@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#111111"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <title>Return / Refund | zenvyar</title>
+  <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
+  <link rel="apple-touch-icon" href="zenvyar-logo.jpg"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    body { background:#f5f5f5; font-family:'Poppins',sans-serif; padding-bottom:3rem; -webkit-font-smoothing:antialiased; }
+    .rh { background:#111; color:#fff; padding:1rem 1.5rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+    .rh .logo { font-size:1.3rem; font-weight:800; color:#fff; text-decoration:none; }
+    .rh .logo span { color:#FF4500; }
+    .rh a.back { color:#aaa; text-decoration:none; font-size:0.9rem; display:flex; align-items:center; gap:6px; min-height:44px; }
+
+    .rc { max-width:600px; margin:2rem auto; padding:0 1rem; }
+
+    .policy-box { background:#fff8f5; border:1.5px solid #FFD0C0; border-radius:14px; padding:1.4rem; margin-bottom:1.5rem; }
+    .policy-box h3 { font-size:1rem; color:#FF4500; margin-bottom:0.8rem; }
+    .policy-box ul { padding-left:1.2rem; color:#555; font-size:0.85rem; line-height:2; }
+
+    .form-card { background:#fff; border-radius:14px; padding:1.8rem; box-shadow:0 4px 20px rgba(0,0,0,0.07); }
+    .form-card h2 { font-size:1.1rem; margin-bottom:1.4rem; display:flex; align-items:center; gap:0.5rem; }
+    .form-card h2 i { color:#FF4500; }
+
+    .fg { margin-bottom:1.1rem; }
+    .fg label { display:block; font-size:0.82rem; font-weight:600; color:#555; margin-bottom:0.4rem; }
+    .fg input, .fg select, .fg textarea {
+      width:100%; padding:0.8rem 1rem; border:2px solid #eee; border-radius:10px;
+      font-family:'Poppins',sans-serif; font-size:16px; outline:none; transition:border 0.2s;
+      -webkit-appearance:none; appearance:none;
+    }
+    .fg select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 12px center; padding-right:36px;
+    }
+    .fg input:focus, .fg select:focus, .fg textarea:focus { border-color:#FF4500; }
+    .fg textarea { resize:vertical; }
+
+    .btn-submit {
+      width:100%; padding:1rem; background:linear-gradient(135deg,#FF4500,#ff6a00);
+      color:#fff; border:none; border-radius:10px; font-family:'Poppins',sans-serif;
+      font-size:1rem; font-weight:700; cursor:pointer; display:flex; align-items:center;
+      justify-content:center; gap:0.5rem; transition:all 0.3s; margin-top:0.5rem;
+      min-height:52px; touch-action:manipulation; -webkit-appearance:none;
+    }
+    .btn-submit:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(255,69,0,0.35); }
+
+    .success-card { background:#e8f5e9; border:1.5px solid #a5d6a7; border-radius:14px; padding:2rem; text-align:center; display:none; }
+    .success-card i { font-size:3rem; color:#27ae60; display:block; margin-bottom:1rem; }
+    .success-card h3 { color:#27ae60; margin-bottom:0.5rem; }
+    .success-card p { color:#555; font-size:0.88rem; }
+    .success-card a { display:inline-block; margin-top:1rem; background:#FF4500; color:#fff; padding:0.7rem 1.5rem; border-radius:8px; text-decoration:none; font-weight:600; font-size:0.9rem; }
+
+    @media (max-width:480px) {
+      .form-card { padding:1.3rem; }
+      .rc { padding:0 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="rh">
+  <a href="index.html" class="logo"><img src="zenvyar-logo.jpg" alt="zenvyar" style="height:44px;vertical-align:middle;border-radius:6px;object-fit:contain"/><span style="vertical-align:middle;margin-left:8px">Zenvyar</span></a>
+  <a href="index.html" class="back"><i class="fas fa-arrow-left"></i> Back</a>
+</header>
+
+<div class="rc">
+
+  <div class="policy-box">
+    <h3><i class="fas fa-info-circle"></i> Return Policy</h3>
+    <ul>
+      <li>Returns accepted within <strong>7 days</strong> of delivery</li>
+      <li>Item must be unused, unwashed, with original tags</li>
+      <li>Damaged or wrong item — full refund guaranteed</li>
+      <li>Refund processed within 3-5 working days</li>
+      <li>For help: WhatsApp <strong>03091452442</strong></li>
+    </ul>
+  </div>
+
+  <div class="form-card" id="return-form-card">
+    <h2><i class="fas fa-undo-alt"></i> Submit Return Request</h2>
+
+    <div class="fg">
+      <label>Order ID / Tracking ID *</label>
+      <input type="text" id="r-orderid" placeholder="e.g. TV-123456" oninput="this.value=this.value.toUpperCase()" required/>
+    </div>
+    <div class="fg">
+      <label>Your Name *</label>
+      <input type="text" id="r-name" placeholder="Muhammad Ali" required/>
+    </div>
+    <div class="fg">
+      <label>Phone Number *</label>
+      <input type="tel" id="r-phone" placeholder="03XX-XXXXXXX" required/>
+    </div>
+    <div class="fg">
+      <label>Return Reason *</label>
+      <select id="r-reason" required>
+        <option value="">Select reason</option>
+        <option value="wrong-item">Wrong item received</option>
+        <option value="damaged">Item is damaged / defective</option>
+        <option value="size-issue">Size doesn't fit</option>
+        <option value="not-as-described">Not as described</option>
+        <option value="changed-mind">Changed my mind</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Additional Details</label>
+      <textarea id="r-details" rows="3" placeholder="Describe the issue in detail..."></textarea>
+    </div>
+    <div class="fg">
+      <label>Refund Method *</label>
+      <select id="r-refund" required>
+        <option value="">Select</option>
+        <option value="easypaisa">Easypaisa</option>
+        <option value="jazzcash">JazzCash</option>
+        <option value="bank">Bank Transfer</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Account Number (for refund)</label>
+      <input type="text" id="r-account" placeholder="03XX-XXXXXXX or account number"/>
+    </div>
+
+    <button class="btn-submit" onclick="submitReturn()">
+      <i class="fas fa-paper-plane"></i> Submit Return Request
+    </button>
+  </div>
+
+  <div class="success-card" id="success-card">
+    <i class="fas fa-check-circle"></i>
+    <h3>Request Submitted!</h3>
+    <p>Your return request has been received. Our team will contact you on <strong id="s-phone"></strong> within 24 hours.</p>
+    <p style="margin-top:0.5rem">Request ID: <strong id="s-reqid" style="color:#FF4500"></strong></p>
+    <a href="index.html">Continue Shopping</a>
+  </div>
+
+</div>
+
+<script>
+  const API = 'http://localhost:5000/api';
+
+  // Pre-fill order ID from URL
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('order')) document.getElementById('r-orderid').value = params.get('order').toUpperCase();
+
+  async function submitReturn() {
+    const orderId  = document.getElementById('r-orderid').value.trim();
+    const name     = document.getElementById('r-name').value.trim();
+    const phone    = document.getElementById('r-phone').value.trim();
+    const reason   = document.getElementById('r-reason').value;
+    const details  = document.getElementById('r-details').value.trim();
+    const refund   = document.getElementById('r-refund').value;
+    const account  = document.getElementById('r-account').value.trim();
+
+    if (!orderId || !name || !phone || !reason || !refund) {
+      alert('Please fill all required fields.');
+      return;
+    }
+
+    const btn = document.querySelector('.btn-submit');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+    btn.disabled = true;
+
+    // Save to localStorage (works without backend too)
+    const reqId = 'RET-' + Date.now().toString().slice(-6);
+    const request = { reqId, orderId, name, phone, reason, details, refund, account, date: new Date().toISOString(), status: 'pending' };
+    const existing = JSON.parse(localStorage.getItem('tv_returns') || '[]');
+    existing.unshift(request);
+    localStorage.setItem('tv_returns', JSON.stringify(existing));
+
+    // Try backend (optional — if return route exists)
+    try {
+      await fetch(`${API}/returns`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(request)
+      });
+    } catch(_) {}
+
+    // Show success
+    document.getElementById('return-form-card').style.display = 'none';
+    document.getElementById('s-phone').textContent = phone;
+    document.getElementById('s-reqid').textContent = reqId;
+    document.getElementById('success-card').style.display = 'block';
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,592 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#1a1a2e"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <title>Admin Panel | zenvyar</title>
+  <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
+  <link rel="apple-touch-icon" href="zenvyar-logo.jpg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+    body{font-family:'Poppins',sans-serif;background:#f0f2f5;color:#333;-webkit-font-smoothing:antialiased}
+    .admin-layout{display:flex;min-height:100vh;min-height:100dvh}
+
+    /* Sidebar */
+    .admin-sidebar{width:240px;background:#1a1a2e;color:#fff;flex-shrink:0;display:flex;flex-direction:column}
+    .admin-logo{padding:1.5rem;font-size:1.3rem;font-weight:800;border-bottom:1px solid rgba(255,255,255,0.1)}
+    .admin-logo span{color:#f85606}
+    .admin-nav{flex:1;padding:1rem 0}
+    .nav-item{display:flex;align-items:center;gap:0.8rem;padding:0.85rem 1.5rem;color:rgba(255,255,255,0.7);cursor:pointer;transition:all 0.3s;font-size:0.9rem}
+    .nav-item:hover,.nav-item.active{background:rgba(248,86,6,0.2);color:#fff;border-right:3px solid #f85606}
+    .nav-item i{width:18px;text-align:center}
+    .admin-user{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.1);font-size:0.82rem;color:rgba(255,255,255,0.6)}
+
+    /* Main */
+    .admin-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    .admin-topbar{background:#fff;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+    .admin-topbar h2{font-size:1.1rem;color:#333}
+    .admin-content{flex:1;padding:2rem;overflow-y:auto}
+
+    /* Panels */
+    .panel{display:none}
+    .panel.active{display:block}
+
+    /* Stats */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-bottom:2rem}
+    .stat-card{background:#fff;border-radius:12px;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:1rem}
+    .stat-icon{width:55px;height:55px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+    .stat-icon.orange{background:#fff3ee;color:#f85606}
+    .stat-icon.blue{background:#e3f2fd;color:#1565c0}
+    .stat-icon.green{background:#e8f5e9;color:#27ae60}
+    .stat-icon.purple{background:#f3e5f5;color:#7b1fa2}
+    .stat-info h3{font-size:1.5rem;font-weight:700;color:#333}
+    .stat-info p{font-size:0.82rem;color:#888}
+
+    /* Table */
+    .table-box{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);overflow:hidden}
+    .table-header{padding:1.2rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee}
+    .table-header h3{font-size:1rem;font-weight:600}
+    table{width:100%;border-collapse:collapse}
+    th{background:#f9f9f9;padding:0.8rem 1rem;text-align:left;font-size:0.82rem;color:#888;font-weight:500}
+    td{padding:0.8rem 1rem;font-size:0.88rem;border-bottom:1px solid #f5f5f5;vertical-align:middle}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:#fafafa}
+
+    /* Buttons */
+    .btn{padding:0.5rem 1.2rem;border-radius:6px;border:none;cursor:pointer;font-family:'Poppins',sans-serif;font-size:0.85rem;font-weight:500;transition:all 0.3s;display:inline-flex;align-items:center;gap:0.4rem}
+    .btn-primary{background:#f85606;color:#fff}
+    .btn-primary:hover{background:#d94e00}
+    .btn-success{background:#27ae60;color:#fff}
+    .btn-danger{background:#e74c3c;color:#fff}
+    .btn-outline{background:#fff;border:1px solid #ddd;color:#555}
+    .btn-outline:hover{border-color:#f85606;color:#f85606}
+    .btn-sm{padding:0.3rem 0.8rem;font-size:0.78rem}
+
+    /* Badge */
+    .badge{padding:0.2rem 0.7rem;border-radius:50px;font-size:0.75rem;font-weight:600}
+    .badge-placed{background:#e3f2fd;color:#1565c0}
+    .badge-confirmed{background:#fff3e0;color:#e65100}
+    .badge-shipped{background:#f3e5f5;color:#7b1fa2}
+    .badge-delivered{background:#e8f5e9;color:#27ae60}
+    .badge-cancelled{background:#ffebee;color:#c62828}
+
+    /* Form */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .form-group{margin-bottom:1rem}
+    .form-group label{display:block;font-size:0.82rem;font-weight:500;color:#555;margin-bottom:0.4rem}
+    .form-group input,.form-group select,.form-group textarea{width:100%;border:1px solid #ddd;border-radius:8px;padding:0.7rem 1rem;font-family:'Poppins',sans-serif;font-size:16px;outline:none;transition:border 0.3s;-webkit-appearance:none;appearance:none}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#f85606}
+    .form-group textarea{resize:vertical}
+    .form-full{grid-column:1/-1}
+
+    /* Modal */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
+    .modal-overlay.open{display:flex}
+    .modal{background:#fff;border-radius:16px;padding:2rem;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;position:relative}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#aaa}
+    .modal h3{font-size:1.1rem;margin-bottom:1.5rem;padding-bottom:0.8rem;border-bottom:2px solid #f85606}
+
+    /* Image preview */
+    .img-preview{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem}
+    .img-preview img{width:70px;height:70px;object-fit:cover;border-radius:6px;border:1px solid #eee}
+
+    /* Search */
+    .search-input{border:1px solid #ddd;border-radius:6px;padding:0.5rem 1rem;font-family:'Poppins',sans-serif;font-size:0.88rem;outline:none;width:220px}
+    .search-input:focus{border-color:#f85606}
+
+    @media(max-width:768px){
+      .admin-sidebar{display:none}
+      .form-grid{grid-template-columns:1fr}
+      .admin-content{padding:1rem}
+      .stats-grid{grid-template-columns:repeat(2,1fr);gap:0.8rem}
+      .stat-card{padding:1rem}
+      .table-header{flex-direction:column;align-items:flex-start;gap:0.6rem}
+      .search-input{width:100%}
+      table{font-size:0.78rem}
+      th,td{padding:0.6rem 0.5rem}
+    }
+    @media(max-width:480px){
+      .stats-grid{grid-template-columns:1fr 1fr}
+      .modal{padding:1.3rem}
+    }
+  </style>
+</head>
+<body>
+
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">
+      <img src="zenvyar-logo.jpg" alt="zenvyar" style="height:36px;vertical-align:middle;margin-right:8px;border-radius:6px;object-fit:contain"/> Zenvyar Admin
+    </div>
+    <nav class="admin-nav">
+      <div class="nav-item active" onclick="showPanel('dashboard')"><i class="fas fa-chart-bar"></i> Dashboard</div>
+      <div class="nav-item" onclick="showPanel('products')"><i class="fas fa-tshirt"></i> Products</div>
+      <div class="nav-item" onclick="showPanel('orders')"><i class="fas fa-shopping-bag"></i> Orders</div>
+      <div class="nav-item" onclick="showPanel('users')"><i class="fas fa-users"></i> Users</div>
+      <div class="nav-item" onclick="showPanel('ads')"><i class="fas fa-ad"></i> Ads</div>
+      <div class="nav-item" onclick="showPanel('sale')"><i class="fas fa-tags"></i> Sale</div>
+      <div class="nav-item" onclick="showPanel('returns')"><i class="fas fa-undo-alt"></i> Returns</div>
+      <div class="nav-item" onclick="showPanel('coupons')"><i class="fas fa-ticket-alt"></i> Coupons</div>
+      <div class="nav-item" onclick="showPanel('sellers')"><i class="fas fa-store"></i> Sellers</div>
+    </nav>
+    <div class="admin-user" id="admin-user-info">Loading...</div>
+  </aside>
+
+  <!-- Main -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h2 id="panel-title">Dashboard</h2>
+      <div style="display:flex;gap:0.8rem;align-items:center">
+        <a href="index.html" class="btn btn-outline btn-sm"><i class="fas fa-store"></i> View Store</a>
+        <button class="btn btn-outline btn-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Dashboard -->
+      <div class="panel active" id="panel-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-shopping-bag"></i></div><div class="stat-info"><h3 id="stat-orders">0</h3><p>Total Orders</p></div></div>
+          <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-tshirt"></i></div><div class="stat-info"><h3 id="stat-products">0</h3><p>Products</p></div></div>
+          <div class="stat-card"><div class="stat-icon green"><i class="fas fa-users"></i></div><div class="stat-info"><h3 id="stat-users">0</h3><p>Registered Users</p></div></div>
+          <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-rupee-sign"></i></div><div class="stat-info"><h3 id="stat-revenue">0</h3><p>Total Revenue</p></div></div>
+          <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-calendar-day"></i></div><div class="stat-info"><h3 id="stat-today">0</h3><p>Today's Orders</p></div></div>
+          <div class="stat-card"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><div class="stat-info"><h3 id="stat-delivered">0</h3><p>Delivered</p></div></div>
+          <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-shipping-fast"></i></div><div class="stat-info"><h3 id="stat-pending">0</h3><p>Pending</p></div></div>
+          <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-times-circle"></i></div><div class="stat-info"><h3 id="stat-cancelled">0</h3><p>Cancelled</p></div></div>
+          <!-- Sale vs Purchase -->
+          <div class="stat-card" style="border-left:4px solid #27ae60"><div class="stat-icon green"><i class="fas fa-hand-holding-usd"></i></div><div class="stat-info"><h3 id="stat-sale-revenue" style="color:#27ae60">Rs. 0</h3><p>Completed Sales</p></div></div>
+          <div class="stat-card" style="border-left:4px solid #f85606"><div class="stat-icon orange"><i class="fas fa-shopping-cart"></i></div><div class="stat-info"><h3 id="stat-purchase-revenue" style="color:#f85606">Rs. 0</h3><p>Pending Purchases</p></div></div>
+          <div class="stat-card" style="border-left:4px solid #3949ab"><div class="stat-icon blue"><i class="fas fa-user-check"></i></div><div class="stat-info"><h3 id="stat-buyers">0</h3><p>Unique Buyers</p></div></div>
+          <div class="stat-card" style="border-left:4px solid #7b1fa2"><div class="stat-icon purple"><i class="fas fa-redo"></i></div><div class="stat-info"><h3 id="stat-repeat">0</h3><p>Repeat Customers</p></div></div>
+          <div class="stat-card" style="border-left:4px solid #27ae60"><div class="stat-icon green"><i class="fas fa-percentage"></i></div><div class="stat-info"><h3 id="stat-commission" style="color:#27ae60">Rs. 0</h3><p>Total Commission</p></div></div>
+        </div>
+
+        <!-- Sale vs Purchase Donut -->
+        <div class="table-box" style="margin-bottom:1.5rem">
+          <div class="table-header"><h3><i class="fas fa-chart-pie" style="color:#f85606"></i> Sale vs Purchase Breakdown</h3></div>
+          <div style="padding:1.5rem;max-width:380px;margin:0 auto"><canvas id="sale-donut"></canvas></div>
+        </div>
+
+        <!-- Revenue Chart -->
+        <div class="table-box" style="margin-bottom:1.5rem">
+          <div class="table-header"><h3><i class="fas fa-chart-line" style="color:#f85606"></i> Revenue (Last 7 Days)</h3></div>
+          <div style="padding:1.5rem"><canvas id="revenue-chart" height="100"></canvas></div>
+        </div>
+
+        <!-- Category Revenue Chart -->
+        <div class="table-box" style="margin-bottom:1.5rem">
+          <div class="table-header"><h3><i class="fas fa-chart-bar" style="color:#f85606"></i> Revenue by Category</h3></div>
+          <div style="padding:1.5rem"><canvas id="category-chart" height="100"></canvas></div>
+        </div>
+
+        <!-- Low Stock Alert -->
+        <div class="table-box" style="margin-bottom:1.5rem" id="low-stock-box">
+          <div class="table-header"><h3><i class="fas fa-exclamation-triangle" style="color:#e74c3c"></i> Low Stock Alert</h3></div>
+          <table><thead><tr><th>Product</th><th>Category</th><th>Stock</th><th>Action</th></tr></thead>
+          <tbody id="low-stock-table"></tbody></table>
+        </div>
+
+        <div class="table-box">
+          <div class="table-header"><h3>Recent Orders</h3></div>
+          <table><thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead>
+          <tbody id="recent-orders"></tbody></table>
+        </div>
+      </div>
+
+      <!-- Products -->
+      <div class="panel" id="panel-products">
+        <div class="table-box">
+          <div class="table-header">
+            <h3>Products</h3>
+            <div style="display:flex;gap:0.8rem">
+              <input class="search-input" placeholder="Search products..." oninput="searchProducts(this.value)"/>
+              <button class="btn btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Add Product</button>
+            </div>
+          </div>
+          <table><thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
+          <tbody id="products-table"></tbody></table>
+        </div>
+      </div>
+
+      <!-- Orders -->
+      <div class="panel" id="panel-orders">
+        <div class="table-box">
+          <div class="table-header">
+            <h3>All Orders</h3>
+            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:center">
+              <input class="search-input" placeholder="Search by ID or name..." oninput="filterOrders()" id="order-search" style="width:180px"/>
+              <select id="order-status-filter" onchange="filterOrders()" style="border:1px solid #ddd;border-radius:6px;padding:0.5rem 0.8rem;font-family:'Poppins',sans-serif;font-size:0.85rem;outline:none">
+                <option value="">All Status</option>
+                <option value="placed">Placed</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="processing">Processing</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <input type="date" id="order-date-filter" onchange="filterOrders()" style="border:1px solid #ddd;border-radius:6px;padding:0.5rem 0.8rem;font-family:'Poppins',sans-serif;font-size:0.85rem;outline:none"/>
+              <button class="btn btn-outline btn-sm" onclick="exportOrdersCSV()"><i class="fas fa-download"></i> Export CSV</button>
+            </div>
+          </div>
+          <table><thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="orders-table"></tbody></table>
+        </div>
+      </div>
+
+      <!-- Users -->
+      <div class="panel" id="panel-users">
+        <div class="table-box">
+          <div class="table-header"><h3>Users</h3></div>
+          <table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th></tr></thead>
+          <tbody id="users-table"></tbody></table>
+        </div>
+      </div>
+
+      <!-- Ads -->
+      <div class="panel" id="panel-ads">
+        <div class="table-box">
+          <div class="table-header">
+            <h3>Banner Ads</h3>
+            <button class="btn btn-primary" onclick="openAdModal()"><i class="fas fa-plus"></i> Add Ad</button>
+          </div>
+          <table>
+            <thead><tr><th>Text</th><th>Color</th><th>Link</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="ads-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Product Modal -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
+    <h3 id="product-modal-title">Add Product</h3>
+    <form id="product-form" onsubmit="saveProduct(event)">
+      <input type="hidden" id="product-id"/>
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>Product Name *</label>
+          <input type="text" id="p-name" required/>
+        </div>
+        <div class="form-group form-full">
+          <label>Description *</label>
+          <textarea id="p-desc" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="p-category" required>
+            <option value="">Select</option>
+            <option value="men">Men</option>
+            <option value="women">Women</option>
+            <option value="kids">Kids</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Badge</label>
+          <input type="text" id="p-badge" placeholder="New, Sale, Hot..."/>
+        </div>
+        <div class="form-group">
+          <label>Price (Rs.) *</label>
+          <input type="number" id="p-price" min="0" required/>
+        </div>
+        <div class="form-group">
+          <label>Old Price (Rs.)</label>
+          <input type="number" id="p-old-price" min="0"/>
+        </div>
+        <div class="form-group">
+          <label>Stock *</label>
+          <input type="number" id="p-stock" min="0" required/>
+        </div>
+        <div class="form-group">
+          <label>Discount (%)</label>
+          <input type="number" id="p-discount" min="0" max="100"/>
+        </div>
+        <div class="form-group form-full">
+          <label>Sizes (comma separated: S,M,L,XL,XXL)</label>
+          <input type="text" id="p-sizes" placeholder="S,M,L,XL,XXL" value="S,M,L,XL,XXL"/>
+        </div>
+        <div class="form-group form-full">
+          <label>Seller (optional)</label>
+          <select id="p-seller">
+            <option value="">No Seller / Zenvyar Direct</option>
+          </select>
+        </div>
+        <div class="form-group form-full">
+          <label>Product Images (max 5)</label>
+          <input type="file" id="p-images" multiple accept="image/*" onchange="previewImages(this)"/>
+          <div class="img-preview" id="img-preview"></div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem">
+        <i class="fas fa-save"></i> Save Product
+      </button>
+    </form>
+  </div>
+</div>
+
+      <!-- Returns Panel -->
+      <div class="panel" id="panel-returns">        <div class="table-box">
+          <div class="table-header">
+            <h3><i class="fas fa-undo-alt" style="color:#f85606"></i> Return Requests</h3>
+            <button class="btn btn-outline btn-sm" onclick="loadReturns()"><i class="fas fa-sync"></i> Refresh</button>
+          </div>
+          <table>
+            <thead><tr><th>Req ID</th><th>Order ID</th><th>Customer</th><th>Reason</th><th>Refund To</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="returns-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sale Management -->
+      <div class="panel" id="panel-sale">
+        <div class="table-box" style="padding:2rem">
+          <div class="table-header" style="border:none;padding:0 0 1.5rem"><h3><i class="fas fa-tags" style="color:#f85606"></i> Sale Banner Management</h3></div>
+
+          <div style="background:#fff8f5;border:2px solid #FFD0C0;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+              <h4 style="font-size:1rem;color:#333">Hero Banner Sale</h4>
+              <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.88rem;font-weight:600">
+                <input type="checkbox" id="sale-active" onchange="toggleSale()" style="accent-color:#f85606;width:18px;height:18px"/>
+                Enable Sale Banner
+              </label>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Sale Tag (e.g. "Summer Sale 2026")</label>
+                <input type="text" id="sale-tag" placeholder="Summer Sale 2026" oninput="previewSale()"/>
+              </div>
+              <div class="form-group">
+                <label>Discount % (e.g. 70)</label>
+                <input type="number" id="sale-discount" placeholder="70" min="1" max="99" oninput="previewSale()"/>
+              </div>
+              <div class="form-group form-full">
+                <label>Subtitle Text</label>
+                <input type="text" id="sale-subtitle" placeholder="On top fashion brands — limited time offer!" oninput="previewSale()"/>
+              </div>
+            </div>
+
+            <!-- Preview -->
+            <div id="sale-preview" style="background:linear-gradient(135deg,#FF4500,#ff6a00);border-radius:10px;padding:1.5rem;color:#fff;margin-top:0.5rem">
+              <p id="prev-tag" style="background:rgba(255,255,255,0.2);display:inline-block;padding:0.2rem 0.8rem;border-radius:50px;font-size:0.8rem;margin-bottom:0.5rem">Summer Sale 2026</p>
+              <h2 id="prev-title" style="font-size:1.8rem;font-weight:900;margin-bottom:0.3rem">Up to <u>70% OFF</u></h2>
+              <p id="prev-sub" style="opacity:0.9;font-size:0.9rem">On top fashion brands — limited time offer!</p>
+            </div>
+
+            <button class="btn btn-primary" style="margin-top:1.2rem;width:100%;justify-content:center;padding:0.85rem" onclick="saveSale()">
+              <i class="fas fa-save"></i> Save & Apply to Website
+            </button>
+          </div>
+
+          <div style="background:#f9f9f9;border-radius:10px;padding:1rem;font-size:0.85rem;color:#666">
+            <i class="fas fa-info-circle" style="color:#f85606"></i>
+            <strong> How it works:</strong> Enable the checkbox, set discount %, tag and subtitle — click Save. The hero banner on the website will update immediately. Disable to show default banner.
+          </div>
+        </div>
+      </div>
+<div class="modal-overlay" id="ad-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeAdModal()"><i class="fas fa-times"></i></button>
+    <h3 id="ad-modal-title">Add Banner Ad</h3>
+    <div class="form-grid">
+      <input type="hidden" id="ad-id"/>
+      <div class="form-group form-full">
+        <label>Headline Text *</label>
+        <input type="text" id="ad-text" placeholder="Summer Sale — Up to 70% OFF!"/>
+      </div>
+      <div class="form-group form-full">
+        <label>Sub Text</label>
+        <input type="text" id="ad-subtext" placeholder="Limited time offer on all categories"/>
+      </div>
+      <div class="form-group">
+        <label>Button Text</label>
+        <input type="text" id="ad-btn" placeholder="Shop Now"/>
+      </div>
+      <div class="form-group">
+        <label>Link (URL or #section)</label>
+        <input type="text" id="ad-link" placeholder="#products-section"/>
+      </div>
+      <div class="form-group">
+        <label>Background Color</label>
+        <select id="ad-bg">
+          <option value="linear-gradient(135deg, #FF4500, #ff8c00)">Orange (Default)</option>
+          <option value="linear-gradient(135deg, #01411C, #006400)">Pakistan Green</option>
+          <option value="linear-gradient(135deg, #8B0000, #c0392b)">Dark Red</option>
+          <option value="linear-gradient(135deg, #1a237e, #3949ab)">Navy Blue</option>
+          <option value="linear-gradient(135deg, #1565c0, #42a5f5)">Blue</option>
+          <option value="linear-gradient(135deg, #27ae60, #2ecc71)">Green</option>
+          <option value="linear-gradient(135deg, #7b1fa2, #ce93d8)">Purple</option>
+          <option value="linear-gradient(135deg, #222, #555)">Dark</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="ad-active">
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem;margin-top:0.5rem" onclick="saveAd()">
+      <i class="fas fa-save"></i> Save Ad
+    </button>
+  </div>
+</div>
+
+      <!-- Coupons Panel -->
+      <div class="panel" id="panel-coupons">
+        <div class="table-box">
+          <div class="table-header">
+            <h3><i class="fas fa-ticket-alt" style="color:#f85606"></i> Coupon Codes</h3>
+            <button class="btn btn-primary" onclick="openCouponModal()"><i class="fas fa-plus"></i> Add Coupon</button>
+          </div>
+          <table>
+            <thead><tr><th>Code</th><th>Discount</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="coupons-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+<!-- Coupon Modal -->
+<div class="modal-overlay" id="coupon-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeCouponModal()"><i class="fas fa-times"></i></button>
+    <h3 id="coupon-modal-title">Add Coupon</h3>
+    <input type="hidden" id="coupon-modal-orig"/>
+    <div class="form-grid">
+      <div class="form-group form-full">
+        <label>Coupon Code *</label>
+        <input type="text" id="coupon-modal-code" placeholder="e.g. SAVE20" style="text-transform:uppercase"/>
+      </div>
+      <div class="form-group">
+        <label>Discount Type *</label>
+        <select id="coupon-modal-type">
+          <option value="percent">Percentage (% OFF)</option>
+          <option value="flat">Flat Amount (Rs. OFF)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Discount Value *</label>
+        <input type="number" id="coupon-modal-value" placeholder="e.g. 20" min="1"/>
+      </div>
+      <div class="form-group form-full">
+        <label>Status</label>
+        <select id="coupon-modal-active">
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem;margin-top:0.5rem" onclick="saveCoupon()">
+      <i class="fas fa-save"></i> Save Coupon
+    </button>
+  </div>
+</div>
+
+<!-- Sellers Panel -->
+<div class="panel" id="panel-sellers">
+  <div class="table-box">
+    <div class="table-header">
+      <h3><i class="fas fa-store" style="color:#f85606"></i> Sellers</h3>
+      <button class="btn btn-primary" onclick="openSellerModal()"><i class="fas fa-plus"></i> Add Seller</button>
+    </div>
+    <table>
+      <thead><tr><th>Name</th><th>Phone</th><th>Easypaisa</th><th>JazzCash</th><th>Commission %</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="sellers-table"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Seller Modal -->
+<div class="modal-overlay" id="seller-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeSellerModal()"><i class="fas fa-times"></i></button>
+    <h3 id="seller-modal-title">Add Seller</h3>
+    <input type="hidden" id="seller-modal-id"/>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Seller Name *</label>
+        <input type="text" id="s-name" placeholder="e.g. Ali Traders" required/>
+      </div>
+      <div class="form-group">
+        <label>Phone *</label>
+        <input type="tel" id="s-phone" placeholder="03XXXXXXXXX" required/>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="s-email" placeholder="seller@email.com"/>
+      </div>
+      <div class="form-group">
+        <label>Commission Rate (%)</label>
+        <input type="number" id="s-commission" min="0" max="100" placeholder="10" value="10"/>
+      </div>
+      <div class="form-group">
+        <label>Easypaisa Number</label>
+        <input type="tel" id="s-easypaisa" placeholder="03XXXXXXXXX"/>
+      </div>
+      <div class="form-group">
+        <label>JazzCash Number</label>
+        <input type="tel" id="s-jazzcash" placeholder="03XXXXXXXXX"/>
+      </div>
+      <div class="form-group form-full">
+        <label>Status</label>
+        <select id="s-active">
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem;margin-top:0.5rem" onclick="saveSeller()">
+      <i class="fas fa-save"></i> Save Seller
+    </button>
+  </div>
+</div>
+
+<!-- Courier Modal -->
+<div class="modal-overlay" id="courier-modal">
+  <div class="modal" style="max-width:420px">
+    <button class="modal-close" onclick="closeCourierModal()"><i class="fas fa-times"></i></button>
+    <h3><i class="fas fa-truck" style="color:#f85606"></i> Assign Courier</h3>
+    <input type="hidden" id="courier-order-id"/>
+    <div class="form-group" style="margin-top:1rem">
+      <label>Courier Company *</label>
+      <select id="courier-name" style="width:100%;border:1px solid #ddd;border-radius:8px;padding:0.7rem 1rem;font-family:'Poppins',sans-serif;font-size:16px;outline:none;-webkit-appearance:none">
+        <option value="">Select Courier</option>
+        <option value="Leopards Courier">Leopards Courier</option>
+        <option value="TCS Courier">TCS Courier</option>
+        <option value="Trax">Trax</option>
+        <option value="BlueEx">BlueEx</option>
+        <option value="M&P Courier">M&amp;P Courier</option>
+        <option value="Pakistan Post">Pakistan Post</option>
+        <option value="Swyft Logistics">Swyft Logistics</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Courier Tracking ID *</label>
+      <input type="text" id="courier-tracking" placeholder="e.g. LP123456789PK" style="width:100%;border:1px solid #ddd;border-radius:8px;padding:0.7rem 1rem;font-family:'Poppins',sans-serif;font-size:16px;outline:none"/>
+    </div>
+    <p style="font-size:0.8rem;color:#888;margin-bottom:1rem"><i class="fas fa-info-circle" style="color:#f85606"></i> Order status will auto-change to "Shipped" when courier is assigned.</p>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem" onclick="saveCourier()">
+      <i class="fas fa-truck"></i> Assign &amp; Mark Shipped
+    </button>
+  </div>
+</div>
+
+<script src="admin.js"></script></body>
+</html>

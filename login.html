@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#1a1a2e"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <title>Admin Login | zenvyar</title>
+  <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
+  <link rel="apple-touch-icon" href="zenvyar-logo.jpg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+
+    .login-card{background:#fff;border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:400px;box-shadow:0 25px 60px rgba(0,0,0,0.4)}
+
+    .login-logo{text-align:center;margin-bottom:2rem}
+    .login-logo h1{font-size:1.8rem;font-weight:900;color:#1a1a2e}
+    .login-logo h1 span{color:#FF4500}
+    .login-logo p{color:#888;font-size:0.85rem;margin-top:0.3rem}
+
+    .form-group{margin-bottom:1.2rem}
+    .form-group label{display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:0.5rem}
+    .input-wrap{position:relative}
+    .input-wrap i{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:#bbb;font-size:0.9rem}
+    .input-wrap input{width:100%;padding:0.85rem 1rem 0.85rem 2.8rem;border:2px solid #eee;border-radius:10px;font-family:'Poppins',sans-serif;font-size:16px;outline:none;transition:border 0.2s;color:#333;-webkit-appearance:none;appearance:none}
+    .input-wrap input:focus{border-color:#FF4500}
+    .toggle-pass{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#bbb;font-size:0.9rem}
+
+    .btn-login{width:100%;padding:1rem;background:linear-gradient(135deg,#FF4500,#ff6a00);color:#fff;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.3s;margin-top:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;min-height:52px;touch-action:manipulation;-webkit-appearance:none}
+    .btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(255,69,0,0.4)}
+    .btn-login:disabled{opacity:0.7;transform:none;cursor:not-allowed}
+
+    .error-msg{background:#ffebee;color:#c62828;border-radius:8px;padding:0.7rem 1rem;font-size:0.83rem;margin-bottom:1rem;display:none;align-items:center;gap:0.5rem}
+    .error-msg.show{display:flex}
+
+    .back-link{text-align:center;margin-top:1.5rem;font-size:0.83rem;color:#aaa}
+    .back-link a{color:#FF4500;text-decoration:none;font-weight:600}
+  </style>
+</head>
+<body>
+
+<div class="login-card">
+  <div class="login-logo">
+    <img src="zenvyar-logo.jpg" alt="zenvyar" style="height:80px;border-radius:10px;margin-bottom:0.8rem;display:block;margin-left:auto;margin-right:auto;object-fit:contain"/>
+    <h1>zenvyar</h1>
+    <p style="color:#FF4500;font-size:0.8rem;font-weight:600">Admin Panel — Authorized Access Only</p>
+  </div>
+
+  <div class="error-msg" id="error-msg">
+    <i class="fas fa-exclamation-circle"></i>
+    <span id="error-text">Invalid credentials</span>
+  </div>
+
+  <form onsubmit="doLogin(event)">
+    <div class="form-group">
+      <label>Email Address</label>
+      <div class="input-wrap">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="login-email" placeholder="admin@trendvault.pk" required autocomplete="email"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div class="input-wrap">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="login-pass" placeholder="Enter password" required autocomplete="current-password"/>
+        <button type="button" class="toggle-pass" onclick="togglePass()"><i class="fas fa-eye" id="eye-icon"></i></button>
+      </div>
+    </div>
+    <button type="submit" class="btn-login" id="login-btn">
+      <i class="fas fa-sign-in-alt"></i> Login to Admin Panel
+    </button>
+  </form>
+
+  <div class="back-link"><a href="index.html"><i class="fas fa-store"></i> Back to Store</a></div>
+</div>
+
+<script>
+  const API = 'http://localhost:5000/api';
+
+  // Already logged in as admin? redirect
+  (async () => {
+    const t = localStorage.getItem('tv_token');
+    if (!t) return;
+    try {
+      const res = await fetch(`${API}/auth/me`, { headers: { Authorization: `Bearer ${t}` } });
+      if (res.ok) {
+        const data = await res.json();
+        const u = data.user || data;
+        if (u.role === 'admin') window.location.href = 'admin.html';
+      }
+    } catch(_) {}
+  })();
+
+  function togglePass() {
+    const inp = document.getElementById('login-pass');
+    const ico = document.getElementById('eye-icon');
+    if (inp.type === 'password') { inp.type = 'text'; ico.className = 'fas fa-eye-slash'; }
+    else { inp.type = 'password'; ico.className = 'fas fa-eye'; }
+  }
+
+  function showError(msg) {
+    document.getElementById('error-text').textContent = msg;
+    document.getElementById('error-msg').classList.add('show');
+  }
+
+  async function doLogin(e) {
+    e.preventDefault();
+    document.getElementById('error-msg').classList.remove('show');
+    const btn = document.getElementById('login-btn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+    btn.disabled = true;
+
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-pass').value;
+
+    try {
+      const res  = await fetch(`${API}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+
+      if (!res.ok) { showError(data.message || 'Login failed'); return; }
+      if (data.user?.role !== 'admin') { showError('Access denied. Admin accounts only.'); return; }
+
+      localStorage.setItem('tv_token', data.token);
+      localStorage.setItem('tv_user',  JSON.stringify(data.user));
+      window.location.href = 'admin.html';
+    } catch(err) {
+      showError('Cannot connect to server. Make sure backend is running.');
+    } finally {
+      btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Admin Panel';
+      btn.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>

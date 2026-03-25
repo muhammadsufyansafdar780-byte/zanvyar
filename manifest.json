@@ -1,0 +1,13 @@
+{
+  "name": "TrendVault",
+  "short_name": "TrendVault",
+  "description": "Pakistan's Online Fashion Store",
+  "start_url": "/e-commerce/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#FF4500",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

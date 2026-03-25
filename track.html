@@ -1,0 +1,410 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#111111"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <title>Track Order | zenvyar</title>
+  <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
+  <link rel="apple-touch-icon" href="zenvyar-logo.jpg"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #f5f5f5; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    .track-header {
+      background: #111; color: #fff; padding: 1rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .track-header .logo { font-size: 1.4rem; font-weight: 700; color: #fff; text-decoration: none; }
+    .track-header .logo span { color: #FF4500; }
+    .track-header a.back { color: #aaa; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; min-height: 44px; align-items: center; }
+
+    .track-container { max-width: 680px; margin: 2rem auto; padding: 0 1rem 5rem; }
+
+    .search-box {
+      background: #fff; border-radius: 14px; padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 1.5rem;
+    }
+    .search-box h2 { font-size: 1.3rem; margin-bottom: 0.4rem; }
+    .search-box p  { color: #888; font-size: 0.88rem; margin-bottom: 1.2rem; }
+    .search-row { display: flex; gap: 0.6rem; }
+    .search-row input {
+      flex: 1; padding: 0.85rem 1rem; border: 2px solid #eee; border-radius: 10px;
+      font-family: 'Poppins', sans-serif; font-size: 16px; outline: none;
+      transition: border 0.2s; -webkit-appearance: none; appearance: none;
+    }
+    .search-row input:focus { border-color: #FF4500; }
+    .search-row button {
+      padding: 0.85rem 1.4rem; background: #FF4500; color: #fff; border: none;
+      border-radius: 10px; font-family: 'Poppins', sans-serif; font-weight: 600;
+      cursor: pointer; font-size: 0.95rem; transition: background 0.2s;
+      min-height: 48px; -webkit-appearance: none; touch-action: manipulation;
+    }
+    .search-row button:hover { background: #e03d00; }
+
+    @media (max-width: 480px) {
+      .search-row { flex-direction: column; }
+      .search-row button { width: 100%; }
+      .track-container { padding: 0 0.8rem 5rem; }
+      .search-box { padding: 1.3rem; }
+      .order-meta-grid { grid-template-columns: 1fr; }
+    }
+
+    .search-box {
+      background: #fff; border-radius: 14px; padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 1.5rem;
+    }
+    .search-box h2 { font-size: 1.3rem; margin-bottom: 0.4rem; }
+    .search-box p  { color: #888; font-size: 0.88rem; margin-bottom: 1.2rem; }
+    .search-row { display: flex; gap: 0.6rem; }
+    .search-row input {
+      flex: 1; padding: 0.85rem 1rem; border: 2px solid #eee; border-radius: 10px;
+      font-family: 'Poppins', sans-serif; font-size: 0.95rem; outline: none;
+      transition: border 0.2s;
+    }
+    .search-row input:focus { border-color: #FF4500; }
+    .search-row button {
+      padding: 0.85rem 1.4rem; background: #FF4500; color: #fff; border: none;
+      border-radius: 10px; font-family: 'Poppins', sans-serif; font-weight: 600;
+      cursor: pointer; font-size: 0.95rem; transition: background 0.2s;
+    }
+    .search-row button:hover { background: #e03d00; }
+
+    .error-msg {
+      background: #fff0f0; color: #c0392b; border: 1px solid #f5c6cb;
+      border-radius: 10px; padding: 1rem 1.2rem; font-size: 0.9rem;
+      display: none; margin-top: 0.8rem;
+    }
+
+    /* Order Card */
+    .order-card {
+      background: #fff; border-radius: 14px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: none;
+    }
+    .order-card-header {
+      background: linear-gradient(135deg, #FF4500, #ff6a35);
+      color: #fff; padding: 1.4rem 1.6rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .order-card-header h3 { font-size: 1.1rem; margin: 0; }
+    .order-card-header .order-date { font-size: 0.82rem; opacity: 0.85; }
+
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600;
+      background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .order-meta { padding: 1.2rem 1.6rem; border-bottom: 1px solid #f0f0f0; }
+    .order-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .meta-item label { font-size: 0.75rem; color: #999; display: block; }
+    .meta-item span  { font-size: 0.9rem; font-weight: 500; }
+
+    /* Timeline */
+    .timeline-section { padding: 1.4rem 1.6rem; }
+    .timeline-section h4 { font-size: 1rem; margin-bottom: 1.2rem; color: #333; }
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 10px; top: 0; bottom: 0;
+      width: 2px; background: #eee;
+    }
+    .tl-item { position: relative; margin-bottom: 1.4rem; }
+    .tl-item:last-child { margin-bottom: 0; }
+    .tl-dot {
+      position: absolute; left: -1.6rem; top: 4px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #ddd; border: 3px solid #fff;
+      box-shadow: 0 0 0 2px #ddd;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tl-dot.active { background: #FF4500; box-shadow: 0 0 0 2px #FF4500; }
+    .tl-dot.done   { background: #27ae60; box-shadow: 0 0 0 2px #27ae60; }
+    .tl-content h5 { font-size: 0.9rem; margin: 0 0 2px; color: #333; }
+    .tl-content p  { font-size: 0.8rem; color: #888; margin: 0; }
+
+    /* Items */
+    .items-section { padding: 0 1.6rem 1.4rem; border-top: 1px solid #f0f0f0; }
+    .items-section h4 { font-size: 1rem; margin: 1.2rem 0 0.8rem; color: #333; }
+    .order-item-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.5rem 0; border-bottom: 1px solid #f9f9f9; font-size: 0.88rem;
+    }
+    .order-item-row:last-child { border-bottom: none; }
+    .order-total-row {
+      display: flex; justify-content: space-between;
+      padding: 0.8rem 0 0; font-weight: 600; font-size: 0.95rem;
+      border-top: 2px solid #f0f0f0; margin-top: 0.4rem;
+    }
+
+    .loading-spinner {
+      text-align: center; padding: 2rem; color: #888; display: none;
+    }
+    .loading-spinner i { font-size: 2rem; color: #FF4500; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <header class="track-header">
+    <a href="index.html" class="logo"><img src="zenvyar-logo.jpg" alt="Zenvyar" style="height:44px;vertical-align:middle;border-radius:6px;object-fit:contain"/><span style="font-size:1rem;font-weight:700;vertical-align:middle;margin-left:6px">Zenvyar</span></a>
+    <a href="index.html" class="back"><i class="fas fa-arrow-left"></i> Back to Shop</a>
+  </header>
+
+  <div class="track-container">
+
+    <!-- Search Box -->
+    <div class="search-box">
+      <h2><i class="fas fa-map-marker-alt" style="color:#FF4500"></i> Track Your Order</h2>
+      <p>Enter your Order ID / Tracking ID that you received after placing your order</p>
+      <div class="search-row">
+        <input type="text" id="track-input" placeholder="e.g. TV-123456" oninput="this.value=this.value.toUpperCase()"/>
+        <button onclick="trackOrder()"><i class="fas fa-search"></i> Track</button>
+      </div>
+      <div class="error-msg" id="error-msg">
+        <i class="fas fa-exclamation-circle"></i> <span id="error-text">Order not found.</span>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-spinner" id="loading">
+      <i class="fas fa-circle-notch"></i>
+      <p style="margin-top:0.5rem">Searching...</p>
+    </div>
+
+    <!-- Order Result -->
+    <div class="order-card" id="order-card">
+
+      <div class="order-card-header">
+        <div>
+          <h3 id="res-order-id">TV-XXXXXX</h3>
+          <div class="order-date" id="res-date"></div>
+        </div>
+        <div class="status-badge" id="res-status-badge">
+          <i class="fas fa-circle" style="font-size:8px"></i>
+          <span id="res-status">Placed</span>
+        </div>
+      </div>
+
+      <div class="order-meta">
+        <div class="order-meta-grid">
+          <div class="meta-item">
+            <label>Customer</label>
+            <span id="res-name">—</span>
+          </div>
+          <div class="meta-item">
+            <label>City</label>
+            <span id="res-city">—</span>
+          </div>
+          <div class="meta-item">
+            <label>Payment</label>
+            <span id="res-payment">—</span>
+          </div>
+          <div class="meta-item">
+            <label>Total</label>
+            <span id="res-total">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Courier Info -->
+      <div id="courier-card" style="display:none;margin:0 1.6rem 1rem;background:#f0fff4;border:1.5px solid #27ae60;border-radius:10px;padding:1rem 1.2rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.4rem">
+          <i class="fas fa-truck" style="color:#27ae60;font-size:1.1rem"></i>
+          <strong style="font-size:0.95rem;color:#1a7a40">Courier Assigned</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.4rem">
+          <div>
+            <span style="font-size:0.78rem;color:#888">Courier</span><br>
+            <strong id="res-courier-name" style="font-size:0.95rem">—</strong>
+          </div>
+          <div>
+            <span style="font-size:0.78rem;color:#888">Tracking ID</span><br>
+            <strong id="res-courier-id" style="font-size:0.95rem;color:#27ae60;letter-spacing:1px">—</strong>
+          </div>
+        </div>
+        <a id="res-courier-link" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:0.8rem;background:#27ae60;color:#fff;padding:0.5rem 1rem;border-radius:8px;font-size:0.85rem;font-weight:600;text-decoration:none">
+          <i class="fas fa-external-link-alt"></i> Track on Courier Website
+        </a>
+      </div>
+
+      <!-- Tracking Timeline -->
+      <div class="timeline-section">
+        <h4><i class="fas fa-route" style="color:#FF4500"></i> Tracking History</h4>
+        <div class="timeline" id="res-timeline"></div>
+      </div>
+
+      <!-- Items -->
+      <div class="items-section">
+        <h4><i class="fas fa-box" style="color:#FF4500"></i> Order Items</h4>
+        <div id="res-items"></div>
+        <div class="order-total-row">
+          <span>Total Amount</span>
+          <span id="res-total-bottom" style="color:#FF4500">—</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:5000/api';
+
+    const statusIcons = {
+      placed:     'fas fa-shopping-bag',
+      confirmed:  'fas fa-check',
+      processing: 'fas fa-cog',
+      shipped:    'fas fa-truck',
+      delivered:  'fas fa-home',
+      cancelled:  'fas fa-times'
+    };
+
+    const statusColors = {
+      placed:     '#FF4500',
+      confirmed:  '#2980b9',
+      processing: '#8e44ad',
+      shipped:    '#e67e22',
+      delivered:  '#27ae60',
+      cancelled:  '#e74c3c'
+    };
+
+    // Auto-fill from URL param
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      if (id) {
+        document.getElementById('track-input').value = id.toUpperCase();
+        trackOrder();
+      }
+    });
+
+    async function trackOrder() {
+      const orderId = document.getElementById('track-input').value.trim().toUpperCase();
+      if (!orderId) { showError('Please enter your Order ID.'); return; }
+
+      hideError();
+      document.getElementById('order-card').style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
+
+      try {
+        const res  = await fetch(`${API}/orders/track/${orderId}`);
+        const data = await res.json();
+        document.getElementById('loading').style.display = 'none';
+
+        if (!res.ok) { showError(data.message || 'Order not found.'); return; }
+
+        renderOrder(data);
+      } catch (e) {
+        document.getElementById('loading').style.display = 'none';
+        showError('Could not connect to server. Please check your connection.');
+      }
+    }
+
+    function renderOrder(order) {
+      const card = document.getElementById('order-card');
+      card.style.display = 'block';
+
+      document.getElementById('res-order-id').textContent = order.orderId;
+      document.getElementById('res-date').textContent =
+        new Date(order.createdAt).toLocaleDateString('en-PK', { day:'numeric', month:'long', year:'numeric' });
+
+      const color = statusColors[order.status] || '#FF4500';
+      document.getElementById('res-status-badge').style.background = color + '33';
+      document.getElementById('res-status-badge').style.borderColor = color;
+      document.getElementById('res-status-badge').style.color = color;
+      document.getElementById('res-status').textContent =
+        order.status.charAt(0).toUpperCase() + order.status.slice(1);
+
+      document.getElementById('res-name').textContent    = order.address?.name || '—';
+      document.getElementById('res-city').textContent    = order.address?.city || '—';
+      document.getElementById('res-payment').textContent = (order.payment?.method || '—').toUpperCase();
+      document.getElementById('res-total').textContent   = `Rs. ${(order.total || 0).toLocaleString()}`;
+      document.getElementById('res-total-bottom').textContent = `Rs. ${(order.total || 0).toLocaleString()}`;
+
+      // Courier info
+      const courierCard = document.getElementById('courier-card');
+      if (order.courier?.trackingId) {
+        courierCard.style.display = 'block';
+        document.getElementById('res-courier-name').textContent = order.courier.name || '—';
+        document.getElementById('res-courier-id').textContent   = order.courier.trackingId;
+        // Build tracking URL per courier
+        const trackingUrls = {
+          'Leopards Courier': `https://leopardscourier.com/leopards-track-your-parcel/?track_numbers=${order.courier.trackingId}`,
+          'TCS Courier':      `https://www.tcs.com.pk/tracking.php?consignment_no=${order.courier.trackingId}`,
+          'Trax':             `https://app.traxlogistics.com/web/track-shipment?tracking_number=${order.courier.trackingId}`,
+          'BlueEx':           `https://blueex.com/track/?tracking_number=${order.courier.trackingId}`,
+          'M&P Courier':      `https://www.mulphyco.com/track-shipment?cn=${order.courier.trackingId}`,
+          'Pakistan Post':    `https://track.pakpost.gov.pk/tracking/track.html`,
+          'Swyft Logistics':  `https://app.swyftlogistics.com/tracking?tracking_number=${order.courier.trackingId}`,
+        };
+        const url = trackingUrls[order.courier.name] || '#';
+        document.getElementById('res-courier-link').href = url;
+        if (url === '#') document.getElementById('res-courier-link').style.display = 'none';
+      } else {
+        courierCard.style.display = 'none';
+      }
+
+      // Timeline
+      const allStatuses = ['placed','confirmed','processing','shipped','delivered'];
+      const currentIdx  = allStatuses.indexOf(order.status);
+      const history     = order.trackingHistory || [];
+
+      // Build timeline from history (most recent last)
+      const tlHtml = history.map((h, i) => {
+        const isLast = i === history.length - 1;
+        const dotClass = isLast ? 'active' : 'done';
+        const icon = statusIcons[h.status] || 'fas fa-circle';
+        const time = new Date(h.timestamp).toLocaleString('en-PK', {
+          day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'
+        });
+        return `
+          <div class="tl-item">
+            <div class="tl-dot ${dotClass}"></div>
+            <div class="tl-content">
+              <h5><i class="${icon}" style="color:${statusColors[h.status]||'#FF4500'};margin-right:5px"></i>${h.message}</h5>
+              <p>${time}</p>
+            </div>
+          </div>`;
+      }).join('');
+
+      document.getElementById('res-timeline').innerHTML = tlHtml ||
+        '<p style="color:#aaa;font-size:0.85rem">No tracking updates yet.</p>';
+
+      // Items
+      const items = order.items || [];
+      document.getElementById('res-items').innerHTML = items.map(item => `
+        <div class="order-item-row">
+          <div>
+            <strong>${item.name}</strong>
+            <span style="color:#888;font-size:0.8rem;margin-left:6px">Size: ${item.size || 'N/A'} | Qty: ${item.qty}</span>
+          </div>
+          <span style="font-weight:600">Rs. ${(item.price * item.qty).toLocaleString()}</span>
+        </div>
+      `).join('') || '<p style="color:#aaa;font-size:0.85rem">No items found.</p>';
+    }
+
+    function showError(msg) {
+      document.getElementById('error-text').textContent = msg;
+      document.getElementById('error-msg').style.display = 'block';
+    }
+    function hideError() {
+      document.getElementById('error-msg').style.display = 'none';
+    }
+
+    // Enter key support
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('track-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') trackOrder();
+      });
+    });
+  </script>
+</body>
+</html>

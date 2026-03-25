@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <meta name="theme-color" content="#ffffff"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-title" content="ZENVYAR"/>
+  <meta name="description" content="ZENVYAR — Minimal. Premium. Timeless."/>
+  <title>ZENVYAR</title>
+  <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
+  <link rel="apple-touch-icon" href="zenvyar-logo.jpg"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header" id="site-header">
+    <div class="header-inner">
+      <!-- Left: Hamburger + Search -->
+      <div class="header-left">
+        <button class="icon-btn" onclick="toggleMenu()" aria-label="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <button class="icon-btn" onclick="toggleSearch()" aria-label="Search">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      <!-- Center: Logo -->
+      <div class="logo">ZENVYAR</div>
+      <!-- Right: Account + Bag -->
+      <div class="header-right">
+        <button class="icon-btn" onclick="openAccPanel()" aria-label="Account">
+          <i class="far fa-user"></i>
+        </button>
+        <button class="icon-btn cart-icon-btn" onclick="toggleCart()" aria-label="Bag">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="cart-dot" id="cart-dot" style="display:none"></span>
+        </button>
+      </div>
+    </div>
+    <!-- Search Bar -->
+    <div class="search-bar-wrap" id="search-wrap">
+      <div class="search-bar-inner">
+        <i class="fas fa-search" style="color:#bbb;font-size:0.8rem;margin-right:0.6rem"></i>
+        <input type="text" id="search-input" placeholder="Search products..." oninput="searchProducts()"/>
+        <button onclick="toggleSearch()" aria-label="Close"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== MOBILE MENU PANEL ===== -->
+  <div class="panel-overlay" id="menu-overlay" onclick="toggleMenu()"></div>
+  <div class="panel panel-left" id="menu-panel">
+    <div class="panel-header">
+      <span class="panel-title">Menu</span>
+      <button class="panel-close" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="panel-body">
+      <div class="menu-section-label">Collections</div>
+      <div class="fp-menu-item" onclick="filterProducts('all',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">All Products</div>
+      <div class="fp-menu-item" onclick="filterProducts('men',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Men</div>
+      <div class="fp-menu-item" onclick="filterProducts('women',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Women</div>
+      <div class="fp-menu-item" onclick="filterProducts('kids',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Junior</div>
+      <div class="menu-section-label" style="margin-top:1.5rem">Help</div>
+      <div class="fp-menu-item" onclick="window.location.href='orders.html'">My Orders</div>
+      <div class="fp-menu-item" onclick="window.location.href='track.html'">Track Order</div>
+      <div class="fp-menu-item" onclick="window.open('https://wa.me/923091452442','_blank')">Contact Us</div>
+    </div>
+  </div>
+
+  <!-- ===== HERO VIDEO SECTION ===== -->
+  <section class="hero-video-section">
+    <div class="hero-video-bg">
+      <!-- Option 1: Apni video ho toh: <source src="hero.mp4" type="video/mp4"/> -->
+      <video autoplay muted loop playsinline class="hero-video">
+        <source src="hero.mp4" type="video/mp4"/>
+      </video>
+      <!-- Animated CSS fallback — fabric/fashion feel -->
+      <div class="hero-video-fallback">
+        <div class="hero-fabric-anim">
+          <div class="fabric-layer f1"></div>
+          <div class="fabric-layer f2"></div>
+          <div class="fabric-layer f3"></div>
+          <div class="fabric-particles">
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">New Collection 2026</p>
+      <h1 class="hero-title">ZENVYAR</h1>
+      <p class="hero-tagline">Minimal. Premium. Timeless.</p>
+      <button class="hero-cta" onclick="document.getElementById('collections').scrollIntoView({behavior:'smooth'})">Explore Collection</button>
+    </div>
+    <div class="hero-scroll-hint"><span></span></div>
+  </section>
+
+  <!-- ===== SCROLL TEXT SECTION ===== -->
+  <section class="scroll-text-section">
+    <div class="scroll-text-inner">
+      <p class="scroll-line">Crafted for Confidence</p>
+      <p class="scroll-line">Designed for Style</p>
+      <p class="scroll-line">Built for Premium Quality</p>
+    </div>
+  </section>
+
+  <!-- ===== COLLECTIONS — 3 items ===== -->
+  <section class="collections-section" id="collections">
+    <div class="collections-grid">
+
+      <div class="collection-item" onclick="filterProducts('men',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">
+        <div class="collection-img collection-men">
+          <div class="collection-overlay"></div>
+          <div class="collection-label">
+            <span class="collection-sub">The</span>
+            <span class="collection-name">MEN</span>
+            <span class="collection-link">Explore →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="collection-item" onclick="filterProducts('women',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">
+        <div class="collection-img collection-women">
+          <div class="collection-overlay"></div>
+          <div class="collection-label">
+            <span class="collection-sub">The</span>
+            <span class="collection-name">WOMEN</span>
+            <span class="collection-link">Explore →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="collection-item" onclick="filterProducts('kids',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">
+        <div class="collection-img collection-junior">
+          <div class="collection-overlay"></div>
+          <div class="collection-label">
+            <span class="collection-sub">The</span>
+            <span class="collection-name">JUNIOR</span>
+            <span class="collection-link">Explore →</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== BRAND STATEMENT ===== -->
+  <section class="brand-statement">
+    <div class="brand-statement-inner">
+      <p class="brand-quote">"Wear less. Say more."</p>
+      <p class="brand-desc">ZENVYAR is not a store. It is a statement. Every piece is curated for those who understand that true luxury lies in simplicity.</p>
+    </div>
+  </section>
+
+  <!-- ===== PRODUCTS SECTION ===== -->
+  <section class="products-section" id="products-section">
+    <div class="products-header">
+      <div class="products-filter-tabs">
+        <button class="filter-tab active" onclick="filterProducts('all', this)">All</button>
+        <button class="filter-tab" onclick="filterProducts('men', this)">Men</button>
+        <button class="filter-tab" onclick="filterProducts('women', this)">Women</button>
+        <button class="filter-tab" onclick="filterProducts('kids', this)">Junior</button>
+      </div>
+    </div>
+    <div class="products-grid" id="products-grid"></div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">ZENVYAR</div>
+      <nav class="footer-nav">
+        <a href="#" onclick="filterProducts('men',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Men</a>
+        <a href="#" onclick="filterProducts('women',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Women</a>
+        <a href="#" onclick="filterProducts('kids',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Junior</a>
+        <a href="orders.html">Orders</a>
+        <a href="track.html">Track</a>
+      </nav>
+      <div class="footer-divider"></div>
+      <div class="footer-social">
+        <a href="https://instagram.com/zenvyar" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://wa.me/923091452442" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+      <p class="footer-copy">© 2026 ZENVYAR. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ===== CART PANEL ===== -->
+  <div class="panel-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+  <div class="panel" id="cart-panel">
+    <div class="panel-header">
+      <span class="panel-title">Your Bag</span>
+      <button class="panel-close" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer" id="cart-footer" style="display:none">
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="cart-total">Rs. 0</span>
+      </div>
+      <button class="btn-checkout" onclick="goToCheckout()">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <!-- ===== ACCOUNT PANEL ===== -->
+  <div class="panel-overlay" id="acc-overlay" onclick="closeAccPanel()"></div>
+  <div class="panel" id="acc-panel">
+    <div class="panel-header">
+      <span class="panel-title">Account</span>
+      <button class="panel-close" onclick="closeAccPanel()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="panel-body">
+      <div class="fp-menu-item" onclick="window.location.href='orders.html'"><i class="fas fa-shopping-bag"></i> My Orders</div>
+      <div class="fp-menu-item" onclick="window.location.href='track.html'"><i class="fas fa-map-marker-alt"></i> Track Order</div>
+      <div class="fp-menu-item" onclick="window.location.href='return.html'"><i class="fas fa-undo-alt"></i> Return / Refund</div>
+      <div class="fp-menu-item" onclick="window.open('https://wa.me/923091452442','_blank')"><i class="fab fa-whatsapp"></i> Contact Us</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,473 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <meta name="theme-color" content="#ffffff"/>
+  <title>Product | ZENVYAR</title>
+  <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family:'Montserrat',sans-serif; background:#fff; color:#111; -webkit-tap-highlight-color:transparent; }
+    button { -webkit-appearance:none; appearance:none; cursor:pointer; }
+    input { font-size:16px !important; }
+    img { display:block; }
+
+    /* ── HEADER ── */
+    .pd-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:1rem 2rem; position:sticky; top:0; z-index:200;
+      background:#fff; border-bottom:1px solid #ebebeb;
+    }
+    .pd-back {
+      background:none; border:none; color:#aaa;
+      font-family:'Montserrat',sans-serif; font-size:0.65rem;
+      font-weight:300; letter-spacing:0.25em; text-transform:uppercase;
+      display:flex; align-items:center; gap:0.5rem;
+      text-decoration:none; transition:color 0.2s;
+    }
+    .pd-back:hover { color:#111; }
+    .pd-logo {
+      font-family:'Playfair Display',serif; font-size:1.1rem;
+      font-weight:400; letter-spacing:0.4em; color:#111;
+    }
+    .pd-header-right { display:flex; gap:1.2rem; align-items:center; }
+    .pd-icon-btn {
+      background:none; border:none; color:#888; font-size:0.95rem;
+      transition:color 0.2s; position:relative;
+    }
+    .pd-icon-btn:hover { color:#111; }
+
+    /* ── MAIN PRODUCT LAYOUT ── */
+    .pd-main {
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:0;
+      max-width:1200px; margin:0 auto;
+      min-height:calc(100vh - 60px);
+    }
+
+    /* Left — image */
+    .pd-img-col {
+      position:sticky; top:60px;
+      height:calc(100vh - 60px);
+      background:#f5f3f0;
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden;
+    }
+    .pd-img-col img {
+      width:100%; height:100%; object-fit:cover;
+      transition:transform 0.6s ease;
+    }
+    .pd-img-col:hover img { transform:scale(1.03); }
+    .pd-img-placeholder {
+      font-size:8rem; color:rgba(0,0,0,0.06);
+    }
+    .pd-img-badge {
+      position:absolute; top:1.5rem; left:1.5rem;
+      background:#111; color:#fff;
+      font-family:'Montserrat',sans-serif;
+      font-size:0.58rem; font-weight:400;
+      letter-spacing:0.15em; text-transform:uppercase;
+      padding:0.3rem 0.8rem;
+    }
+
+    /* Right — info */
+    .pd-info-col {
+      padding:3rem 3rem 6rem;
+      overflow-y:auto;
+    }
+    .pd-breadcrumb {
+      font-size:0.6rem; font-weight:300;
+      letter-spacing:0.3em; text-transform:uppercase;
+      color:#C6A969; margin-bottom:1.2rem;
+    }
+    .pd-name {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.8rem,3vw,2.6rem);
+      font-weight:400; color:#111; line-height:1.2;
+      margin-bottom:1.5rem;
+    }
+    .pd-price-row {
+      display:flex; align-items:baseline; gap:1rem;
+      margin-bottom:0.6rem;
+    }
+    .pd-price {
+      font-size:1.2rem; font-weight:400;
+      color:#111; letter-spacing:0.05em;
+    }
+    .pd-old-price {
+      font-size:0.9rem; font-weight:300;
+      color:#bbb; text-decoration:line-through;
+    }
+    .pd-save {
+      font-size:0.62rem; font-weight:400;
+      letter-spacing:0.15em; text-transform:uppercase;
+      color:#fff; background:#C6A969;
+      padding:0.2rem 0.6rem; margin-bottom:2rem;
+      display:inline-block;
+    }
+    .pd-divider { height:1px; background:#f0f0f0; margin:1.8rem 0; }
+    .pd-desc {
+      font-size:0.8rem; font-weight:300;
+      line-height:2; color:#999; letter-spacing:0.04em;
+      margin-bottom:2rem;
+    }
+
+    /* Size */
+    .pd-label {
+      font-size:0.6rem; font-weight:400;
+      letter-spacing:0.3em; text-transform:uppercase;
+      color:#aaa; margin-bottom:0.8rem;
+    }
+    .size-btns { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:2rem; }
+    .size-btn {
+      background:none; border:1px solid #e0e0e0; color:#aaa;
+      font-family:'Montserrat',sans-serif; font-size:0.68rem;
+      font-weight:300; letter-spacing:0.1em;
+      padding:0.55rem 1.1rem; transition:all 0.2s;
+    }
+    .size-btn:hover, .size-btn.active {
+      border-color:#111; color:#111; background:#f8f8f8;
+    }
+
+    /* Qty */
+    .qty-row { display:flex; align-items:center; gap:1rem; margin-bottom:2.5rem; }
+    .qty-btn {
+      background:none; border:1px solid #e0e0e0; color:#888;
+      width:34px; height:34px; display:flex;
+      align-items:center; justify-content:center;
+      font-size:1rem; transition:all 0.2s;
+    }
+    .qty-btn:hover { border-color:#111; color:#111; }
+    .qty-val {
+      font-size:0.85rem; font-weight:300;
+      color:#555; min-width:20px; text-align:center;
+    }
+
+    /* CTA */
+    .pd-cta { display:flex; gap:0.8rem; margin-bottom:2rem; }
+    .btn-add-bag {
+      flex:1; background:#111; color:#fff; border:none;
+      font-family:'Montserrat',sans-serif; font-size:0.65rem;
+      font-weight:400; letter-spacing:0.3em; text-transform:uppercase;
+      padding:1rem; transition:background 0.3s;
+    }
+    .btn-add-bag:hover { background:#C6A969; }
+    .btn-wish {
+      background:none; border:1px solid #e0e0e0; color:#bbb;
+      padding:1rem 1.2rem; font-size:0.9rem; transition:all 0.3s;
+    }
+    .btn-wish:hover, .btn-wish.active { border-color:#C6A969; color:#C6A969; }
+
+    /* Features */
+    .pd-features { display:flex; flex-direction:column; gap:0.8rem; }
+    .pd-feature {
+      display:flex; align-items:center; gap:0.8rem;
+      font-size:0.68rem; font-weight:300;
+      letter-spacing:0.08em; color:#aaa;
+    }
+    .pd-feature i { color:#C6A969; font-size:0.75rem; width:14px; }
+
+    /* ── RELATED SECTION ── */
+    .related-wrap {
+      max-width:1200px; margin:0 auto;
+      padding:4rem 2rem 5rem;
+      border-top:1px solid #f0f0f0;
+    }
+    .related-heading {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.2rem,2.5vw,1.8rem);
+      font-weight:400; color:#111;
+      margin-bottom:0.5rem;
+    }
+    .related-sub {
+      font-size:0.65rem; font-weight:300;
+      letter-spacing:0.25em; text-transform:uppercase;
+      color:#C6A969; margin-bottom:2.5rem;
+    }
+    .related-grid {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:3px;
+    }
+    .related-card {
+      cursor:pointer; overflow:hidden;
+      background:#f8f7f5;
+      transition:transform 0.4s ease;
+    }
+    .related-card:hover { transform:scale(1.01); }
+    .related-img {
+      height:clamp(200px,22vw,300px);
+      background:#f0ede8; overflow:hidden;
+      position:relative;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .related-img img {
+      width:100%; height:100%; object-fit:cover;
+      transition:transform 0.5s ease;
+    }
+    .related-card:hover .related-img img { transform:scale(1.05); }
+    .related-img i { font-size:3rem; color:rgba(0,0,0,0.06); }
+    .related-badge {
+      position:absolute; top:10px; left:10px;
+      background:#111; color:#fff;
+      font-family:'Montserrat',sans-serif;
+      font-size:0.55rem; letter-spacing:0.1em;
+      padding:0.22rem 0.55rem;
+    }
+    .related-info { padding:0.9rem 1rem 1.2rem; background:#fff; }
+    .related-info h4 {
+      font-family:'Montserrat',sans-serif;
+      font-size:0.68rem; font-weight:400;
+      letter-spacing:0.1em; text-transform:uppercase;
+      color:#333; margin-bottom:0.4rem;
+    }
+    .related-price-row { display:flex; align-items:center; gap:0.5rem; }
+    .related-price {
+      font-size:0.75rem; font-weight:400; color:#111;
+    }
+    .related-old {
+      font-size:0.68rem; font-weight:300;
+      color:#C6A969; text-decoration:line-through;
+    }
+
+    /* Toast */
+    #toast {
+      position:fixed; bottom:2rem; left:50%;
+      transform:translateX(-50%) translateY(16px);
+      background:#111; color:#fff;
+      font-family:'Montserrat',sans-serif;
+      font-size:0.62rem; font-weight:300;
+      letter-spacing:0.2em; text-transform:uppercase;
+      padding:0.7rem 1.8rem;
+      opacity:0; transition:all 0.3s; z-index:9999;
+      white-space:nowrap;
+    }
+    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    /* ── MOBILE ── */
+    @media (max-width:768px) {
+      .pd-main { grid-template-columns:1fr; }
+      .pd-img-col {
+        position:relative; top:auto;
+        height:clamp(320px,75vw,480px);
+      }
+      .pd-info-col { padding:2rem 1.5rem 5rem; }
+      .related-grid { grid-template-columns:repeat(2,1fr); }
+      .related-wrap { padding:3rem 1.2rem 4rem; }
+      .pd-header { padding:1rem 1.2rem; }
+    }
+    @media (max-width:480px) {
+      .related-grid { grid-template-columns:repeat(2,1fr); gap:2px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="pd-header">
+    <a href="index.html" class="pd-back"><i class="fas fa-arrow-left"></i> Back</a>
+    <span class="pd-logo">ZENVYAR</span>
+    <div class="pd-header-right">
+      <button class="pd-icon-btn" onclick="addToBag()" aria-label="Add to bag">
+        <i class="fas fa-shopping-bag"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN: image + info side by side -->
+  <div class="pd-main">
+
+    <!-- LEFT: Product Image -->
+    <div class="pd-img-col" id="pd-img-col">
+      <i class="fas fa-tshirt pd-img-placeholder" id="pd-placeholder"></i>
+      <span class="pd-img-badge" id="pd-img-badge" style="display:none"></span>
+    </div>
+
+    <!-- RIGHT: Product Info -->
+    <div class="pd-info-col">
+      <p class="pd-breadcrumb" id="pd-category">Collection</p>
+      <h1 class="pd-name" id="pd-name">Loading...</h1>
+
+      <div class="pd-price-row">
+        <span class="pd-price" id="pd-price"></span>
+        <span class="pd-old-price" id="pd-old-price" style="display:none"></span>
+      </div>
+      <span class="pd-save" id="pd-save" style="display:none"></span>
+
+      <div class="pd-divider"></div>
+      <p class="pd-desc" id="pd-desc"></p>
+
+      <p class="pd-label">Select Size</p>
+      <div class="size-btns">
+        <button class="size-btn" onclick="selectSize(this,'XS')">XS</button>
+        <button class="size-btn" onclick="selectSize(this,'S')">S</button>
+        <button class="size-btn" onclick="selectSize(this,'M')">M</button>
+        <button class="size-btn" onclick="selectSize(this,'L')">L</button>
+        <button class="size-btn" onclick="selectSize(this,'XL')">XL</button>
+      </div>
+
+      <p class="pd-label">Quantity</p>
+      <div class="qty-row">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <span class="qty-val" id="qty-val">1</span>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+
+      <div class="pd-cta">
+        <button class="btn-add-bag" onclick="addToBag()">Add to Bag</button>
+      </div>
+
+      <div class="pd-divider"></div>
+      <div class="pd-features">
+        <div class="pd-feature"><i class="fas fa-truck"></i> Free delivery on orders above Rs. 3,000</div>
+        <div class="pd-feature"><i class="fas fa-undo"></i> Easy 7-day returns</div>
+        <div class="pd-feature"><i class="fas fa-shield-alt"></i> 100% authentic product</div>
+        <div class="pd-feature"><i class="fas fa-star"></i> Premium ZENVYAR quality</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RELATED PRODUCTS -->
+  <div class="related-wrap" id="related-wrap" style="display:none">
+    <p class="related-sub">Complete the Look</p>
+    <h2 class="related-heading" id="related-heading">You May Also Like</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    const products = [
+      { id:1,  name:'Classic White Tee',    category:'men',   price:2499, oldPrice:3499, discount:29, icon:'fas fa-tshirt',  image:'images/white-tee.jpg',     description:'Premium cotton, relaxed fit. Crafted for everyday luxury.' },
+      { id:2,  name:'Oversize Black Tee',   category:'men',   price:2799, oldPrice:3999, discount:30, icon:'fas fa-tshirt',  image:'images/black-tee.jpg',     description:'Signature oversized silhouette. The ZENVYAR essential.' },
+      { id:3,  name:'Slim Fit Trousers',    category:'men',   price:3499, oldPrice:4999, discount:30, icon:'fas fa-male',   image:'images/slim-trousers.jpg', description:'Tailored for the modern man. Clean lines, premium fabric.' },
+      { id:4,  name:'Linen Shirt',          category:'men',   price:2999, oldPrice:3999, discount:25, icon:'fas fa-tshirt',  image:'images/linen-shirt.jpg',   description:'Breathable luxury linen. Minimal design, maximum comfort.' },
+      { id:5,  name:'Premium Suit',         category:'men',   price:8999, oldPrice:12999,discount:31, icon:'fas fa-tshirt',  image:'images/suit-men.jpg',      description:'Tailored premium suit. Crafted for the distinguished man.' },
+      { id:6,  name:'Casual Chinos',        category:'men',   price:2299, oldPrice:3299, discount:30, icon:'fas fa-male',   image:'images/chinos.jpg',        description:'Relaxed everyday chinos. Comfort meets style.' },
+      { id:7,  name:'Minimal Dress',        category:'women', price:3999, oldPrice:5499, discount:27, icon:'fas fa-female', image:'images/minimal-dress.jpg', description:'Effortless elegance. Designed for the confident woman.' },
+      { id:8,  name:'Silk Blouse',          category:'women', price:3299, oldPrice:4499, discount:27, icon:'fas fa-female', image:'images/silk-blouse.jpg',   description:'Pure silk, premium finish. Timeless and refined.' },
+      { id:9,  name:'Formal Kurta',         category:'women', price:4499, oldPrice:6499, discount:31, icon:'fas fa-female', image:'images/formal-kurta.jpg',  description:'Elegant formal kurta. Crafted for special occasions.' },
+      { id:10, name:'Embroidered Suit',     category:'women', price:6999, oldPrice:9999, discount:30, icon:'fas fa-female', image:'images/embroidered-suit.jpg',description:'Hand-embroidered luxury suit. A masterpiece of craft.' },
+      { id:11, name:'Casual Lawn Set',      category:'women', price:2799, oldPrice:3999, discount:30, icon:'fas fa-female', image:'images/lawn-set.jpg',      description:'Soft lawn fabric. Perfect for everyday elegance.' },
+      { id:12, name:'Evening Gown',         category:'women', price:7499, oldPrice:10999,discount:32, icon:'fas fa-female', image:'images/evening-gown.jpg',  description:'Flowing evening gown. Luxury redefined.' },
+      { id:13, name:'Junior Classic Tee',   category:'kids',  price:1499, oldPrice:1999, discount:25, icon:'fas fa-child',  image:'images/junior-tee.jpg',    description:'Soft cotton for young ones. Comfortable all day.' },
+      { id:14, name:'Junior Joggers',       category:'kids',  price:1799, oldPrice:2499, discount:28, icon:'fas fa-child',  image:'images/junior-joggers.jpg',description:'Comfortable everyday wear for the little ones.' },
+      { id:15, name:'Junior Polo Shirt',    category:'kids',  price:1299, oldPrice:1799, discount:28, icon:'fas fa-child',  image:'images/junior-polo.jpg',   description:'Classic polo for young style.' },
+      { id:16, name:'Junior Formal Set',    category:'kids',  price:2499, oldPrice:3499, discount:29, icon:'fas fa-child',  image:'images/junior-formal.jpg', description:'Formal set for special occasions.' },
+      { id:17, name:'Junior Hoodie',        category:'kids',  price:1999, oldPrice:2799, discount:29, icon:'fas fa-child',  image:'images/junior-hoodie.jpg', description:'Cozy hoodie for cool days.' },
+      { id:18, name:'Junior Casual Dress',  category:'kids',  price:1699, oldPrice:2299, discount:26, icon:'fas fa-child',  image:'images/junior-dress.jpg',  description:'Cute casual dress for girls.' },
+    ];
+
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get('id'));
+    const p = products.find(pr => pr.id === id);
+
+    let selectedSize = '';
+    let qty = 1;
+    let wishlisted = false;
+
+    if (p) {
+      document.title = `${p.name} | ZENVYAR`;
+
+      // Category label
+      const catMap = { men:'Men\'s Collection', women:'Women\'s Collection', kids:'Junior Collection' };
+      document.getElementById('pd-category').textContent = catMap[p.category] || p.category;
+
+      document.getElementById('pd-name').textContent = p.name;
+      document.getElementById('pd-price').textContent = `Rs. ${p.price.toLocaleString()}`;
+      document.getElementById('pd-desc').textContent = p.description;
+
+      // Discount
+      if (p.oldPrice && p.oldPrice !== p.price) {
+        const oldEl = document.getElementById('pd-old-price');
+        oldEl.textContent = `Rs. ${p.oldPrice.toLocaleString()}`;
+        oldEl.style.display = 'inline';
+        const saveEl = document.getElementById('pd-save');
+        saveEl.textContent = `Save ${p.discount}%`;
+        saveEl.style.display = 'inline-block';
+        const badge = document.getElementById('pd-img-badge');
+        badge.textContent = `-${p.discount}%`;
+        badge.style.display = 'block';
+      }
+
+      // Image
+      const imgCol = document.getElementById('pd-img-col');
+      if (p.image) {
+        const img = document.createElement('img');
+        img.src = p.image;
+        img.alt = p.name;
+        img.onerror = () => img.remove();
+        // Insert before placeholder
+        imgCol.insertBefore(img, imgCol.firstChild);
+        document.getElementById('pd-placeholder').style.display = 'none';
+      }
+
+      // Related products — same category, exclude current, show up to 4
+      const related = products.filter(pr => pr.category === p.category && pr.id !== p.id).slice(0, 4);
+      if (related.length) {
+        const wrap = document.getElementById('related-wrap');
+        wrap.style.display = 'block';
+        // Heading based on category
+        const headMap = { men:'More for Him', women:'More for Her', kids:'More for Juniors' };
+        document.getElementById('related-heading').textContent = headMap[p.category] || 'You May Also Like';
+
+        document.getElementById('related-grid').innerHTML = related.map(r => `
+          <div class="related-card" onclick="window.location.href='product.html?id=${r.id}'">
+            <div class="related-img">
+              ${r.image
+                ? `<img src="${r.image}" alt="${r.name}" loading="lazy" onerror="this.style.display='none'">`
+                : `<i class="${r.icon}"></i>`}
+              <span class="related-badge">-${r.discount}%</span>
+            </div>
+            <div class="related-info">
+              <h4>${r.name}</h4>
+              <div class="related-price-row">
+                <span class="related-price">Rs. ${r.price.toLocaleString()}</span>
+                <span class="related-old">Rs. ${r.oldPrice.toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function selectSize(btn, size) {
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedSize = size;
+    }
+
+    function changeQty(val) {
+      qty = Math.max(1, qty + val);
+      document.getElementById('qty-val').textContent = qty;
+    }
+
+    function addToBag() {
+      if (!selectedSize) { showToast('Please select a size'); return; }
+      let cart = JSON.parse(localStorage.getItem('tv_cart') || '[]');
+      const key = `${p.id}-${selectedSize}`;
+      const existing = cart.find(c => c.cartKey === key);
+      if (existing) existing.qty += qty;
+      else cart.push({ ...p, qty, size: selectedSize, cartKey: key });
+      localStorage.setItem('tv_cart', JSON.stringify(cart));
+      showToast('Added to bag');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(t._t);
+      t._t = setTimeout(() => t.classList.remove('show'), 2200);
+    }
+  </script>
+</body>
+</html>
