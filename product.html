@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
   <meta name="theme-color" content="#ffffff"/>
-  <title>Product | ZENVYAR</title>
+  <title>Product | ZENYAR</title>
   <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
   <link rel="manifest" href="manifest.json"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -37,7 +37,34 @@
       font-family:'Playfair Display',serif; font-size:1.1rem;
       font-weight:400; letter-spacing:0.4em; color:#111;
     }
-    .pd-header-right { display:flex; gap:1.2rem; align-items:center; }
+    /* Description — bigger, black */
+    .pd-desc {
+      font-size:1rem !important; font-weight:400 !important;
+      line-height:1.9; color:#111 !important; letter-spacing:0.02em;
+      margin-bottom:1.5rem; padding-bottom:1.5rem;
+      border-bottom:1px solid #f0f0f0;
+    }
+    /* Fabric info block */
+    .pd-fabric-info {
+      background:#fafafa; border:1px solid #f0f0f0;
+      padding:1.2rem 1.4rem; margin-bottom:1.5rem;
+    }
+    .pd-fabric-info h5 {
+      font-size:0.6rem; font-weight:400; letter-spacing:0.3em;
+      text-transform:uppercase; color:#aaa; margin-bottom:0.8rem;
+    }
+    .pd-fabric-row {
+      display:flex; align-items:center; gap:0.7rem;
+      font-size:0.75rem; font-weight:300; color:#555;
+      margin-bottom:0.5rem; letter-spacing:0.04em;
+    }
+    .pd-fabric-row i { color:#C6A969; font-size:0.7rem; width:14px; }
+    /* Complete the Look — spacious */
+    .related-wrap {
+      max-width:1200px; margin:0 auto;
+      padding:5rem 2rem 6rem;
+      border-top:1px solid #f0f0f0;
+    }    .pd-header-right { display:flex; gap:1.2rem; align-items:center; }
     .pd-icon-btn {
       background:none; border:none; color:#888; font-size:0.95rem;
       transition:color 0.2s; position:relative;
@@ -160,6 +187,13 @@
       padding:1rem; transition:background 0.3s;
     }
     .btn-add-bag:hover { background:#C6A969; }
+    .btn-order-now-pd {
+      flex:1; background:#C6A969; color:#fff; border:none;
+      font-family:'Montserrat',sans-serif; font-size:0.65rem;
+      font-weight:400; letter-spacing:0.3em; text-transform:uppercase;
+      padding:1rem; transition:background 0.3s;
+    }
+    .btn-order-now-pd:hover { background:#b8955a; }
     .btn-wish {
       background:none; border:1px solid #e0e0e0; color:#bbb;
       padding:1rem 1.2rem; font-size:0.9rem; transition:all 0.3s;
@@ -274,7 +308,7 @@
   <!-- HEADER -->
   <header class="pd-header">
     <a href="index.html" class="pd-back"><i class="fas fa-arrow-left"></i> Back</a>
-    <span class="pd-logo">ZENVYAR</span>
+    <span class="pd-logo">ZENYAR</span>
     <div class="pd-header-right">
       <button class="pd-icon-btn" onclick="addToBag()" aria-label="Add to bag">
         <i class="fas fa-shopping-bag"></i>
@@ -305,6 +339,16 @@
       <div class="pd-divider"></div>
       <p class="pd-desc" id="pd-desc"></p>
 
+      <!-- Fabric & Printing Info -->
+      <div class="pd-fabric-info">
+        <h5>Fabric & Craftsmanship</h5>
+        <div class="pd-fabric-row"><i class="fas fa-circle"></i> 100% Premium Cotton / Luxury Fabric</div>
+        <div class="pd-fabric-row"><i class="fas fa-circle"></i> High-definition digital printing</div>
+        <div class="pd-fabric-row"><i class="fas fa-circle"></i> Colourfast — wash after wash</div>
+        <div class="pd-fabric-row"><i class="fas fa-circle"></i> Breathable & skin-friendly</div>
+        <div class="pd-fabric-row"><i class="fas fa-circle"></i> Precision stitching, reinforced seams</div>
+      </div>
+
       <p class="pd-label">Select Size</p>
       <div class="size-btns">
         <button class="size-btn" onclick="selectSize(this,'XS')">XS</button>
@@ -323,6 +367,7 @@
 
       <div class="pd-cta">
         <button class="btn-add-bag" onclick="addToBag()">Add to Bag</button>
+        <button class="btn-order-now-pd" onclick="orderNow()">Order Now</button>
       </div>
 
       <div class="pd-divider"></div>
@@ -459,6 +504,17 @@
       else cart.push({ ...p, qty, size: selectedSize, cartKey: key });
       localStorage.setItem('tv_cart', JSON.stringify(cart));
       showToast('Added to bag');
+    }
+
+    function orderNow() {
+      if (!selectedSize) { showToast('Please select a size'); return; }
+      let cart = JSON.parse(localStorage.getItem('tv_cart') || '[]');
+      const key = `${p.id}-${selectedSize}`;
+      const existing = cart.find(c => c.cartKey === key);
+      if (existing) existing.qty += qty;
+      else cart.push({ ...p, qty, size: selectedSize, cartKey: key });
+      localStorage.setItem('tv_cart', JSON.stringify(cart));
+      window.location.href = 'checkout.html';
     }
 
     function showToast(msg) {

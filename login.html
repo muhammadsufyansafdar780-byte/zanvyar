@@ -87,7 +87,7 @@
 
   // Already logged in as admin? redirect
   (async () => {
-    const t = localStorage.getItem('tv_token');
+    const t = localStorage.getItem('zv_token');
     if (!t) return;
     try {
       const res = await fetch(`${API}/auth/me`, { headers: { Authorization: `Bearer ${t}` } });
@@ -132,8 +132,8 @@
       if (!res.ok) { showError(data.message || 'Login failed'); return; }
       if (data.user?.role !== 'admin') { showError('Access denied. Admin accounts only.'); return; }
 
-      localStorage.setItem('tv_token', data.token);
-      localStorage.setItem('tv_user',  JSON.stringify(data.user));
+      localStorage.setItem('zv_token', data.token);
+      localStorage.setItem('zv_user',  JSON.stringify(data.user));
       window.location.href = 'admin.html';
     } catch(err) {
       showError('Cannot connect to server. Make sure backend is running.');

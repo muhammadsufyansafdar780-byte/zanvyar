@@ -1,4 +1,7 @@
-﻿// ===== PRODUCTS DATA =====
+﻿// ===== CONFIG =====
+const API = 'http://localhost:5000/api';
+
+// ===== PRODUCTS DATA (fallback if backend offline) =====
 const products = [
   { id:1,  name:'Classic White Tee',      category:'men',   price:2499, oldPrice:3499, discount:29, icon:'fas fa-tshirt',  image:'images/white-tee.jpg',     description:'Premium cotton, relaxed fit. Crafted for everyday luxury.' },
   { id:2,  name:'Oversize Black Tee',      category:'men',   price:2799, oldPrice:3999, discount:30, icon:'fas fa-tshirt',  image:'images/black-tee.jpg',     description:'Signature oversized silhouette. The ZENVYAR essential.' },
@@ -23,7 +26,8 @@ const products = [
 // Active discount (admin can set this)
 let activeDiscount = null; // e.g. { percent: 20, label: 'EID SALE' }
 
-let cart = [];
+// Load cart from localStorage on startup
+let cart = JSON.parse(localStorage.getItem('tv_cart') || '[]');
 let currentFilter = 'all';
 
 // ===== RENDER PRODUCTS =====
@@ -105,12 +109,31 @@ function addToCart(id, size) {
   const existing = cart.find(c => c.cartKey === key);
   if (existing) existing.qty++;
   else cart.push({ ...p, price: finalPrice, qty: 1, size: size || '', cartKey: key });
+  // Sync to localStorage so checkout.js can read it
+  localStorage.setItem('tv_cart', JSON.stringify(cart));
   updateCart();
   openCartPanel();
+  showToastMsg('Added to bag');
+}
+
+function showToastMsg(msg) {
+  let t = document.getElementById('global-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'global-toast';
+    t.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#111;color:#fff;padding:.7rem 1.8rem;font-family:Montserrat,sans-serif;font-size:.62rem;font-weight:300;letter-spacing:.2em;text-transform:uppercase;opacity:0;transition:all .3s;z-index:9999;white-space:nowrap;pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 2200);
 }
 
 function removeFromCart(key) {
   cart = cart.filter(c => c.cartKey !== key);
+  localStorage.setItem('tv_cart', JSON.stringify(cart));
   updateCart();
 }
 
@@ -118,6 +141,7 @@ function changeCartQty(key, val) {
   const item = cart.find(c => c.cartKey === key);
   if (!item) return;
   item.qty = Math.max(1, item.qty + val);
+  localStorage.setItem('tv_cart', JSON.stringify(cart));
   updateCart();
 }
 
@@ -184,6 +208,32 @@ function goToCheckout() {
 
 // ===== ACCOUNT PANEL =====
 function openAccPanel() {
+  const body = document.getElementById('acc-panel-body');
+  const user = getUser();
+  if (body) {
+    const userSection = user
+      ? `<div style="padding:1.2rem 0.8rem 0.5rem;border-bottom:1px solid #f5f5f5;margin-bottom:0.5rem">
+           <p style="font-family:'Montserrat',sans-serif;font-size:0.7rem;font-weight:400;letter-spacing:0.1em;color:#333">${user.name}</p>
+           <p style="font-family:'Montserrat',sans-serif;font-size:0.62rem;font-weight:300;color:#aaa;margin-top:0.2rem">${user.email}</p>
+         </div>`
+      : `<div class="fp-menu-item" onclick="window.location.href='login.html'"><i class="far fa-user"></i> Login / Register</div>`;
+
+    const adminLink = user?.role === 'admin'
+      ? `<div class="fp-menu-item" onclick="window.location.href='admin.html'"><i class="fas fa-cog"></i> Admin Panel</div>` : '';
+
+    const logoutLink = user
+      ? `<div class="fp-menu-item" onclick="doLogout()" style="color:#e74c3c"><i class="fas fa-sign-out-alt"></i> Logout</div>` : '';
+
+    body.innerHTML = `
+      ${userSection}
+      <div class="fp-menu-item" onclick="window.location.href='orders.html'"><i class="fas fa-shopping-bag"></i> My Orders</div>
+      <div class="fp-menu-item" onclick="window.location.href='track.html'"><i class="fas fa-map-marker-alt"></i> Track Order</div>
+      <div class="fp-menu-item" onclick="window.location.href='return.html'"><i class="fas fa-undo-alt"></i> Return / Refund</div>
+      <div class="fp-menu-item" onclick="window.open('https://wa.me/923091452442','_blank')"><i class="fab fa-whatsapp"></i> Contact Us</div>
+      ${adminLink}
+      ${logoutLink}
+    `;
+  }
   document.getElementById('acc-panel')?.classList.add('open');
   document.getElementById('acc-overlay')?.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -192,6 +242,10 @@ function closeAccPanel() {
   document.getElementById('acc-panel')?.classList.remove('open');
   document.getElementById('acc-overlay')?.classList.remove('open');
   document.body.style.overflow = '';
+}
+function doLogout() {
+  clearAuth();
+  closeAccPanel();
 }
 
 // ===== MENU PANEL =====
@@ -240,22 +294,57 @@ function initScrollAnimations() {
 // ===== LOAD FROM BACKEND =====
 async function loadFromBackend() {
   try {
-    const res = await fetch('http://localhost:5000/api/products', { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${API}/products`, { signal: AbortSignal.timeout(4000) });
     if (!res.ok) throw new Error();
     const data = await res.json();
     if (data && data.length > 0) {
       products.length = 0;
       data.forEach(p => products.push({
-        id: p._id, name: p.name, category: p.category,
-        price: p.price, oldPrice: p.oldPrice || p.price,
-        discount: p.discount || 0,
-        icon: 'fas fa-tshirt',
-        image: p.images?.[0] ? `http://localhost:5000${p.images[0]}` : null,
+        id:          p._id,
+        name:        p.name,
+        category:    p.category,
+        price:       p.price,
+        oldPrice:    p.oldPrice || p.price,
+        discount:    p.discount || 0,
+        icon:        'fas fa-tshirt',
+        image:       p.images?.[0] ? `http://localhost:5000${p.images[0]}` : null,
         description: p.description || '',
+        sizes:       p.sizes || [],
       }));
       renderProducts();
     }
-  } catch (_) {}
+  } catch (_) { /* backend offline — use local fallback */ }
+}
+
+// ===== AUTH HELPERS =====
+function getToken() { return localStorage.getItem('zv_token'); }
+function getUser()  { return JSON.parse(localStorage.getItem('zv_user') || 'null'); }
+function setAuth(token, user) {
+  localStorage.setItem('zv_token', token);
+  localStorage.setItem('zv_user', JSON.stringify(user));
+}
+function clearAuth() {
+  localStorage.removeItem('zv_token');
+  localStorage.removeItem('zv_user');
+}
+
+// ===== HERO SLIDER =====
+let heroIdx = 0;
+let heroTimer = null;
+function goHeroSlide(n) {
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots   = document.querySelectorAll('.hero-dot');
+  if (!slides.length) return;
+  slides[heroIdx].classList.remove('active');
+  dots[heroIdx]?.classList.remove('active');
+  heroIdx = n % slides.length;
+  slides[heroIdx].classList.add('active');
+  dots[heroIdx]?.classList.add('active');
+  clearInterval(heroTimer);
+  heroTimer = setInterval(() => goHeroSlide(heroIdx + 1), 6000);
+}
+function startHeroSlider() {
+  heroTimer = setInterval(() => goHeroSlide(heroIdx + 1), 6000);
 }
 
 // ===== INIT =====
@@ -264,4 +353,5 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCart();
   initScrollAnimations();
   loadFromBackend();
+  startHeroSlider();
 });

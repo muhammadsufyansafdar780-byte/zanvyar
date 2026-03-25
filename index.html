@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
   <meta name="theme-color" content="#ffffff"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-title" content="ZENVYAR"/>
-  <meta name="description" content="ZENVYAR — Minimal. Premium. Timeless."/>
-  <title>ZENVYAR</title>
+  <meta name="apple-mobile-web-app-title" content="ZENYAR"/>
+  <meta name="description" content="ZENYAR — Minimal. Premium. Timeless."/>
+  <title>ZENYAR</title>
   <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
   <link rel="apple-touch-icon" href="zenvyar-logo.jpg"/>
   <link rel="manifest" href="manifest.json"/>
@@ -32,7 +32,7 @@
         </button>
       </div>
       <!-- Center: Logo -->
-      <div class="logo">ZENVYAR</div>
+      <div class="logo">ZENYAR</div>
       <!-- Right: Account + Bag -->
       <div class="header-right">
         <button class="icon-btn" onclick="openAccPanel()" aria-label="Account">
@@ -75,31 +75,57 @@
   </div>
 
   <!-- ===== HERO VIDEO SECTION ===== -->
+  <!-- ===== HERO BANNER SLIDER ===== -->
   <section class="hero-video-section">
-    <div class="hero-video-bg">
-      <!-- Option 1: Apni video ho toh: <source src="hero.mp4" type="video/mp4"/> -->
-      <video autoplay muted loop playsinline class="hero-video">
-        <source src="hero.mp4" type="video/mp4"/>
-      </video>
-      <!-- Animated CSS fallback — fabric/fashion feel -->
-      <div class="hero-video-fallback">
-        <div class="hero-fabric-anim">
-          <div class="fabric-layer f1"></div>
-          <div class="fabric-layer f2"></div>
-          <div class="fabric-layer f3"></div>
-          <div class="fabric-particles">
-            <span></span><span></span><span></span>
-            <span></span><span></span><span></span>
+    <div class="hero-slides" id="hero-slides">
+
+      <!-- Slide 1: Main Brand -->
+      <div class="hero-slide active">
+        <div class="hero-video-bg">
+          <video autoplay muted loop playsinline class="hero-video">
+            <source src="hero.mp4" type="video/mp4"/>
+          </video>
+          <div class="hero-video-fallback">
+            <div class="hero-fabric-anim">
+              <div class="fabric-layer f1"></div><div class="fabric-layer f2"></div><div class="fabric-layer f3"></div>
+              <div class="fabric-particles"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
           </div>
         </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <p class="hero-eyebrow">New Collection 2026</p>
+          <h1 class="hero-title">ZENYAR</h1>
+          <p class="hero-tagline">Minimal. Premium. Timeless.</p>
+          <button class="hero-cta" onclick="document.getElementById('collections').scrollIntoView({behavior:'smooth'})">Explore Collection</button>
+        </div>
       </div>
+
+      <!-- Slide 2: Coming Soon -->
+      <div class="hero-slide">
+        <div class="hero-video-bg">
+          <div class="hero-video-fallback">
+            <div class="hero-fabric-anim">
+              <div class="fabric-layer f1" style="background:radial-gradient(ellipse at 30% 40%,rgba(198,169,105,0.3) 0%,transparent 65%)"></div>
+              <div class="fabric-layer f2"></div><div class="fabric-layer f3"></div>
+              <div class="fabric-particles"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <p class="hero-eyebrow" style="color:#C6A969;letter-spacing:0.6em">Coming Soon</p>
+          <h1 class="hero-title" style="font-size:clamp(2.5rem,8vw,6rem)">New Season</h1>
+          <p class="hero-tagline">Something extraordinary is on its way.</p>
+          <p style="font-family:'Montserrat',sans-serif;font-size:0.68rem;font-weight:300;letter-spacing:0.3em;color:rgba(255,255,255,0.45);text-transform:uppercase;margin-bottom:2.5rem">Stay tuned — 2026</p>
+          <button class="hero-cta" onclick="window.open('https://wa.me/923091452442','_blank')">Get Notified</button>
+        </div>
+      </div>
+
     </div>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <p class="hero-eyebrow">New Collection 2026</p>
-      <h1 class="hero-title">ZENVYAR</h1>
-      <p class="hero-tagline">Minimal. Premium. Timeless.</p>
-      <button class="hero-cta" onclick="document.getElementById('collections').scrollIntoView({behavior:'smooth'})">Explore Collection</button>
+    <div class="hero-dots">
+      <span class="hero-dot active" onclick="goHeroSlide(0)"></span>
+      <span class="hero-dot" onclick="goHeroSlide(1)"></span>
     </div>
     <div class="hero-scroll-hint"><span></span></div>
   </section>
@@ -121,7 +147,6 @@
         <div class="collection-img collection-men">
           <div class="collection-overlay"></div>
           <div class="collection-label">
-            <span class="collection-sub">The</span>
             <span class="collection-name">MEN</span>
             <span class="collection-link">Explore →</span>
           </div>
@@ -132,7 +157,6 @@
         <div class="collection-img collection-women">
           <div class="collection-overlay"></div>
           <div class="collection-label">
-            <span class="collection-sub">The</span>
             <span class="collection-name">WOMEN</span>
             <span class="collection-link">Explore →</span>
           </div>
@@ -143,7 +167,6 @@
         <div class="collection-img collection-junior">
           <div class="collection-overlay"></div>
           <div class="collection-label">
-            <span class="collection-sub">The</span>
             <span class="collection-name">JUNIOR</span>
             <span class="collection-link">Explore →</span>
           </div>
@@ -156,8 +179,8 @@
   <!-- ===== BRAND STATEMENT ===== -->
   <section class="brand-statement">
     <div class="brand-statement-inner">
-      <p class="brand-quote">"Wear less. Say more."</p>
-      <p class="brand-desc">ZENVYAR is not a store. It is a statement. Every piece is curated for those who understand that true luxury lies in simplicity.</p>
+      <p class="brand-quote">"Wear more. Say less."</p>
+      <p class="brand-desc">ZENYAR is not a store. It is a statement. Every piece is curated for those who understand that true luxury lies in simplicity.</p>
     </div>
   </section>
 
@@ -177,20 +200,51 @@
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
     <div class="footer-inner">
-      <div class="footer-logo">ZENVYAR</div>
-      <nav class="footer-nav">
-        <a href="#" onclick="filterProducts('men',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Men</a>
-        <a href="#" onclick="filterProducts('women',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Women</a>
-        <a href="#" onclick="filterProducts('kids',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Junior</a>
-        <a href="orders.html">Orders</a>
-        <a href="track.html">Track</a>
-      </nav>
-      <div class="footer-divider"></div>
-      <div class="footer-social">
-        <a href="https://instagram.com/zenvyar" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="https://wa.me/923091452442" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <div class="footer-logo">ZENYAR</div>
+
+      <!-- Footer columns -->
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4 class="footer-col-title">About</h4>
+          <p class="footer-col-text">Quality you can feel. Craftsmanship you can trust. At ZENYAR, every piece is designed to meet the highest standards of style and durability.</p>
+          <p class="footer-col-text" style="margin-top:0.8rem">Built on careful design, premium fabrics, and attention to detail. Each product is made with precision, comfort, and longevity in mind.</p>
+          <p class="footer-col-text" style="margin-top:0.8rem">Because you deserve clothing that feels as good as it looks. <em>ZENYAR — wear not just style, but confidence.</em></p>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-col-title">Explore</h4>
+          <a href="#" class="footer-col-link" onclick="filterProducts('men',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Men's Collection</a>
+          <a href="#" class="footer-col-link" onclick="filterProducts('women',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Women's Collection</a>
+          <a href="#" class="footer-col-link" onclick="filterProducts('kids',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Junior Collection</a>
+          <a href="#" class="footer-col-link" onclick="document.getElementById('collections').scrollIntoView({behavior:'smooth'});return false">New Arrivals</a>
+          <a href="#" class="footer-col-link" onclick="document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">All Products</a>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-col-title">Help</h4>
+          <a href="orders.html" class="footer-col-link">My Orders</a>
+          <a href="track.html" class="footer-col-link">Track Order</a>
+          <a href="return.html" class="footer-col-link">Return & Refund</a>
+          <a href="https://wa.me/923091452442" target="_blank" class="footer-col-link">Contact Us</a>
+          <a href="checkout.html" class="footer-col-link">Checkout</a>
+        </div>
       </div>
-      <p class="footer-copy">© 2026 ZENVYAR. All rights reserved.</p>
+
+      <div class="footer-divider"></div>
+      <p class="footer-follow">Follow Us</p>
+      <div class="footer-social">
+        <a href="https://instagram.com/zenyar" target="_blank" aria-label="Instagram" class="social-link">
+          <i class="fab fa-instagram"></i><span>Instagram</span>
+        </a>
+        <a href="https://wa.me/923091452442" target="_blank" aria-label="WhatsApp" class="social-link">
+          <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+        </a>
+        <a href="mailto:info@zenyar.com" aria-label="Email" class="social-link">
+          <i class="fas fa-envelope"></i><span>Email</span>
+        </a>
+        <a href="https://facebook.com/zenyar" target="_blank" aria-label="Facebook" class="social-link">
+          <i class="fab fa-facebook-f"></i><span>Facebook</span>
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 ZENYAR. All rights reserved.</p>
     </div>
   </footer>
 
@@ -208,6 +262,7 @@
         <span id="cart-total">Rs. 0</span>
       </div>
       <button class="btn-checkout" onclick="goToCheckout()">Proceed to Checkout</button>
+      <button class="btn-order-now" onclick="goToCheckout()">Order Now <i class="fas fa-arrow-right"></i></button>
     </div>
   </div>
 
@@ -218,7 +273,7 @@
       <span class="panel-title">Account</span>
       <button class="panel-close" onclick="closeAccPanel()"><i class="fas fa-times"></i></button>
     </div>
-    <div class="panel-body">
+    <div class="panel-body" id="acc-panel-body">
       <div class="fp-menu-item" onclick="window.location.href='orders.html'"><i class="fas fa-shopping-bag"></i> My Orders</div>
       <div class="fp-menu-item" onclick="window.location.href='track.html'"><i class="fas fa-map-marker-alt"></i> Track Order</div>
       <div class="fp-menu-item" onclick="window.location.href='return.html'"><i class="fas fa-undo-alt"></i> Return / Refund</div>
