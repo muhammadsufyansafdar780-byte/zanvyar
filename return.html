@@ -2,198 +2,220 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
-  <meta name="theme-color" content="#111111"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-  <meta name="mobile-web-app-capable" content="yes"/>
-  <title>Return / Refund | zenvyar</title>
-  <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
-  <link rel="apple-touch-icon" href="zenvyar-logo.jpg"/>
-  <link rel="manifest" href="manifest.json"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  <meta name="theme-color" content="#ffffff"/>
+  <title>Return & Refund | ZENYAR</title>
+  <link rel="icon" type="image/jpeg" href="ZENYAR-logo.jpg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
-    body { background:#f5f5f5; font-family:'Poppins',sans-serif; padding-bottom:3rem; -webkit-font-smoothing:antialiased; }
-    .rh { background:#111; color:#fff; padding:1rem 1.5rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
-    .rh .logo { font-size:1.3rem; font-weight:800; color:#fff; text-decoration:none; }
-    .rh .logo span { color:#FF4500; }
-    .rh a.back { color:#aaa; text-decoration:none; font-size:0.9rem; display:flex; align-items:center; gap:6px; min-height:44px; }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Montserrat',sans-serif;background:#fff;color:#111;-webkit-tap-highlight-color:transparent;min-height:100vh}
+    a{text-decoration:none}
+    button{-webkit-appearance:none;appearance:none;cursor:pointer}
+    input,select,textarea{font-size:16px!important;-webkit-appearance:none}
 
-    .rc { max-width:600px; margin:2rem auto; padding:0 1rem; }
+    .pg-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid #ebebeb;position:sticky;top:0;background:#fff;z-index:100}
+    .pg-back{background:none;border:none;color:#aaa;font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:300;letter-spacing:.25em;text-transform:uppercase;display:flex;align-items:center;gap:.5rem;transition:color .2s}
+    .pg-back:hover{color:#111}
+    .pg-logo{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;letter-spacing:.4em;color:#111}
+    .pg-logo a{color:#111}
 
-    .policy-box { background:#fff8f5; border:1.5px solid #FFD0C0; border-radius:14px; padding:1.4rem; margin-bottom:1.5rem; }
-    .policy-box h3 { font-size:1rem; color:#FF4500; margin-bottom:0.8rem; }
-    .policy-box ul { padding-left:1.2rem; color:#555; font-size:0.85rem; line-height:2; }
+    .pg-body{max-width:750px;margin:0 auto;padding:3rem 2rem 5rem}
+    .pg-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:400;color:#111;margin-bottom:.5rem}
+    .pg-sub{font-size:.68rem;font-weight:300;letter-spacing:.15em;color:#aaa;margin-bottom:3rem}
 
-    .form-card { background:#fff; border-radius:14px; padding:1.8rem; box-shadow:0 4px 20px rgba(0,0,0,0.07); }
-    .form-card h2 { font-size:1.1rem; margin-bottom:1.4rem; display:flex; align-items:center; gap:0.5rem; }
-    .form-card h2 i { color:#FF4500; }
+    /* Policy cards */
+    .policy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:3rem}
+    .policy-card{border:1px solid #e0e0e0;padding:1.5rem;text-align:center}
+    .policy-card i{font-size:1.5rem;color:#C6A969;display:block;margin-bottom:.8rem}
+    .policy-card h4{font-size:.68rem;font-weight:400;letter-spacing:.15em;text-transform:uppercase;color:#111;margin-bottom:.5rem}
+    .policy-card p{font-size:.65rem;font-weight:300;color:#aaa;line-height:1.7;letter-spacing:.03em}
 
-    .fg { margin-bottom:1.1rem; }
-    .fg label { display:block; font-size:0.82rem; font-weight:600; color:#555; margin-bottom:0.4rem; }
-    .fg input, .fg select, .fg textarea {
-      width:100%; padding:0.8rem 1rem; border:2px solid #eee; border-radius:10px;
-      font-family:'Poppins',sans-serif; font-size:16px; outline:none; transition:border 0.2s;
-      -webkit-appearance:none; appearance:none;
-    }
-    .fg select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
-      background-repeat:no-repeat; background-position:right 12px center; padding-right:36px;
-    }
-    .fg input:focus, .fg select:focus, .fg textarea:focus { border-color:#FF4500; }
-    .fg textarea { resize:vertical; }
+    /* Policy text */
+    .policy-section{margin-bottom:2.5rem}
+    .policy-section h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;color:#111;margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid #f0f0f0}
+    .policy-section p,.policy-section li{font-size:.75rem;font-weight:300;color:#555;line-height:2;letter-spacing:.03em}
+    .policy-section ul{padding-left:1.2rem;margin-top:.5rem}
+    .policy-section li{margin-bottom:.3rem}
 
-    .btn-submit {
-      width:100%; padding:1rem; background:linear-gradient(135deg,#FF4500,#ff6a00);
-      color:#fff; border:none; border-radius:10px; font-family:'Poppins',sans-serif;
-      font-size:1rem; font-weight:700; cursor:pointer; display:flex; align-items:center;
-      justify-content:center; gap:0.5rem; transition:all 0.3s; margin-top:0.5rem;
-      min-height:52px; touch-action:manipulation; -webkit-appearance:none;
-    }
-    .btn-submit:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(255,69,0,0.35); }
+    /* Return form */
+    .return-form-wrap{border:1px solid #e0e0e0;padding:2rem;margin-bottom:2rem}
+    .return-form-title{font-size:.62rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:#aaa;margin-bottom:1.5rem}
+    .fg{margin-bottom:1.2rem}
+    .fg label{display:block;font-size:.6rem;font-weight:400;letter-spacing:.25em;text-transform:uppercase;color:#aaa;margin-bottom:.5rem}
+    .fg input,.fg select,.fg textarea{width:100%;padding:.85rem 1rem;border:1px solid #e0e0e0;font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:300;color:#111;outline:none;transition:border .2s;background:#fff}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:#111}
+    .fg textarea{resize:none}
+    .fg select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23aaa' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .btn-submit{width:100%;padding:1.1rem;background:#111;color:#fff;border:none;font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:400;letter-spacing:.35em;text-transform:uppercase;cursor:pointer;transition:background .3s;margin-top:.5rem}
+    .btn-submit:hover{background:#C6A969}
 
-    .success-card { background:#e8f5e9; border:1.5px solid #a5d6a7; border-radius:14px; padding:2rem; text-align:center; display:none; }
-    .success-card i { font-size:3rem; color:#27ae60; display:block; margin-bottom:1rem; }
-    .success-card h3 { color:#27ae60; margin-bottom:0.5rem; }
-    .success-card p { color:#555; font-size:0.88rem; }
-    .success-card a { display:inline-block; margin-top:1rem; background:#FF4500; color:#fff; padding:0.7rem 1.5rem; border-radius:8px; text-decoration:none; font-weight:600; font-size:0.9rem; }
+    /* Success */
+    .submit-success{display:none;background:#f0faf0;border:1px solid #c8e6c9;padding:1.5rem;text-align:center;margin-top:1rem}
+    .submit-success i{font-size:1.5rem;color:#2e7d32;display:block;margin-bottom:.8rem}
+    .submit-success p{font-size:.75rem;font-weight:300;color:#2e7d32;line-height:1.8}
 
-    @media (max-width:480px) {
-      .form-card { padding:1.3rem; }
-      .rc { padding:0 0.8rem; }
-    }
+    /* Contact */
+    .contact-strip{background:linear-gradient(135deg,#2c1810,#6b3520);padding:2rem;text-align:center;margin-top:2rem}
+    .contact-strip p{font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:300;color:rgba(255,255,255,.6);letter-spacing:.1em;margin-bottom:1rem}
+    .contact-strip a{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.8rem;background:#C6A969;color:#fff;font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:400;letter-spacing:.25em;text-transform:uppercase;transition:opacity .2s}
+    .contact-strip a:hover{opacity:.85}
+
+    @media(max-width:600px){.pg-body{padding:2rem 1.2rem 4rem}.policy-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 
-<header class="rh">
-  <a href="index.html" class="logo"><img src="zenvyar-logo.jpg" alt="zenvyar" style="height:44px;vertical-align:middle;border-radius:6px;object-fit:contain"/><span style="vertical-align:middle;margin-left:8px">Zenvyar</span></a>
-  <a href="index.html" class="back"><i class="fas fa-arrow-left"></i> Back</a>
+<header class="pg-header">
+  <button class="pg-back" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</button>
+  <span class="pg-logo"><a href="index.html">ZENYAR</a></span>
+  <div style="width:60px"></div>
 </header>
 
-<div class="rc">
+<div class="pg-body">
+  <h1 class="pg-title">Return & Refund</h1>
+  <p class="pg-sub">We want you to love every ZENYAR piece</p>
 
-  <div class="policy-box">
-    <h3><i class="fas fa-info-circle"></i> Return Policy</h3>
+  <!-- Policy highlights -->
+  <div class="policy-grid">
+    <div class="policy-card">
+      <i class="fas fa-calendar-check"></i>
+      <h4>7-Day Returns</h4>
+      <p>Return within 7 days of delivery for a full refund or exchange</p>
+    </div>
+    <div class="policy-card">
+      <i class="fas fa-exchange-alt"></i>
+      <h4>Easy Exchange</h4>
+      <p>Wrong size? Exchange for the right fit at no extra cost</p>
+    </div>
+    <div class="policy-card">
+      <i class="fas fa-shield-alt"></i>
+      <h4>Quality Guarantee</h4>
+      <p>Defective or damaged items replaced immediately</p>
+    </div>
+  </div>
+
+  <!-- Policy details -->
+  <div class="policy-section">
+    <h3>Return Policy</h3>
+    <p>At ZENYAR, we stand behind the quality of every product. If you are not completely satisfied, we are here to help.</p>
     <ul>
-      <li>Returns accepted within <strong>7 days</strong> of delivery</li>
-      <li>Item must be unused, unwashed, with original tags</li>
-      <li>Damaged or wrong item — full refund guaranteed</li>
-      <li>Refund processed within 3-5 working days</li>
-      <li>For help: WhatsApp <strong>03091452442</strong></li>
+      <li>Items must be returned within <strong>7 days</strong> of delivery</li>
+      <li>Items must be unused, unwashed, and in original condition with tags attached</li>
+      <li>Sale items and customized products are not eligible for return</li>
+      <li>Original packaging must be intact</li>
     </ul>
   </div>
 
-  <div class="form-card" id="return-form-card">
-    <h2><i class="fas fa-undo-alt"></i> Submit Return Request</h2>
-
-    <div class="fg">
-      <label>Order ID / Tracking ID *</label>
-      <input type="text" id="r-orderid" placeholder="e.g. TV-123456" oninput="this.value=this.value.toUpperCase()" required/>
-    </div>
-    <div class="fg">
-      <label>Your Name *</label>
-      <input type="text" id="r-name" placeholder="Muhammad Ali" required/>
-    </div>
-    <div class="fg">
-      <label>Phone Number *</label>
-      <input type="tel" id="r-phone" placeholder="03XX-XXXXXXX" required/>
-    </div>
-    <div class="fg">
-      <label>Return Reason *</label>
-      <select id="r-reason" required>
-        <option value="">Select reason</option>
-        <option value="wrong-item">Wrong item received</option>
-        <option value="damaged">Item is damaged / defective</option>
-        <option value="size-issue">Size doesn't fit</option>
-        <option value="not-as-described">Not as described</option>
-        <option value="changed-mind">Changed my mind</option>
-        <option value="other">Other</option>
-      </select>
-    </div>
-    <div class="fg">
-      <label>Additional Details</label>
-      <textarea id="r-details" rows="3" placeholder="Describe the issue in detail..."></textarea>
-    </div>
-    <div class="fg">
-      <label>Refund Method *</label>
-      <select id="r-refund" required>
-        <option value="">Select</option>
-        <option value="easypaisa">Easypaisa</option>
-        <option value="jazzcash">JazzCash</option>
-        <option value="bank">Bank Transfer</option>
-      </select>
-    </div>
-    <div class="fg">
-      <label>Account Number (for refund)</label>
-      <input type="text" id="r-account" placeholder="03XX-XXXXXXX or account number"/>
-    </div>
-
-    <button class="btn-submit" onclick="submitReturn()">
-      <i class="fas fa-paper-plane"></i> Submit Return Request
-    </button>
+  <div class="policy-section">
+    <h3>Refund Process</h3>
+    <ul>
+      <li>Refunds are processed within <strong>3-5 business days</strong> after we receive the item</li>
+      <li>Refund will be issued via the original payment method</li>
+      <li>For COD orders, refund will be sent via Easypaisa or bank transfer</li>
+      <li>Delivery charges are non-refundable unless the item is defective</li>
+    </ul>
   </div>
 
-  <div class="success-card" id="success-card">
-    <i class="fas fa-check-circle"></i>
-    <h3>Request Submitted!</h3>
-    <p>Your return request has been received. Our team will contact you on <strong id="s-phone"></strong> within 24 hours.</p>
-    <p style="margin-top:0.5rem">Request ID: <strong id="s-reqid" style="color:#FF4500"></strong></p>
-    <a href="index.html">Continue Shopping</a>
+  <div class="policy-section">
+    <h3>How to Return</h3>
+    <p>Fill the form below or contact us on WhatsApp. We will arrange pickup from your doorstep.</p>
   </div>
 
+  <!-- Return Request Form -->
+  <div class="return-form-wrap">
+    <p class="return-form-title">Submit Return Request</p>
+    <form onsubmit="submitReturn(event)">
+      <div class="form-row">
+        <div class="fg"><label>Order ID *</label><input type="text" id="r-orderid" placeholder="e.g. ZY-123456" required/></div>
+        <div class="fg"><label>Phone *</label><input type="tel" id="r-phone" placeholder="03XX-XXXXXXX" required/></div>
+      </div>
+      <div class="fg"><label>Product Name *</label><input type="text" id="r-product" placeholder="Name of the item you want to return" required/></div>
+      <div class="fg">
+        <label>Reason *</label>
+        <select id="r-reason" required>
+          <option value="">Select reason</option>
+          <option>Wrong size received</option>
+          <option>Defective / damaged product</option>
+          <option>Wrong item delivered</option>
+          <option>Product not as described</option>
+          <option>Changed my mind</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Return Type *</label>
+        <select id="r-type" required>
+          <option value="">Select type</option>
+          <option>Exchange (different size)</option>
+          <option>Refund</option>
+          <option>Store credit</option>
+        </select>
+      </div>
+      <div class="fg"><label>Additional Details</label><textarea id="r-details" rows="3" placeholder="Any additional information..."></textarea></div>
+      <button type="submit" class="btn-submit">Submit Return Request</button>
+    </form>
+    <div class="submit-success" id="submit-success">
+      <i class="fas fa-check-circle"></i>
+      <p>Your return request has been submitted successfully.<br>Our team will contact you within 24 hours via WhatsApp.</p>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="contact-strip">
+    <p>Need immediate help? Contact us directly on WhatsApp</p>
+    <a href="https://wa.me/923091452442?text=Hi ZENYAR, I need help with a return" target="_blank">
+      <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+    </a>
+  </div>
 </div>
 
 <script>
   const API = 'http://localhost:5000/api';
 
   // Pre-fill order ID from URL
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('order')) document.getElementById('r-orderid').value = params.get('order').toUpperCase();
+  const urlId = new URLSearchParams(window.location.search).get('id');
+  if (urlId) document.getElementById('r-orderid').value = urlId;
 
-  async function submitReturn() {
-    const orderId  = document.getElementById('r-orderid').value.trim();
-    const name     = document.getElementById('r-name').value.trim();
-    const phone    = document.getElementById('r-phone').value.trim();
-    const reason   = document.getElementById('r-reason').value;
-    const details  = document.getElementById('r-details').value.trim();
-    const refund   = document.getElementById('r-refund').value;
-    const account  = document.getElementById('r-account').value.trim();
-
-    if (!orderId || !name || !phone || !reason || !refund) {
-      alert('Please fill all required fields.');
-      return;
-    }
-
-    const btn = document.querySelector('.btn-submit');
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  async function submitReturn(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]');
+    btn.textContent = 'Submitting...';
     btn.disabled = true;
 
-    // Save to localStorage (works without backend too)
-    const reqId = 'RET-' + Date.now().toString().slice(-6);
-    const request = { reqId, orderId, name, phone, reason, details, refund, account, date: new Date().toISOString(), status: 'pending' };
-    const existing = JSON.parse(localStorage.getItem('tv_returns') || '[]');
-    existing.unshift(request);
-    localStorage.setItem('tv_returns', JSON.stringify(existing));
+    const data = {
+      orderId:  document.getElementById('r-orderid').value.trim(),
+      phone:    document.getElementById('r-phone').value.trim(),
+      product:  document.getElementById('r-product').value.trim(),
+      reason:   document.getElementById('r-reason').value,
+      type:     document.getElementById('r-type').value,
+      details:  document.getElementById('r-details').value.trim(),
+    };
 
-    // Try backend (optional — if return route exists)
+    // Try to send to backend, fallback to WhatsApp
+    let sent = false;
     try {
-      await fetch(`${API}/returns`, {
+      const res = await fetch(`${API}/orders/return-request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(request)
+        body: JSON.stringify(data),
+        signal: AbortSignal.timeout(4000)
       });
+      if (res.ok) sent = true;
     } catch(_) {}
 
-    // Show success
-    document.getElementById('return-form-card').style.display = 'none';
-    document.getElementById('s-phone').textContent = phone;
-    document.getElementById('s-reqid').textContent = reqId;
-    document.getElementById('success-card').style.display = 'block';
+    if (!sent) {
+      // Fallback: open WhatsApp with details
+      const msg = `Hi ZENYAR, I want to return:\nOrder: ${data.orderId}\nProduct: ${data.product}\nReason: ${data.reason}\nType: ${data.type}\nPhone: ${data.phone}`;
+      window.open(`https://wa.me/923091452442?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    document.getElementById('submit-success').style.display = 'block';
+    e.target.style.display = 'none';
   }
 </script>
 </body>

@@ -277,7 +277,7 @@ input, select, textarea { font-size: 16px !important; }
 }
 .collections-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 3px;
   max-width: 1400px; margin: 0 auto;
   padding: 0 2rem;
@@ -367,9 +367,9 @@ input, select, textarea { font-size: 16px !important; }
   background: none; border: none;
   color: #aaa;
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.65rem; font-weight: 400;
-  letter-spacing: 0.3em; text-transform: uppercase;
-  padding: 0.75rem 2rem;
+  font-size: 0.85rem; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 1rem 3rem;
   transition: all 0.3s ease;
   border-right: 1px solid #e0e0e0;
 }
@@ -386,7 +386,8 @@ input, select, textarea { font-size: 16px !important; }
 
 /* ===== PRODUCT CARD — float animation ===== */
 .product-card {
-  background: #f8f7f5; cursor: pointer;
+  background: linear-gradient(160deg, #eef4fb 0%, #f0f6fc 50%, #e8f1f8 100%);
+  cursor: pointer;
   overflow: hidden; position: relative;
   animation: productFloat 6s ease-in-out infinite;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
@@ -416,7 +417,7 @@ input, select, textarea { font-size: 16px !important; }
 }
 .product-img {
   height: clamp(260px, 30vw, 380px);
-  background: #f0ede8;
+  background: linear-gradient(135deg, #ddeaf7 0%, #e8f2fb 100%);
   display: flex; align-items: center; justify-content: center;
   overflow: hidden; position: relative;
 }
@@ -436,7 +437,7 @@ input, select, textarea { font-size: 16px !important; }
 }
 .product-info {
   padding: 1rem 1rem 1.3rem;
-  background: #fff;
+  background: linear-gradient(180deg, #f5f9fd 0%, #eef4fb 100%);
 }
 .product-info h3 {
   font-family: 'Montserrat', sans-serif;
@@ -758,11 +759,10 @@ input, select, textarea { font-size: 16px !important; }
   .collections-grid { grid-template-columns: 1fr; gap: 3px; padding: 0; }
   .collection-img { height: 60vw; min-height: 280px; }
   .header-inner { padding: 1rem 1.5rem; }
-}
-@media (max-width: 600px) {
+}@media (max-width: 600px) {
   .products-grid { grid-template-columns: repeat(2, 1fr); }
   .hero-title { letter-spacing: 0.1em; }
-  .filter-tab { padding: 0.7rem 1rem; font-size: 0.58rem; }
+  .filter-tab { padding: 0.85rem 1.5rem; font-size: 0.75rem; }
   .panel { max-width: 100%; }
   .hero-video-section { margin-top: 57px; }
 }

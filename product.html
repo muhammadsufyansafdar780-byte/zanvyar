@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
   <meta name="theme-color" content="#ffffff"/>
   <title>Product | ZENYAR</title>
-  <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
+  <link rel="icon" type="image/jpeg" href="ZENYAR-logo.jpg"/>
   <link rel="manifest" href="manifest.json"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -14,7 +14,12 @@
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html { scroll-behavior: smooth; }
-    body { font-family:'Montserrat',sans-serif; background:#fff; color:#111; -webkit-tap-highlight-color:transparent; }
+    body {
+      font-family:'Montserrat',sans-serif;
+      background: linear-gradient(160deg, #f5ede0 0%, #ede0cc 30%, #e8d5b8 60%, #f0e8d8 100%);
+      background-attachment: fixed;
+      color:#111; -webkit-tap-highlight-color:transparent;
+    }
     button { -webkit-appearance:none; appearance:none; cursor:pointer; }
     input { font-size:16px !important; }
     img { display:block; }
@@ -23,7 +28,10 @@
     .pd-header {
       display:flex; align-items:center; justify-content:space-between;
       padding:1rem 2rem; position:sticky; top:0; z-index:200;
-      background:#fff; border-bottom:1px solid #ebebeb;
+      background:rgba(245,237,224,0.95);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(198,169,105,0.2);
     }
     .pd-back {
       background:none; border:none; color:#aaa;
@@ -37,16 +45,16 @@
       font-family:'Playfair Display',serif; font-size:1.1rem;
       font-weight:400; letter-spacing:0.4em; color:#111;
     }
-    /* Description — bigger, black */
     .pd-desc {
       font-size:1rem !important; font-weight:400 !important;
       line-height:1.9; color:#111 !important; letter-spacing:0.02em;
       margin-bottom:1.5rem; padding-bottom:1.5rem;
-      border-bottom:1px solid #f0f0f0;
+      border-bottom:1px solid rgba(198,169,105,0.2);
     }
     /* Fabric info block */
     .pd-fabric-info {
-      background:#fafafa; border:1px solid #f0f0f0;
+      background: rgba(245,237,224,0.7);
+      border:1px solid rgba(198,169,105,0.2);
       padding:1.2rem 1.4rem; margin-bottom:1.5rem;
     }
     .pd-fabric-info h5 {
@@ -63,7 +71,8 @@
     .related-wrap {
       max-width:1200px; margin:0 auto;
       padding:5rem 2rem 6rem;
-      border-top:1px solid #f0f0f0;
+      border-top:1px solid rgba(198,169,105,0.2);
+      background: linear-gradient(180deg, rgba(237,224,204,0.3) 0%, rgba(245,237,224,0.5) 100%);
     }    .pd-header-right { display:flex; gap:1.2rem; align-items:center; }
     .pd-icon-btn {
       background:none; border:none; color:#888; font-size:0.95rem;
@@ -84,7 +93,7 @@
     .pd-img-col {
       position:sticky; top:60px;
       height:calc(100vh - 60px);
-      background:#f5f3f0;
+      background: linear-gradient(160deg, #ddeaf7 0%, #e8f2fb 100%);
       display:flex; align-items:center; justify-content:center;
       overflow:hidden;
     }
@@ -109,6 +118,7 @@
     .pd-info-col {
       padding:3rem 3rem 6rem;
       overflow-y:auto;
+      background: linear-gradient(180deg, rgba(245,237,224,0.6) 0%, rgba(237,224,204,0.4) 100%);
     }
     .pd-breadcrumb {
       font-size:0.6rem; font-weight:300;
@@ -233,13 +243,14 @@
     }
     .related-card {
       cursor:pointer; overflow:hidden;
-      background:#f8f7f5;
+      background: linear-gradient(160deg, #eef4fb 0%, #e8f0f8 100%);
       transition:transform 0.4s ease;
     }
     .related-card:hover { transform:scale(1.01); }
     .related-img {
       height:clamp(200px,22vw,300px);
-      background:#f0ede8; overflow:hidden;
+      background: linear-gradient(135deg, #ddeaf7 0%, #e8f2fb 100%);
+      overflow:hidden;
       position:relative;
       display:flex; align-items:center; justify-content:center;
     }
@@ -256,7 +267,7 @@
       font-size:0.55rem; letter-spacing:0.1em;
       padding:0.22rem 0.55rem;
     }
-    .related-info { padding:0.9rem 1rem 1.2rem; background:#fff; }
+    .related-info { padding:0.9rem 1rem 1.2rem; background:rgba(245,237,224,0.5); }
     .related-info h4 {
       font-family:'Montserrat',sans-serif;
       font-size:0.68rem; font-weight:400;
@@ -375,7 +386,7 @@
         <div class="pd-feature"><i class="fas fa-truck"></i> Free delivery on orders above Rs. 3,000</div>
         <div class="pd-feature"><i class="fas fa-undo"></i> Easy 7-day returns</div>
         <div class="pd-feature"><i class="fas fa-shield-alt"></i> 100% authentic product</div>
-        <div class="pd-feature"><i class="fas fa-star"></i> Premium ZENVYAR quality</div>
+        <div class="pd-feature"><i class="fas fa-star"></i> Premium ZENYAR quality</div>
       </div>
     </div>
   </div>
@@ -392,7 +403,7 @@
   <script>
     const products = [
       { id:1,  name:'Classic White Tee',    category:'men',   price:2499, oldPrice:3499, discount:29, icon:'fas fa-tshirt',  image:'images/white-tee.jpg',     description:'Premium cotton, relaxed fit. Crafted for everyday luxury.' },
-      { id:2,  name:'Oversize Black Tee',   category:'men',   price:2799, oldPrice:3999, discount:30, icon:'fas fa-tshirt',  image:'images/black-tee.jpg',     description:'Signature oversized silhouette. The ZENVYAR essential.' },
+      { id:2,  name:'Oversize Black Tee',   category:'men',   price:2799, oldPrice:3999, discount:30, icon:'fas fa-tshirt',  image:'images/black-tee.jpg',     description:'Signature oversized silhouette. The ZENYAR essential.' },
       { id:3,  name:'Slim Fit Trousers',    category:'men',   price:3499, oldPrice:4999, discount:30, icon:'fas fa-male',   image:'images/slim-trousers.jpg', description:'Tailored for the modern man. Clean lines, premium fabric.' },
       { id:4,  name:'Linen Shirt',          category:'men',   price:2999, oldPrice:3999, discount:25, icon:'fas fa-tshirt',  image:'images/linen-shirt.jpg',   description:'Breathable luxury linen. Minimal design, maximum comfort.' },
       { id:5,  name:'Premium Suit',         category:'men',   price:8999, oldPrice:12999,discount:31, icon:'fas fa-tshirt',  image:'images/suit-men.jpg',      description:'Tailored premium suit. Crafted for the distinguished man.' },
@@ -420,7 +431,7 @@
     let wishlisted = false;
 
     if (p) {
-      document.title = `${p.name} | ZENVYAR`;
+      document.title = `${p.name} | ZENYAR`;
 
       // Category label
       const catMap = { men:'Men\'s Collection', women:'Women\'s Collection', kids:'Junior Collection' };

@@ -8,8 +8,8 @@
   <meta name="apple-mobile-web-app-title" content="ZENYAR"/>
   <meta name="description" content="ZENYAR — Minimal. Premium. Timeless."/>
   <title>ZENYAR</title>
-  <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
-  <link rel="apple-touch-icon" href="zenvyar-logo.jpg"/>
+  <link rel="icon" type="image/jpeg" href="ZENYAR-logo.jpg"/>
+  <link rel="apple-touch-icon" href="ZENYAR-logo.jpg"/>
   <link rel="manifest" href="manifest.json"/>
   <link rel="stylesheet" href="style.css"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -66,7 +66,6 @@
       <div class="fp-menu-item" onclick="filterProducts('all',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">All Products</div>
       <div class="fp-menu-item" onclick="filterProducts('men',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Men</div>
       <div class="fp-menu-item" onclick="filterProducts('women',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Women</div>
-      <div class="fp-menu-item" onclick="filterProducts('kids',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Junior</div>
       <div class="menu-section-label" style="margin-top:1.5rem">Help</div>
       <div class="fp-menu-item" onclick="window.location.href='orders.html'">My Orders</div>
       <div class="fp-menu-item" onclick="window.location.href='track.html'">Track Order</div>
@@ -163,16 +162,6 @@
         </div>
       </div>
 
-      <div class="collection-item" onclick="filterProducts('kids',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">
-        <div class="collection-img collection-junior">
-          <div class="collection-overlay"></div>
-          <div class="collection-label">
-            <span class="collection-name">JUNIOR</span>
-            <span class="collection-link">Explore →</span>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
@@ -191,7 +180,6 @@
         <button class="filter-tab active" onclick="filterProducts('all', this)">All</button>
         <button class="filter-tab" onclick="filterProducts('men', this)">Men</button>
         <button class="filter-tab" onclick="filterProducts('women', this)">Women</button>
-        <button class="filter-tab" onclick="filterProducts('kids', this)">Junior</button>
       </div>
     </div>
     <div class="products-grid" id="products-grid"></div>
@@ -214,7 +202,6 @@
           <h4 class="footer-col-title">Explore</h4>
           <a href="#" class="footer-col-link" onclick="filterProducts('men',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Men's Collection</a>
           <a href="#" class="footer-col-link" onclick="filterProducts('women',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Women's Collection</a>
-          <a href="#" class="footer-col-link" onclick="filterProducts('kids',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Junior Collection</a>
           <a href="#" class="footer-col-link" onclick="document.getElementById('collections').scrollIntoView({behavior:'smooth'});return false">New Arrivals</a>
           <a href="#" class="footer-col-link" onclick="document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">All Products</a>
         </div>

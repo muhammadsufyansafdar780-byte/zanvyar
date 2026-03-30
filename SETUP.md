@@ -1,4 +1,4 @@
-# ZENVYAR — Setup Guide
+﻿# ZENYAR — Setup Guide
 
 ## Requirements
 - Node.js (v18+)
@@ -14,7 +14,7 @@ npm install
 ## 2. Environment Variables
 Edit `backend/.env`:
 ```
-MONGO_URI=mongodb://localhost:27017/zenvyar
+MONGO_URI=mongodb://localhost:27017/ZENYAR
 EMAIL_USER=your_gmail@gmail.com
 EMAIL_PASS=your_app_password
 ADMIN_EMAIL=your_gmail@gmail.com
@@ -25,8 +25,8 @@ ADMIN_EMAIL=your_gmail@gmail.com
 node backend/seed-admin.js
 ```
 Admin credentials:
-- Email: admin@zenvyar.com
-- Password: Zenvyar@2026
+- Email: admin@ZENYAR.com
+- Password: ZENYAR@2026
 
 ## 4. Start Server
 ```bash

@@ -2,194 +2,232 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
-  <meta name="theme-color" content="#111111"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-  <meta name="mobile-web-app-capable" content="yes"/>
-  <title>My Orders | zenvyar</title>
-  <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
-  <link rel="apple-touch-icon" href="zenvyar-logo.jpg"/>
-  <link rel="manifest" href="manifest.json"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  <meta name="theme-color" content="#ffffff"/>
+  <title>My Orders | ZENYAR</title>
+  <link rel="icon" type="image/jpeg" href="ZENYAR-logo.jpg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
-    body { background:#f5f5f5; font-family:'Poppins',sans-serif; padding-bottom:3rem; -webkit-font-smoothing:antialiased; }
-    .orders-header { background:#111; color:#fff; padding:1rem 1.5rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
-    .orders-header .logo { font-size:1.3rem; font-weight:800; color:#fff; text-decoration:none; }
-    .orders-header .logo span { color:#FF4500; }
-    .orders-header a.back { color:#aaa; text-decoration:none; font-size:0.9rem; display:flex; align-items:center; gap:6px; min-height:44px; }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Montserrat',sans-serif;background:#fff;color:#111;-webkit-tap-highlight-color:transparent;min-height:100vh}
+    a{text-decoration:none}
+    button{-webkit-appearance:none;appearance:none;cursor:pointer}
 
-    .orders-container { max-width:700px; margin:2rem auto; padding:0 1rem; }
+    .pg-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid #ebebeb;position:sticky;top:0;background:#fff;z-index:100}
+    .pg-back{background:none;border:none;color:#aaa;font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:300;letter-spacing:.25em;text-transform:uppercase;display:flex;align-items:center;gap:.5rem;transition:color .2s}
+    .pg-back:hover{color:#111}
+    .pg-logo{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;letter-spacing:.4em;color:#111}
+    .pg-logo a{color:#111}
 
-    .search-track-box { background:#fff; border-radius:14px; padding:1.5rem; box-shadow:0 4px 20px rgba(0,0,0,0.07); margin-bottom:1.5rem; }
-    .search-track-box h2 { font-size:1.1rem; margin-bottom:0.3rem; }
-    .search-track-box p { color:#888; font-size:0.85rem; margin-bottom:1rem; }
-    .track-row { display:flex; gap:0.6rem; flex-wrap:wrap; }
-    .track-row input { flex:1; min-width:0; padding:0.8rem 1rem; border:2px solid #eee; border-radius:10px; font-family:'Poppins',sans-serif; font-size:16px; outline:none; transition:border 0.2s; -webkit-appearance:none; }
-    .track-row input:focus { border-color:#FF4500; }
-    .track-row button { padding:0.8rem 1.2rem; background:#FF4500; color:#fff; border:none; border-radius:10px; font-family:'Poppins',sans-serif; font-weight:600; cursor:pointer; font-size:0.9rem; min-height:48px; touch-action:manipulation; -webkit-appearance:none; }
+    .pg-body{max-width:800px;margin:0 auto;padding:3rem 2rem 5rem}
+    .pg-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:400;color:#111;margin-bottom:.5rem}
+    .pg-sub{font-size:.68rem;font-weight:300;letter-spacing:.15em;color:#aaa;margin-bottom:3rem}
 
-    @media (max-width:480px) {
-      .track-row { flex-direction:column; }
-      .track-row button { width:100%; }
-    }
+    /* Track by ID */
+    .track-quick{background:#fafafa;border:1px solid #e0e0e0;padding:1.5rem;margin-bottom:3rem}
+    .track-quick h4{font-size:.62rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:#aaa;margin-bottom:1rem}
+    .track-row{display:flex;gap:.8rem}
+    .track-row input{flex:1;padding:.85rem 1rem;border:1px solid #e0e0e0;font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:300;outline:none;transition:border .2s;-webkit-appearance:none}
+    .track-row input:focus{border-color:#111}
+    .track-row button{padding:.85rem 1.5rem;background:#111;color:#fff;border:none;font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:400;letter-spacing:.25em;text-transform:uppercase;transition:background .3s}
+    .track-row button:hover{background:#C6A969}
 
-    .section-title { font-size:1rem; font-weight:700; color:#333; margin:1.5rem 0 0.8rem; display:flex; align-items:center; gap:0.5rem; }
-    .section-title i { color:#FF4500; }
+    /* Orders list */
+    .orders-section-title{font-size:.62rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:#aaa;margin-bottom:1.5rem}
+    .order-card{border:1px solid #e0e0e0;margin-bottom:1rem;transition:border-color .2s}
+    .order-card:hover{border-color:#C6A969}
+    .order-card-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;cursor:pointer;gap:1rem;flex-wrap:wrap}
+    .order-id{font-family:'Playfair Display',serif;font-size:1rem;color:#111;letter-spacing:.05em}
+    .order-date{font-size:.62rem;font-weight:300;color:#aaa;letter-spacing:.08em}
+    .order-status{font-size:.6rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;padding:.3rem .8rem;border:1px solid}
+    .status-placed{color:#1565c0;border-color:#1565c0;background:#f0f4ff}
+    .status-confirmed{color:#6a1b9a;border-color:#6a1b9a;background:#f9f0ff}
+    .status-processing{color:#e65100;border-color:#e65100;background:#fff8f0}
+    .status-shipped{color:#00695c;border-color:#00695c;background:#f0faf8}
+    .status-delivered{color:#2e7d32;border-color:#2e7d32;background:#f0faf0}
+    .status-cancelled{color:#c62828;border-color:#c62828;background:#fff0f0}
+    .order-total{font-size:.82rem;font-weight:400;color:#111}
+    .order-card-body{padding:0 1.5rem 1.5rem;display:none;border-top:1px solid #f5f5f5}
+    .order-card-body.open{display:block}
+    .order-items{margin-top:1rem}
+    .order-item-row{display:flex;align-items:center;gap:1rem;padding:.7rem 0;border-bottom:1px solid #f8f8f8}
+    .order-item-row:last-child{border-bottom:none}
+    .order-item-img{width:50px;height:60px;background:#f5f3f0;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .order-item-img img{width:100%;height:100%;object-fit:cover}
+    .order-item-img i{color:#ddd;font-size:1.2rem}
+    .order-item-info{flex:1}
+    .order-item-info h4{font-size:.7rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:#333;margin-bottom:.2rem}
+    .order-item-info p{font-size:.62rem;font-weight:300;color:#aaa}
+    .order-item-price{font-size:.75rem;font-weight:400;color:#111}
+    .order-actions{display:flex;gap:.8rem;margin-top:1.2rem;flex-wrap:wrap}
+    .order-btn{padding:.65rem 1.4rem;font-family:'Montserrat',sans-serif;font-size:.6rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;border:1px solid #e0e0e0;background:#fff;color:#555;transition:all .2s;cursor:pointer}
+    .order-btn:hover{border-color:#111;color:#111}
+    .order-btn.primary{background:#111;color:#fff;border-color:#111}
+    .order-btn.primary:hover{background:#C6A969;border-color:#C6A969}
 
-    .order-card { background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); margin-bottom:1rem; border:1px solid #f0f0f0; transition:box-shadow 0.2s; }
-    .order-card:hover { box-shadow:0 6px 24px rgba(0,0,0,0.1); }
-    .order-card-top { padding:1rem 1.2rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #f5f5f5; flex-wrap:wrap; gap:0.5rem; }
-    .order-id-label { font-size:0.78rem; color:#999; }
-    .order-id-val { font-size:0.95rem; font-weight:700; color:#222; }
-    .order-date { font-size:0.78rem; color:#aaa; }
-    .status-pill { padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:700; }
-    .status-placed    { background:#e3f2fd; color:#1565c0; }
-    .status-confirmed { background:#fff3e0; color:#e65100; }
-    .status-processing{ background:#f3e5f5; color:#7b1fa2; }
-    .status-shipped   { background:#fff8e1; color:#f57f17; }
-    .status-delivered { background:#e8f5e9; color:#27ae60; }
-    .status-cancelled { background:#ffebee; color:#c62828; }
+    /* Empty state */
+    .empty-state{text-align:center;padding:5rem 2rem}
+    .empty-state i{font-size:3rem;color:#e0e0e0;display:block;margin-bottom:1.5rem}
+    .empty-state h3{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:400;color:#111;margin-bottom:.8rem}
+    .empty-state p{font-size:.72rem;font-weight:300;color:#aaa;letter-spacing:.05em;line-height:1.8;margin-bottom:2rem}
+    .empty-state a{display:inline-block;padding:.9rem 2.5rem;background:#111;color:#fff;font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;transition:background .3s}
+    .empty-state a:hover{background:#C6A969}
 
-    .order-card-items { padding:0.8rem 1.2rem; display:flex; gap:0.5rem; flex-wrap:wrap; border-bottom:1px solid #f5f5f5; }
-    .order-item-chip { background:#f8f8f8; border-radius:6px; padding:0.3rem 0.7rem; font-size:0.78rem; color:#555; }
+    /* Loading */
+    .loading{text-align:center;padding:3rem;color:#aaa;font-size:.72rem;font-weight:300;letter-spacing:.2em;text-transform:uppercase}
+    .loading i{display:block;font-size:1.5rem;margin-bottom:1rem;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-    .order-card-footer { padding:0.8rem 1.2rem; display:flex; justify-content:space-between; align-items:center; }
-    .order-total-label { font-size:0.82rem; color:#888; }
-    .order-total-val { font-size:1rem; font-weight:800; color:#FF4500; }
-    .order-actions { display:flex; gap:0.5rem; }
-    .btn-track { background:#FF4500; color:#fff; border:none; padding:0.45rem 1rem; border-radius:8px; font-size:0.8rem; font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; display:flex; align-items:center; gap:5px; text-decoration:none; }
-    .btn-reorder { background:#fff; color:#FF4500; border:1.5px solid #FF4500; padding:0.45rem 1rem; border-radius:8px; font-size:0.8rem; font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; }
-
-    .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; }
-    .empty-state i { font-size:3.5rem; color:#eee; display:block; margin-bottom:1rem; }
-    .empty-state a { display:inline-block; margin-top:1rem; background:#FF4500; color:#fff; padding:0.7rem 1.5rem; border-radius:8px; text-decoration:none; font-weight:600; font-size:0.9rem; }
-
-    .loading { text-align:center; padding:2rem; color:#aaa; }
-    .loading i { font-size:2rem; color:#FF4500; animation:spin 1s linear infinite; }
-    @keyframes spin { to { transform:rotate(360deg); } }
+    @media(max-width:600px){.pg-body{padding:2rem 1.2rem 4rem}.track-row{flex-direction:column}.order-card-header{gap:.6rem}}
   </style>
 </head>
 <body>
 
-  <header class="orders-header">
-    <a href="index.html" class="logo"><img src="zenvyar-logo.jpg" alt="Zenvyar" style="height:44px;vertical-align:middle;border-radius:6px;object-fit:contain"/><span style="font-size:1rem;font-weight:700;vertical-align:middle;margin-left:6px">Zenvyar</span></a>
-    <a href="index.html" class="back"><i class="fas fa-arrow-left"></i> Back to Shop</a>
-  </header>
+<header class="pg-header">
+  <button class="pg-back" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</button>
+  <span class="pg-logo"><a href="index.html">ZENYAR</a></span>
+  <div style="width:60px"></div>
+</header>
 
-  <div class="orders-container">
+<div class="pg-body">
+  <h1 class="pg-title">My Orders</h1>
+  <p class="pg-sub">Track and manage your ZENYAR orders</p>
 
-    <!-- Track by ID -->
-    <div class="search-track-box">
-      <h2><i class="fas fa-search" style="color:#FF4500"></i> Track an Order</h2>
-      <p>Enter your Order / Tracking ID to see its status</p>
-      <div class="track-row">
-        <input type="text" id="track-input" placeholder="e.g. TV-123456" oninput="this.value=this.value.toUpperCase()"/>
-        <button onclick="goTrack()"><i class="fas fa-map-marker-alt"></i> Track</button>
-      </div>
+  <!-- Quick Track -->
+  <div class="track-quick">
+    <h4>Track by Order ID</h4>
+    <div class="track-row">
+      <input type="text" id="quick-track-input" placeholder="Enter your Order ID (e.g. ZY-123456)"/>
+      <button onclick="quickTrack()">Track</button>
     </div>
-
-    <!-- Recent Orders from localStorage -->
-    <div class="section-title"><i class="fas fa-history"></i> Recent Orders</div>
-    <div id="loading" class="loading"><i class="fas fa-circle-notch"></i></div>
-    <div id="orders-list"></div>
-
   </div>
 
-  <script>
-    const API = 'http://localhost:5000/api';
+  <!-- Orders -->
+  <p class="orders-section-title">Recent Orders</p>
+  <div id="orders-list">
+    <div class="loading"><i class="fas fa-circle-notch"></i>Loading orders...</div>
+  </div>
+</div>
 
-    function goTrack() {
-      const id = document.getElementById('track-input').value.trim();
-      if (!id) return;
-      window.location.href = `track.html?id=${id}`;
-    }
-    document.getElementById('track-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter') goTrack();
-    });
+<script>
+  const API = 'http://localhost:5000/api';
 
-    const statusColors = { placed:'placed', confirmed:'confirmed', processing:'processing', shipped:'shipped', delivered:'delivered', cancelled:'cancelled' };
+  const statusLabels = {
+    placed:'Order Placed', confirmed:'Confirmed', processing:'Being Packed',
+    shipped:'Shipped', delivered:'Delivered', cancelled:'Cancelled'
+  };
 
-    async function loadOrders() {
-      const list = document.getElementById('orders-list');
-      document.getElementById('loading').style.display = 'block';
+  function quickTrack() {
+    const id = document.getElementById('quick-track-input').value.trim();
+    if (!id) return;
+    window.location.href = `track.html?id=${id}`;
+  }
 
-      // Try backend (logged-in user)
-      const token = localStorage.getItem('tv_token');
-      if (token) {
-        try {
-          const res = await fetch(`${API}/orders/my`, { headers: { 'Authorization': `Bearer ${token}` } });
-          if (res.ok) {
-            const orders = await res.json();
-            document.getElementById('loading').style.display = 'none';
-            renderOrders(orders);
-            return;
-          }
-        } catch(e) {}
-      }
+  document.getElementById('quick-track-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') quickTrack();
+  });
 
-      // Fallback: localStorage saved order IDs
-      const savedIds = JSON.parse(localStorage.getItem('tv_order_ids') || '[]');
-      document.getElementById('loading').style.display = 'none';
+  async function loadOrders() {
+    const list = document.getElementById('orders-list');
+    const token = localStorage.getItem('zv_token');
 
-      if (savedIds.length === 0) {
-        list.innerHTML = `<div class="empty-state"><i class="fas fa-shopping-bag"></i><p>No orders yet</p><a href="index.html">Start Shopping</a></div>`;
-        return;
-      }
-
-      // Fetch each order from backend
-      const orders = [];
-      for (const id of savedIds.slice(0, 10)) {
-        try {
-          const res = await fetch(`${API}/orders/track/${id}`);
-          if (res.ok) orders.push(await res.json());
-        } catch(e) {}
-      }
-
-      if (orders.length === 0) {
-        list.innerHTML = `<div class="empty-state"><i class="fas fa-shopping-bag"></i><p>Could not load orders. Check your connection.</p><a href="index.html">Start Shopping</a></div>`;
-        return;
-      }
-      renderOrders(orders);
+    // Try backend if logged in
+    if (token) {
+      try {
+        const res = await fetch(`${API}/orders/my`, {
+          headers: { Authorization: `Bearer ${token}` },
+          signal: AbortSignal.timeout(4000)
+        });
+        if (res.ok) {
+          const orders = await res.json();
+          if (orders.length) { renderOrders(orders); return; }
+        }
+      } catch(_) {}
     }
 
-    function renderOrders(orders) {
-      const list = document.getElementById('orders-list');
-      if (!orders.length) {
-        list.innerHTML = `<div class="empty-state"><i class="fas fa-shopping-bag"></i><p>No orders yet</p><a href="index.html">Start Shopping</a></div>`;
-        return;
+    // Fallback: guest orders from localStorage
+    const ids = JSON.parse(localStorage.getItem('tv_order_ids') || '[]');
+    if (!ids.length) { renderEmpty(); return; }
+
+    // Fetch each order by ID
+    const orders = [];
+    for (const id of ids.slice(0, 10)) {
+      try {
+        const res = await fetch(`${API}/orders/track/${id}`, { signal: AbortSignal.timeout(3000) });
+        if (res.ok) orders.push(await res.json());
+      } catch(_) {
+        // Backend offline — show basic info from localStorage
+        orders.push({ orderId: id, status: 'placed', items: [], total: 0, createdAt: new Date() });
       }
-      list.innerHTML = orders.map(o => `
-        <div class="order-card">
-          <div class="order-card-top">
-            <div>
-              <div class="order-id-label">Order ID</div>
-              <div class="order-id-val">${o.orderId}</div>
-              <div class="order-date">${new Date(o.createdAt).toLocaleDateString('en-PK', { day:'numeric', month:'short', year:'numeric' })}</div>
-            </div>
-            <span class="status-pill status-${o.status}">${o.status.charAt(0).toUpperCase() + o.status.slice(1)}</span>
+    }
+
+    if (orders.length) renderOrders(orders);
+    else renderEmpty();
+  }
+
+  function renderOrders(orders) {
+    const list = document.getElementById('orders-list');
+    list.innerHTML = orders.map((o, i) => `
+      <div class="order-card">
+        <div class="order-card-header" onclick="toggleOrder(${i})">
+          <div>
+            <div class="order-id">${o.orderId}</div>
+            <div class="order-date">${new Date(o.createdAt).toLocaleDateString('en-PK',{day:'numeric',month:'long',year:'numeric'})}</div>
           </div>
-          <div class="order-card-items">
-            ${(o.items || []).map(i => `<span class="order-item-chip">${i.name} ${i.size ? `(${i.size})` : ''} ×${i.qty}</span>`).join('')}
+          <span class="order-status status-${o.status}">${statusLabels[o.status] || o.status}</span>
+          <div class="order-total">Rs. ${(o.total || 0).toLocaleString()}</div>
+          <i class="fas fa-chevron-down" style="color:#aaa;font-size:.75rem;transition:transform .3s" id="chev-${i}"></i>
+        </div>
+        <div class="order-card-body" id="body-${i}">
+          <div class="order-items">
+            ${(o.items || []).map(item => `
+              <div class="order-item-row">
+                <div class="order-item-img">
+                  ${item.image ? `<img src="${item.image}" onerror="this.style.display='none'">` : `<i class="fas fa-tshirt"></i>`}
+                </div>
+                <div class="order-item-info">
+                  <h4>${item.name || 'Product'}</h4>
+                  <p>${item.size ? `Size: ${item.size} · ` : ''}Qty: ${item.qty || 1}</p>
+                </div>
+                <span class="order-item-price">Rs. ${((item.price || 0) * (item.qty || 1)).toLocaleString()}</span>
+              </div>
+            `).join('')}
           </div>
-          <div class="order-card-footer">
-            <div>
-              <div class="order-total-label">Total Amount</div>
-              <div class="order-total-val">Rs. ${(o.total || 0).toLocaleString()}</div>
-            </div>
-            <div class="order-actions">
-              <a href="track.html?id=${o.orderId}" class="btn-track"><i class="fas fa-map-marker-alt"></i> Track</a>
-            </div>
+          <div class="order-actions">
+            <button class="order-btn primary" onclick="window.location.href='track.html?id=${o.orderId}'">
+              <i class="fas fa-map-marker-alt"></i> Track Order
+            </button>
+            ${o.status === 'delivered' ? `<button class="order-btn" onclick="window.location.href='return.html?id=${o.orderId}'"><i class="fas fa-undo"></i> Return</button>` : ''}
+            <button class="order-btn" onclick="window.open('https://wa.me/923091452442?text=Hi ZENYAR, my order ID is ${o.orderId}','_blank')">
+              <i class="fab fa-whatsapp"></i> Help
+            </button>
           </div>
         </div>
-      `).join('');
-    }
+      </div>
+    `).join('');
+  }
 
-    loadOrders();
-  </script>
+  function toggleOrder(i) {
+    const body = document.getElementById(`body-${i}`);
+    const chev = document.getElementById(`chev-${i}`);
+    body.classList.toggle('open');
+    chev.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+  }
+
+  function renderEmpty() {
+    document.getElementById('orders-list').innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-shopping-bag"></i>
+        <h3>No Orders Yet</h3>
+        <p>You haven't placed any orders yet.<br>Explore our collection and find something you love.</p>
+        <a href="index.html">Shop Now</a>
+      </div>`;
+  }
+
+  loadOrders();
+</script>
 </body>
 </html>

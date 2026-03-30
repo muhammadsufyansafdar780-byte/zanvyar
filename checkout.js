@@ -1,14 +1,14 @@
 ﻿// ===== CONFIG =====
 const API = 'http://localhost:5000/api';
 
-// ZENVYAR payment details — admin can update these
+// ZENYAR payment details — admin can update these
 const PAYMENT_INFO = {
-  easypaisa: { number: '03091452442', name: 'ZENVYAR' },
-  jazzcash:  { number: '03091452442', name: 'ZENVYAR' },
+  easypaisa: { number: '03091452442', name: 'ZENYAR' },
+  jazzcash:  { number: '03091452442', name: 'ZENYAR' },
   bank: {
     accounts: [
-      { bank: 'HBL',    title: 'ZENVYAR',  iban: 'PK00HABB0000000000000000' },
-      { bank: 'Meezan', title: 'ZENVYAR',  iban: 'PK00MEZN0000000000000000' },
+      { bank: 'HBL',    title: 'ZENYAR',  iban: 'PK00HABB0000000000000000' },
+      { bank: 'Meezan', title: 'ZENYAR',  iban: 'PK00MEZN0000000000000000' },
     ]
   }
 };
@@ -102,8 +102,8 @@ function goStep(n) {
     if (i === n) s.classList.add('active');
   });
 
-  // When entering step 2, refresh payment detail box
-  if (n === 2) selectPay(selectedPay);
+  // When entering step 2, refresh payment detail box after DOM is visible
+  if (n === 2) setTimeout(() => selectPay(selectedPay), 10);
   if (n === 3) buildReview();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -135,10 +135,15 @@ function validateStep2() {
 // ===== PAYMENT SELECTION =====
 function selectPay(method) {
   selectedPay = method;
+
+  // Update selected state on options (only if visible)
   document.querySelectorAll('.pay-option').forEach(el => el.classList.remove('selected'));
-  document.getElementById(`opt-${method}`).classList.add('selected');
+  const optEl = document.getElementById(`opt-${method}`);
+  if (optEl) optEl.classList.add('selected');
 
   const box = document.getElementById('pay-detail-box');
+  if (!box) return; // step-2 not visible yet — will be called again when step-2 opens
+
   const subtotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
   const delivery = subtotal >= 3000 ? 0 : 250;
   const discount = appliedPromo
@@ -176,7 +181,7 @@ function selectPay(method) {
         </button>
         <div class="fg" style="margin-bottom:0">
           <label>Transaction ID *</label>
-          <input type="text" id="txn-id" placeholder="Paste your transaction ID here"/>
+          <input type="text" id="txn-id" placeholder="Paste your transaction ID here" style="font-size:16px!important"/>
         </div>
       </div>`;
     return;
@@ -195,13 +200,13 @@ function selectPay(method) {
           </div>
         `).join('')}
         <ul class="pay-steps-list">
-          <li><span>1</span>Transfer <strong>Rs. ${total.toLocaleString()}</strong> to any of the accounts above</li>
-          <li><span>2</span>Take a screenshot of the transfer confirmation</li>
+          <li><span>1</span>Transfer <strong>Rs. ${total.toLocaleString()}</strong> to any account above</li>
+          <li><span>2</span>Take a screenshot of the confirmation</li>
           <li><span>3</span>Enter your transaction reference below</li>
         </ul>
         <div class="fg" style="margin-bottom:0;margin-top:1rem">
           <label>Transaction Reference *</label>
-          <input type="text" id="txn-id" placeholder="Bank transaction reference number"/>
+          <input type="text" id="txn-id" placeholder="Bank transaction reference number" style="font-size:16px!important"/>
         </div>
       </div>`;
   }

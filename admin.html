@@ -1,592 +1,693 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
-  <meta name="theme-color" content="#1a1a2e"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
-  <meta name="mobile-web-app-capable" content="yes"/>
-  <title>Admin Panel | zenvyar</title>
-  <link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
-  <link rel="apple-touch-icon" href="zenvyar-logo.jpg"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-    body{font-family:'Poppins',sans-serif;background:#f0f2f5;color:#333;-webkit-font-smoothing:antialiased}
-    .admin-layout{display:flex;min-height:100vh;min-height:100dvh}
-
-    /* Sidebar */
-    .admin-sidebar{width:240px;background:#1a1a2e;color:#fff;flex-shrink:0;display:flex;flex-direction:column}
-    .admin-logo{padding:1.5rem;font-size:1.3rem;font-weight:800;border-bottom:1px solid rgba(255,255,255,0.1)}
-    .admin-logo span{color:#f85606}
-    .admin-nav{flex:1;padding:1rem 0}
-    .nav-item{display:flex;align-items:center;gap:0.8rem;padding:0.85rem 1.5rem;color:rgba(255,255,255,0.7);cursor:pointer;transition:all 0.3s;font-size:0.9rem}
-    .nav-item:hover,.nav-item.active{background:rgba(248,86,6,0.2);color:#fff;border-right:3px solid #f85606}
-    .nav-item i{width:18px;text-align:center}
-    .admin-user{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.1);font-size:0.82rem;color:rgba(255,255,255,0.6)}
-
-    /* Main */
-    .admin-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-    .admin-topbar{background:#fff;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
-    .admin-topbar h2{font-size:1.1rem;color:#333}
-    .admin-content{flex:1;padding:2rem;overflow-y:auto}
-
-    /* Panels */
-    .panel{display:none}
-    .panel.active{display:block}
-
-    /* Stats */
-    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-bottom:2rem}
-    .stat-card{background:#fff;border-radius:12px;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:1rem}
-    .stat-icon{width:55px;height:55px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
-    .stat-icon.orange{background:#fff3ee;color:#f85606}
-    .stat-icon.blue{background:#e3f2fd;color:#1565c0}
-    .stat-icon.green{background:#e8f5e9;color:#27ae60}
-    .stat-icon.purple{background:#f3e5f5;color:#7b1fa2}
-    .stat-info h3{font-size:1.5rem;font-weight:700;color:#333}
-    .stat-info p{font-size:0.82rem;color:#888}
-
-    /* Table */
-    .table-box{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);overflow:hidden}
-    .table-header{padding:1.2rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee}
-    .table-header h3{font-size:1rem;font-weight:600}
-    table{width:100%;border-collapse:collapse}
-    th{background:#f9f9f9;padding:0.8rem 1rem;text-align:left;font-size:0.82rem;color:#888;font-weight:500}
-    td{padding:0.8rem 1rem;font-size:0.88rem;border-bottom:1px solid #f5f5f5;vertical-align:middle}
-    tr:last-child td{border-bottom:none}
-    tr:hover td{background:#fafafa}
-
-    /* Buttons */
-    .btn{padding:0.5rem 1.2rem;border-radius:6px;border:none;cursor:pointer;font-family:'Poppins',sans-serif;font-size:0.85rem;font-weight:500;transition:all 0.3s;display:inline-flex;align-items:center;gap:0.4rem}
-    .btn-primary{background:#f85606;color:#fff}
-    .btn-primary:hover{background:#d94e00}
-    .btn-success{background:#27ae60;color:#fff}
-    .btn-danger{background:#e74c3c;color:#fff}
-    .btn-outline{background:#fff;border:1px solid #ddd;color:#555}
-    .btn-outline:hover{border-color:#f85606;color:#f85606}
-    .btn-sm{padding:0.3rem 0.8rem;font-size:0.78rem}
-
-    /* Badge */
-    .badge{padding:0.2rem 0.7rem;border-radius:50px;font-size:0.75rem;font-weight:600}
-    .badge-placed{background:#e3f2fd;color:#1565c0}
-    .badge-confirmed{background:#fff3e0;color:#e65100}
-    .badge-shipped{background:#f3e5f5;color:#7b1fa2}
-    .badge-delivered{background:#e8f5e9;color:#27ae60}
-    .badge-cancelled{background:#ffebee;color:#c62828}
-
-    /* Form */
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-    .form-group{margin-bottom:1rem}
-    .form-group label{display:block;font-size:0.82rem;font-weight:500;color:#555;margin-bottom:0.4rem}
-    .form-group input,.form-group select,.form-group textarea{width:100%;border:1px solid #ddd;border-radius:8px;padding:0.7rem 1rem;font-family:'Poppins',sans-serif;font-size:16px;outline:none;transition:border 0.3s;-webkit-appearance:none;appearance:none}
-    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#f85606}
-    .form-group textarea{resize:vertical}
-    .form-full{grid-column:1/-1}
-
-    /* Modal */
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
-    .modal-overlay.open{display:flex}
-    .modal{background:#fff;border-radius:16px;padding:2rem;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;position:relative}
-    .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#aaa}
-    .modal h3{font-size:1.1rem;margin-bottom:1.5rem;padding-bottom:0.8rem;border-bottom:2px solid #f85606}
-
-    /* Image preview */
-    .img-preview{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem}
-    .img-preview img{width:70px;height:70px;object-fit:cover;border-radius:6px;border:1px solid #eee}
-
-    /* Search */
-    .search-input{border:1px solid #ddd;border-radius:6px;padding:0.5rem 1rem;font-family:'Poppins',sans-serif;font-size:0.88rem;outline:none;width:220px}
-    .search-input:focus{border-color:#f85606}
-
-    @media(max-width:768px){
-      .admin-sidebar{display:none}
-      .form-grid{grid-template-columns:1fr}
-      .admin-content{padding:1rem}
-      .stats-grid{grid-template-columns:repeat(2,1fr);gap:0.8rem}
-      .stat-card{padding:1rem}
-      .table-header{flex-direction:column;align-items:flex-start;gap:0.6rem}
-      .search-input{width:100%}
-      table{font-size:0.78rem}
-      th,td{padding:0.6rem 0.5rem}
-    }
-    @media(max-width:480px){
-      .stats-grid{grid-template-columns:1fr 1fr}
-      .modal{padding:1.3rem}
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin | ZENYAR</title>
+<link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Montserrat',sans-serif;background:#f5f5f5;color:#111;min-height:100vh}
+button,input,select,textarea{font-family:'Montserrat',sans-serif;font-size:14px;-webkit-appearance:none;appearance:none}
+a{text-decoration:none}
+/* Layout */
+.admin-wrap{display:flex;min-height:100vh}
+.sidebar{width:220px;background:#111;flex-shrink:0;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100}
+.sidebar-logo{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;letter-spacing:.35em;color:#C6A969;padding:1.8rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.sidebar-logo span{display:block;font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:300;letter-spacing:.2em;color:rgba(255,255,255,.3);margin-top:.3rem;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:.8rem;padding:.9rem 1.5rem;color:rgba(255,255,255,.45);font-size:.72rem;font-weight:300;letter-spacing:.1em;cursor:pointer;transition:all .2s;border:none;background:none;width:100%;text-align:left}
+.nav-item i{width:16px;font-size:.85rem}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,.05)}
+.nav-item.active{color:#C6A969;background:rgba(198,169,105,.08)}
+.sidebar-bottom{margin-top:auto;padding:1rem}
+.main{margin-left:220px;flex:1;padding:2rem}
+/* Header */
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.admin-header h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:400;color:#111}
+.admin-header p{font-size:.65rem;font-weight:300;color:#aaa;letter-spacing:.1em;margin-top:.2rem}
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.stat-card{background:#fff;border:1px solid #e0e0e0;padding:1.5rem;text-align:center}
+.stat-card i{font-size:1.5rem;color:#C6A969;display:block;margin-bottom:.8rem}
+.stat-val{font-family:'Playfair Display',serif;font-size:1.8rem;color:#111;margin-bottom:.3rem}
+.stat-label{font-size:.6rem;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:#aaa}
+/* Section */
+.section{background:#fff;border:1px solid #e0e0e0;margin-bottom:1.5rem}
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid #f0f0f0}
+.section-title{font-size:.65rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:#111}
+.btn{padding:.65rem 1.4rem;font-size:.6rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:.5rem}
+.btn-primary{background:#111;color:#fff}
+.btn-primary:hover{background:#C6A969}
+.btn-danger{background:#c62828;color:#fff}
+.btn-danger:hover{background:#b71c1c}
+.btn-outline{background:#fff;color:#555;border:1px solid #e0e0e0}
+.btn-outline:hover{border-color:#111;color:#111}
+.btn-gold{background:#C6A969;color:#fff}
+.btn-gold:hover{background:#b8955a}
+/* Table */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:.58rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#aaa;padding:.8rem 1rem;text-align:left;border-bottom:1px solid #f0f0f0;white-space:nowrap}
+td{font-size:.72rem;font-weight:300;color:#333;padding:.9rem 1rem;border-bottom:1px solid #f8f8f8;vertical-align:middle}
+tr:hover td{background:#fafafa}
+.td-img{width:44px;height:52px;background:#ddeaf7;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.td-img img{width:100%;height:100%;object-fit:cover}
+.td-img i{color:#aac4e0;font-size:1rem}
+.status-badge{font-size:.55rem;font-weight:400;letter-spacing:.15em;text-transform:uppercase;padding:.25rem .7rem;border:1px solid}
+.s-placed{color:#1565c0;border-color:#1565c0;background:#f0f4ff}
+.s-confirmed{color:#6a1b9a;border-color:#6a1b9a;background:#f9f0ff}
+.s-processing{color:#e65100;border-color:#e65100;background:#fff8f0}
+.s-shipped{color:#00695c;border-color:#00695c;background:#f0faf8}
+.s-delivered{color:#2e7d32;border-color:#2e7d32;background:#f0faf0}
+.s-cancelled{color:#c62828;border-color:#c62828;background:#fff0f0}
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid #f0f0f0;position:sticky;top:0;background:#fff;z-index:1}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;color:#111}
+.modal-close{background:none;border:none;color:#aaa;font-size:1rem;cursor:pointer;transition:color .2s}
+.modal-close:hover{color:#111}
+.modal-body{padding:1.5rem}
+.modal-footer{padding:1rem 1.5rem;border-top:1px solid #f0f0f0;display:flex;gap:.8rem;justify-content:flex-end}
+/* Form */
+.fg{margin-bottom:1rem}
+.fg label{display:block;font-size:.58rem;font-weight:400;letter-spacing:.25em;text-transform:uppercase;color:#aaa;margin-bottom:.4rem}
+.fg input,.fg select,.fg textarea{width:100%;padding:.75rem 1rem;border:1px solid #e0e0e0;font-size:.82rem;font-weight:300;color:#111;outline:none;transition:border .2s;background:#fff;border-radius:0}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:#111}
+.fg textarea{resize:vertical;min-height:80px}
+.fg select{cursor:pointer}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+/* Image preview */
+.img-preview{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+.img-thumb{width:70px;height:80px;background:#ddeaf7;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+.img-thumb img{width:100%;height:100%;object-fit:cover}
+.img-thumb .rm{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.6);color:#fff;border:none;width:18px;height:18px;border-radius:50%;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+/* Discount banner */
+.discount-bar{background:linear-gradient(135deg,#2c1810,#6b3520);padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.discount-bar label{font-size:.6rem;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.discount-bar input{padding:.5rem .8rem;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:.8rem;width:80px;border-radius:0;outline:none}
+.discount-bar input::placeholder{color:rgba(255,255,255,.4)}
+/* Loading */
+.loading-row td{text-align:center;padding:2rem;color:#aaa;font-size:.7rem;letter-spacing:.2em}
+/* Empty */
+.empty-row td{text-align:center;padding:3rem;color:#ccc;font-size:.7rem;letter-spacing:.2em}
+/* Tabs */
+.page{display:none}
+.page.active{display:block}
+/* Alert */
+.alert{padding:.8rem 1rem;font-size:.72rem;font-weight:300;margin-bottom:1rem;display:none}
+.alert.show{display:block}
+.alert-success{background:#f0faf0;border:1px solid #c8e6c9;color:#2e7d32}
+.alert-error{background:#fff0f0;border:1px solid #ffcdd2;color:#c62828}
+@media(max-width:768px){.sidebar{width:60px}.sidebar-logo span,.nav-item span{display:none}.main{margin-left:60px}.stats-grid{grid-template-columns:1fr 1fr}.form-row{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 
-<div class="admin-layout">
+<div class="admin-wrap">
   <!-- Sidebar -->
-  <aside class="admin-sidebar">
-    <div class="admin-logo">
-      <img src="zenvyar-logo.jpg" alt="zenvyar" style="height:36px;vertical-align:middle;margin-right:8px;border-radius:6px;object-fit:contain"/> Zenvyar Admin
+  <aside class="sidebar">
+    <div class="sidebar-logo">ZENYAR<span>Admin Panel</span></div>
+    <button class="nav-item active" onclick="showPage('dashboard')"><i class="fas fa-chart-bar"></i><span>Dashboard</span></button>
+    <button class="nav-item" onclick="showPage('products')"><i class="fas fa-tshirt"></i><span>Products</span></button>
+    <button class="nav-item" onclick="showPage('orders')"><i class="fas fa-shopping-bag"></i><span>Orders</span></button>
+    <button class="nav-item" onclick="showPage('discount')"><i class="fas fa-tag"></i><span>Discount</span></button>
+    <div class="sidebar-bottom">
+      <button class="nav-item" onclick="window.open('index.html','_blank')"><i class="fas fa-external-link-alt"></i><span>View Site</span></button>
+      <button class="nav-item" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
     </div>
-    <nav class="admin-nav">
-      <div class="nav-item active" onclick="showPanel('dashboard')"><i class="fas fa-chart-bar"></i> Dashboard</div>
-      <div class="nav-item" onclick="showPanel('products')"><i class="fas fa-tshirt"></i> Products</div>
-      <div class="nav-item" onclick="showPanel('orders')"><i class="fas fa-shopping-bag"></i> Orders</div>
-      <div class="nav-item" onclick="showPanel('users')"><i class="fas fa-users"></i> Users</div>
-      <div class="nav-item" onclick="showPanel('ads')"><i class="fas fa-ad"></i> Ads</div>
-      <div class="nav-item" onclick="showPanel('sale')"><i class="fas fa-tags"></i> Sale</div>
-      <div class="nav-item" onclick="showPanel('returns')"><i class="fas fa-undo-alt"></i> Returns</div>
-      <div class="nav-item" onclick="showPanel('coupons')"><i class="fas fa-ticket-alt"></i> Coupons</div>
-      <div class="nav-item" onclick="showPanel('sellers')"><i class="fas fa-store"></i> Sellers</div>
-    </nav>
-    <div class="admin-user" id="admin-user-info">Loading...</div>
   </aside>
 
   <!-- Main -->
-  <main class="admin-main">
-    <div class="admin-topbar">
-      <h2 id="panel-title">Dashboard</h2>
-      <div style="display:flex;gap:0.8rem;align-items:center">
-        <a href="index.html" class="btn btn-outline btn-sm"><i class="fas fa-store"></i> View Store</a>
-        <button class="btn btn-outline btn-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="admin-header">
+        <div><h1>Dashboard</h1><p>Welcome back, Admin</p></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><i class="fas fa-shopping-bag"></i><div class="stat-val" id="stat-orders">—</div><div class="stat-label">Total Orders</div></div>
+        <div class="stat-card"><i class="fas fa-tshirt"></i><div class="stat-val" id="stat-products">—</div><div class="stat-label">Products</div></div>
+        <div class="stat-card"><i class="fas fa-rupee-sign"></i><div class="stat-val" id="stat-revenue">—</div><div class="stat-label">Revenue</div></div>
+        <div class="stat-card"><i class="fas fa-truck"></i><div class="stat-val" id="stat-pending">—</div><div class="stat-label">Pending Orders</div></div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-title">Recent Orders</span><button class="btn btn-outline" onclick="showPage('orders')">View All</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody id="dash-orders"><tr class="loading-row"><td colspan="5"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr></tbody></table></div>
       </div>
     </div>
 
-    <div class="admin-content">
-
-      <!-- Dashboard -->
-      <div class="panel active" id="panel-dashboard">
-        <div class="stats-grid">
-          <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-shopping-bag"></i></div><div class="stat-info"><h3 id="stat-orders">0</h3><p>Total Orders</p></div></div>
-          <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-tshirt"></i></div><div class="stat-info"><h3 id="stat-products">0</h3><p>Products</p></div></div>
-          <div class="stat-card"><div class="stat-icon green"><i class="fas fa-users"></i></div><div class="stat-info"><h3 id="stat-users">0</h3><p>Registered Users</p></div></div>
-          <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-rupee-sign"></i></div><div class="stat-info"><h3 id="stat-revenue">0</h3><p>Total Revenue</p></div></div>
-          <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-calendar-day"></i></div><div class="stat-info"><h3 id="stat-today">0</h3><p>Today's Orders</p></div></div>
-          <div class="stat-card"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><div class="stat-info"><h3 id="stat-delivered">0</h3><p>Delivered</p></div></div>
-          <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-shipping-fast"></i></div><div class="stat-info"><h3 id="stat-pending">0</h3><p>Pending</p></div></div>
-          <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-times-circle"></i></div><div class="stat-info"><h3 id="stat-cancelled">0</h3><p>Cancelled</p></div></div>
-          <!-- Sale vs Purchase -->
-          <div class="stat-card" style="border-left:4px solid #27ae60"><div class="stat-icon green"><i class="fas fa-hand-holding-usd"></i></div><div class="stat-info"><h3 id="stat-sale-revenue" style="color:#27ae60">Rs. 0</h3><p>Completed Sales</p></div></div>
-          <div class="stat-card" style="border-left:4px solid #f85606"><div class="stat-icon orange"><i class="fas fa-shopping-cart"></i></div><div class="stat-info"><h3 id="stat-purchase-revenue" style="color:#f85606">Rs. 0</h3><p>Pending Purchases</p></div></div>
-          <div class="stat-card" style="border-left:4px solid #3949ab"><div class="stat-icon blue"><i class="fas fa-user-check"></i></div><div class="stat-info"><h3 id="stat-buyers">0</h3><p>Unique Buyers</p></div></div>
-          <div class="stat-card" style="border-left:4px solid #7b1fa2"><div class="stat-icon purple"><i class="fas fa-redo"></i></div><div class="stat-info"><h3 id="stat-repeat">0</h3><p>Repeat Customers</p></div></div>
-          <div class="stat-card" style="border-left:4px solid #27ae60"><div class="stat-icon green"><i class="fas fa-percentage"></i></div><div class="stat-info"><h3 id="stat-commission" style="color:#27ae60">Rs. 0</h3><p>Total Commission</p></div></div>
-        </div>
-
-        <!-- Sale vs Purchase Donut -->
-        <div class="table-box" style="margin-bottom:1.5rem">
-          <div class="table-header"><h3><i class="fas fa-chart-pie" style="color:#f85606"></i> Sale vs Purchase Breakdown</h3></div>
-          <div style="padding:1.5rem;max-width:380px;margin:0 auto"><canvas id="sale-donut"></canvas></div>
-        </div>
-
-        <!-- Revenue Chart -->
-        <div class="table-box" style="margin-bottom:1.5rem">
-          <div class="table-header"><h3><i class="fas fa-chart-line" style="color:#f85606"></i> Revenue (Last 7 Days)</h3></div>
-          <div style="padding:1.5rem"><canvas id="revenue-chart" height="100"></canvas></div>
-        </div>
-
-        <!-- Category Revenue Chart -->
-        <div class="table-box" style="margin-bottom:1.5rem">
-          <div class="table-header"><h3><i class="fas fa-chart-bar" style="color:#f85606"></i> Revenue by Category</h3></div>
-          <div style="padding:1.5rem"><canvas id="category-chart" height="100"></canvas></div>
-        </div>
-
-        <!-- Low Stock Alert -->
-        <div class="table-box" style="margin-bottom:1.5rem" id="low-stock-box">
-          <div class="table-header"><h3><i class="fas fa-exclamation-triangle" style="color:#e74c3c"></i> Low Stock Alert</h3></div>
-          <table><thead><tr><th>Product</th><th>Category</th><th>Stock</th><th>Action</th></tr></thead>
-          <tbody id="low-stock-table"></tbody></table>
-        </div>
-
-        <div class="table-box">
-          <div class="table-header"><h3>Recent Orders</h3></div>
-          <table><thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead>
-          <tbody id="recent-orders"></tbody></table>
-        </div>
+    <!-- PRODUCTS -->
+    <div class="page" id="page-products">
+      <div class="admin-header">
+        <div><h1>Products</h1><p>Manage your ZENYAR collection</p></div>
+        <button class="btn btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Add Product</button>
       </div>
-
-      <!-- Products -->
-      <div class="panel" id="panel-products">
-        <div class="table-box">
-          <div class="table-header">
-            <h3>Products</h3>
-            <div style="display:flex;gap:0.8rem">
-              <input class="search-input" placeholder="Search products..." oninput="searchProducts(this.value)"/>
-              <button class="btn btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Add Product</button>
-            </div>
-          </div>
-          <table><thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
-          <tbody id="products-table"></tbody></table>
+      <div id="prod-alert" class="alert"></div>
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">All Products</span>
+          <select onchange="filterProdCat(this.value)" style="padding:.5rem .8rem;border:1px solid #e0e0e0;font-size:.7rem;outline:none;cursor:pointer">
+            <option value="">All Categories</option>
+            <option value="men">Men</option>
+            <option value="women">Women</option>
+            <option value="kids">Junior</option>
+          </select>
         </div>
-      </div>
-
-      <!-- Orders -->
-      <div class="panel" id="panel-orders">
-        <div class="table-box">
-          <div class="table-header">
-            <h3>All Orders</h3>
-            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:center">
-              <input class="search-input" placeholder="Search by ID or name..." oninput="filterOrders()" id="order-search" style="width:180px"/>
-              <select id="order-status-filter" onchange="filterOrders()" style="border:1px solid #ddd;border-radius:6px;padding:0.5rem 0.8rem;font-family:'Poppins',sans-serif;font-size:0.85rem;outline:none">
-                <option value="">All Status</option>
-                <option value="placed">Placed</option>
-                <option value="confirmed">Confirmed</option>
-                <option value="processing">Processing</option>
-                <option value="shipped">Shipped</option>
-                <option value="delivered">Delivered</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-              <input type="date" id="order-date-filter" onchange="filterOrders()" style="border:1px solid #ddd;border-radius:6px;padding:0.5rem 0.8rem;font-family:'Poppins',sans-serif;font-size:0.85rem;outline:none"/>
-              <button class="btn btn-outline btn-sm" onclick="exportOrdersCSV()"><i class="fas fa-download"></i> Export CSV</button>
-            </div>
-          </div>
-          <table><thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Action</th></tr></thead>
-          <tbody id="orders-table"></tbody></table>
-        </div>
-      </div>
-
-      <!-- Users -->
-      <div class="panel" id="panel-users">
-        <div class="table-box">
-          <div class="table-header"><h3>Users</h3></div>
-          <table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th></tr></thead>
-          <tbody id="users-table"></tbody></table>
-        </div>
-      </div>
-
-      <!-- Ads -->
-      <div class="panel" id="panel-ads">
-        <div class="table-box">
-          <div class="table-header">
-            <h3>Banner Ads</h3>
-            <button class="btn btn-primary" onclick="openAdModal()"><i class="fas fa-plus"></i> Add Ad</button>
-          </div>
+        <div class="table-wrap">
           <table>
-            <thead><tr><th>Text</th><th>Color</th><th>Link</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody id="ads-table"></tbody>
+            <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Discount</th><th>Actions</th></tr></thead>
+            <tbody id="products-tbody"><tr class="loading-row"><td colspan="7"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr></tbody>
           </table>
         </div>
       </div>
-
     </div>
+
+    <!-- ORDERS -->
+    <div class="page" id="page-orders">
+      <div class="admin-header">
+        <div><h1>Orders</h1><p>Manage customer orders</p></div>
+      </div>
+      <div id="order-alert" class="alert"></div>
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">All Orders</span>
+          <select onchange="filterOrderStatus(this.value)" style="padding:.5rem .8rem;border:1px solid #e0e0e0;font-size:.7rem;outline:none;cursor:pointer">
+            <option value="">All Status</option>
+            <option value="placed">Placed</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>City</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="orders-tbody"><tr class="loading-row"><td colspan="9"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISCOUNT -->
+    <div class="page" id="page-discount">
+      <div class="admin-header"><div><h1>Discount</h1><p>Set sitewide discount or promo codes</p></div></div>
+      <div class="section">
+        <div class="section-header"><span class="section-title">Sitewide Discount</span></div>
+        <div class="discount-bar">
+          <label>Discount %</label>
+          <input type="number" id="disc-percent" placeholder="e.g. 20" min="0" max="90"/>
+          <label>Label</label>
+          <input type="text" id="disc-label" placeholder="e.g. EID SALE" style="width:140px"/>
+          <button class="btn btn-gold" onclick="applyDiscount()"><i class="fas fa-tag"></i> Apply</button>
+          <button class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3)" onclick="removeDiscount()"><i class="fas fa-times"></i> Remove</button>
+        </div>
+        <div style="padding:1rem 1.5rem;font-size:.7rem;font-weight:300;color:#aaa">Current: <span id="disc-current">No active discount</span></div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-title">Promo Codes</span><button class="btn btn-primary" onclick="openPromoModal()"><i class="fas fa-plus"></i> Add Code</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Code</th><th>Type</th><th>Value</th><th>Status</th><th>Actions</th></tr></thead><tbody id="promos-tbody"></tbody></table></div>
+      </div>
+    </div>
+
   </main>
 </div>
 
-<!-- Product Modal -->
+<!-- PRODUCT MODAL -->
 <div class="modal-overlay" id="product-modal">
   <div class="modal">
-    <button class="modal-close" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
-    <h3 id="product-modal-title">Add Product</h3>
-    <form id="product-form" onsubmit="saveProduct(event)">
-      <input type="hidden" id="product-id"/>
-      <div class="form-grid">
-        <div class="form-group form-full">
-          <label>Product Name *</label>
-          <input type="text" id="p-name" required/>
-        </div>
-        <div class="form-group form-full">
-          <label>Description *</label>
-          <textarea id="p-desc" rows="3" required></textarea>
-        </div>
-        <div class="form-group">
-          <label>Category *</label>
-          <select id="p-category" required>
+    <div class="modal-header">
+      <span class="modal-title" id="prod-modal-title">Add Product</span>
+      <button class="modal-close" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="prod-id"/>
+      <div class="form-row">
+        <div class="fg"><label>Product Name *</label><input type="text" id="prod-name" placeholder="e.g. Classic White Tee"/></div>
+        <div class="fg"><label>Category *</label>
+          <select id="prod-cat">
             <option value="">Select</option>
             <option value="men">Men</option>
             <option value="women">Women</option>
-            <option value="kids">Kids</option>
+            <option value="kids">Junior</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Badge</label>
-          <input type="text" id="p-badge" placeholder="New, Sale, Hot..."/>
-        </div>
-        <div class="form-group">
-          <label>Price (Rs.) *</label>
-          <input type="number" id="p-price" min="0" required/>
-        </div>
-        <div class="form-group">
-          <label>Old Price (Rs.)</label>
-          <input type="number" id="p-old-price" min="0"/>
-        </div>
-        <div class="form-group">
-          <label>Stock *</label>
-          <input type="number" id="p-stock" min="0" required/>
-        </div>
-        <div class="form-group">
-          <label>Discount (%)</label>
-          <input type="number" id="p-discount" min="0" max="100"/>
-        </div>
-        <div class="form-group form-full">
-          <label>Sizes (comma separated: S,M,L,XL,XXL)</label>
-          <input type="text" id="p-sizes" placeholder="S,M,L,XL,XXL" value="S,M,L,XL,XXL"/>
-        </div>
-        <div class="form-group form-full">
-          <label>Seller (optional)</label>
-          <select id="p-seller">
-            <option value="">No Seller / Zenvyar Direct</option>
-          </select>
-        </div>
-        <div class="form-group form-full">
-          <label>Product Images (max 5)</label>
-          <input type="file" id="p-images" multiple accept="image/*" onchange="previewImages(this)"/>
-          <div class="img-preview" id="img-preview"></div>
-        </div>
       </div>
-      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem">
-        <i class="fas fa-save"></i> Save Product
-      </button>
-    </form>
+      <div class="form-row">
+        <div class="fg"><label>Price (Rs.) *</label><input type="number" id="prod-price" placeholder="2499"/></div>
+        <div class="fg"><label>Old Price (Rs.)</label><input type="number" id="prod-oldprice" placeholder="3499"/></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Stock *</label><input type="number" id="prod-stock" placeholder="50"/></div>
+        <div class="fg"><label>Discount %</label><input type="number" id="prod-discount" placeholder="0" min="0" max="90"/></div>
+      </div>
+      <div class="fg"><label>Sizes (comma separated)</label><input type="text" id="prod-sizes" placeholder="XS, S, M, L, XL"/></div>
+      <div class="fg"><label>Description *</label><textarea id="prod-desc" placeholder="Product description..."></textarea></div>
+      <div class="fg">
+        <label>Product Images</label>
+        <input type="file" id="prod-images" accept="image/*" multiple onchange="previewImages(this)"/>
+        <div class="img-preview" id="img-preview"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeProductModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProduct()" id="save-prod-btn"><i class="fas fa-save"></i> Save Product</button>
+    </div>
   </div>
 </div>
 
-      <!-- Returns Panel -->
-      <div class="panel" id="panel-returns">        <div class="table-box">
-          <div class="table-header">
-            <h3><i class="fas fa-undo-alt" style="color:#f85606"></i> Return Requests</h3>
-            <button class="btn btn-outline btn-sm" onclick="loadReturns()"><i class="fas fa-sync"></i> Refresh</button>
-          </div>
-          <table>
-            <thead><tr><th>Req ID</th><th>Order ID</th><th>Customer</th><th>Reason</th><th>Refund To</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody id="returns-table"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Sale Management -->
-      <div class="panel" id="panel-sale">
-        <div class="table-box" style="padding:2rem">
-          <div class="table-header" style="border:none;padding:0 0 1.5rem"><h3><i class="fas fa-tags" style="color:#f85606"></i> Sale Banner Management</h3></div>
-
-          <div style="background:#fff8f5;border:2px solid #FFD0C0;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-              <h4 style="font-size:1rem;color:#333">Hero Banner Sale</h4>
-              <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.88rem;font-weight:600">
-                <input type="checkbox" id="sale-active" onchange="toggleSale()" style="accent-color:#f85606;width:18px;height:18px"/>
-                Enable Sale Banner
-              </label>
-            </div>
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Sale Tag (e.g. "Summer Sale 2026")</label>
-                <input type="text" id="sale-tag" placeholder="Summer Sale 2026" oninput="previewSale()"/>
-              </div>
-              <div class="form-group">
-                <label>Discount % (e.g. 70)</label>
-                <input type="number" id="sale-discount" placeholder="70" min="1" max="99" oninput="previewSale()"/>
-              </div>
-              <div class="form-group form-full">
-                <label>Subtitle Text</label>
-                <input type="text" id="sale-subtitle" placeholder="On top fashion brands — limited time offer!" oninput="previewSale()"/>
-              </div>
-            </div>
-
-            <!-- Preview -->
-            <div id="sale-preview" style="background:linear-gradient(135deg,#FF4500,#ff6a00);border-radius:10px;padding:1.5rem;color:#fff;margin-top:0.5rem">
-              <p id="prev-tag" style="background:rgba(255,255,255,0.2);display:inline-block;padding:0.2rem 0.8rem;border-radius:50px;font-size:0.8rem;margin-bottom:0.5rem">Summer Sale 2026</p>
-              <h2 id="prev-title" style="font-size:1.8rem;font-weight:900;margin-bottom:0.3rem">Up to <u>70% OFF</u></h2>
-              <p id="prev-sub" style="opacity:0.9;font-size:0.9rem">On top fashion brands — limited time offer!</p>
-            </div>
-
-            <button class="btn btn-primary" style="margin-top:1.2rem;width:100%;justify-content:center;padding:0.85rem" onclick="saveSale()">
-              <i class="fas fa-save"></i> Save & Apply to Website
-            </button>
-          </div>
-
-          <div style="background:#f9f9f9;border-radius:10px;padding:1rem;font-size:0.85rem;color:#666">
-            <i class="fas fa-info-circle" style="color:#f85606"></i>
-            <strong> How it works:</strong> Enable the checkbox, set discount %, tag and subtitle — click Save. The hero banner on the website will update immediately. Disable to show default banner.
-          </div>
-        </div>
-      </div>
-<div class="modal-overlay" id="ad-modal">
+<!-- ORDER DETAIL MODAL -->
+<div class="modal-overlay" id="order-modal">
   <div class="modal">
-    <button class="modal-close" onclick="closeAdModal()"><i class="fas fa-times"></i></button>
-    <h3 id="ad-modal-title">Add Banner Ad</h3>
-    <div class="form-grid">
-      <input type="hidden" id="ad-id"/>
-      <div class="form-group form-full">
-        <label>Headline Text *</label>
-        <input type="text" id="ad-text" placeholder="Summer Sale — Up to 70% OFF!"/>
-      </div>
-      <div class="form-group form-full">
-        <label>Sub Text</label>
-        <input type="text" id="ad-subtext" placeholder="Limited time offer on all categories"/>
-      </div>
-      <div class="form-group">
-        <label>Button Text</label>
-        <input type="text" id="ad-btn" placeholder="Shop Now"/>
-      </div>
-      <div class="form-group">
-        <label>Link (URL or #section)</label>
-        <input type="text" id="ad-link" placeholder="#products-section"/>
-      </div>
-      <div class="form-group">
-        <label>Background Color</label>
-        <select id="ad-bg">
-          <option value="linear-gradient(135deg, #FF4500, #ff8c00)">Orange (Default)</option>
-          <option value="linear-gradient(135deg, #01411C, #006400)">Pakistan Green</option>
-          <option value="linear-gradient(135deg, #8B0000, #c0392b)">Dark Red</option>
-          <option value="linear-gradient(135deg, #1a237e, #3949ab)">Navy Blue</option>
-          <option value="linear-gradient(135deg, #1565c0, #42a5f5)">Blue</option>
-          <option value="linear-gradient(135deg, #27ae60, #2ecc71)">Green</option>
-          <option value="linear-gradient(135deg, #7b1fa2, #ce93d8)">Purple</option>
-          <option value="linear-gradient(135deg, #222, #555)">Dark</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Status</label>
-        <select id="ad-active">
-          <option value="true">Active</option>
-          <option value="false">Inactive</option>
-        </select>
-      </div>
+    <div class="modal-header">
+      <span class="modal-title" id="ord-modal-title">Order Details</span>
+      <button class="modal-close" onclick="closeOrderModal()"><i class="fas fa-times"></i></button>
     </div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem;margin-top:0.5rem" onclick="saveAd()">
-      <i class="fas fa-save"></i> Save Ad
-    </button>
+    <div class="modal-body" id="ord-modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeOrderModal()">Close</button>
+    </div>
   </div>
 </div>
 
-      <!-- Coupons Panel -->
-      <div class="panel" id="panel-coupons">
-        <div class="table-box">
-          <div class="table-header">
-            <h3><i class="fas fa-ticket-alt" style="color:#f85606"></i> Coupon Codes</h3>
-            <button class="btn btn-primary" onclick="openCouponModal()"><i class="fas fa-plus"></i> Add Coupon</button>
-          </div>
-          <table>
-            <thead><tr><th>Code</th><th>Discount</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody id="coupons-table"></tbody>
-          </table>
+<!-- PROMO MODAL -->
+<div class="modal-overlay" id="promo-modal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header"><span class="modal-title">Add Promo Code</span><button class="modal-close" onclick="document.getElementById('promo-modal').classList.remove('open')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="fg"><label>Code *</label><input type="text" id="promo-code" placeholder="e.g. SAVE20" style="text-transform:uppercase"/></div>
+      <div class="form-row">
+        <div class="fg"><label>Type</label><select id="promo-type"><option value="percent">Percent %</option><option value="fixed">Fixed Rs.</option></select></div>
+        <div class="fg"><label>Value *</label><input type="number" id="promo-val" placeholder="20"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="document.getElementById('promo-modal').classList.remove('open')">Cancel</button>
+      <button class="btn btn-primary" onclick="savePromo()">Save Code</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+const API = 'http://localhost:5000/api';
+let token = localStorage.getItem('zv_token');
+let allProducts = [];
+let allOrders = [];
+
+// ── Auth check ──────────────────────────────────────────────────────────────
+(async () => {
+  if (!token) { window.location.href = 'login.html'; return; }
+  try {
+    const res = await fetch(`${API}/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    if ((data.user || data).role !== 'admin') throw new Error();
+  } catch(_) { window.location.href = 'login.html'; }
+})();
+
+function doLogout() { localStorage.removeItem('zv_token'); localStorage.removeItem('zv_user'); window.location.href = 'login.html'; }
+
+// ── Navigation ───────────────────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`page-${name}`).classList.add('active');
+  event?.currentTarget?.classList.add('active');
+  if (name === 'dashboard') loadDashboard();
+  if (name === 'products')  loadProducts();
+  if (name === 'orders')    loadOrders();
+  if (name === 'discount')  loadDiscount();
+}
+
+// ── DASHBOARD ────────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const [oRes, pRes] = await Promise.all([
+      fetch(`${API}/orders`, { headers: { Authorization: `Bearer ${token}` } }),
+      fetch(`${API}/products`)
+    ]);
+    const orders   = oRes.ok ? await oRes.json() : [];
+    const products = pRes.ok ? await pRes.json() : [];
+
+    document.getElementById('stat-orders').textContent   = orders.length;
+    document.getElementById('stat-products').textContent = products.length;
+    const revenue = orders.filter(o => o.status !== 'cancelled').reduce((s, o) => s + (o.total || 0), 0);
+    document.getElementById('stat-revenue').textContent  = `${Math.round(revenue/1000)}K`;
+    document.getElementById('stat-pending').textContent  = orders.filter(o => ['placed','confirmed','processing'].includes(o.status)).length;
+
+    const recent = orders.slice(0, 8);
+    document.getElementById('dash-orders').innerHTML = recent.length
+      ? recent.map(o => `<tr>
+          <td style="font-family:'Playfair Display',serif;font-size:.85rem">${o.orderId}</td>
+          <td>${o.address?.name || '—'}</td>
+          <td>Rs. ${(o.total||0).toLocaleString()}</td>
+          <td><span class="status-badge s-${o.status}">${o.status}</span></td>
+          <td>${new Date(o.createdAt).toLocaleDateString('en-PK',{day:'numeric',month:'short'})}</td>
+        </tr>`).join('')
+      : `<tr class="empty-row"><td colspan="5">No orders yet</td></tr>`;
+  } catch(_) {
+    document.getElementById('dash-orders').innerHTML = `<tr class="empty-row"><td colspan="5">Backend offline</td></tr>`;
+  }
+}
+
+// ── PRODUCTS ─────────────────────────────────────────────────────────────────
+async function loadProducts(cat = '') {
+  const tbody = document.getElementById('products-tbody');
+  tbody.innerHTML = `<tr class="loading-row"><td colspan="7"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>`;
+  try {
+    const url = cat ? `${API}/products?category=${cat}` : `${API}/products`;
+    const res = await fetch(url);
+    allProducts = res.ok ? await res.json() : [];
+    renderProductsTable(allProducts);
+  } catch(_) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="7">Backend offline — start server first</td></tr>`;
+  }
+}
+
+function renderProductsTable(prods) {
+  const tbody = document.getElementById('products-tbody');
+  if (!prods.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No products found</td></tr>`; return; }
+  tbody.innerHTML = prods.map(p => `
+    <tr>
+      <td><div class="td-img">${p.images?.[0] ? `<img src="http://localhost:5000${p.images[0]}" onerror="this.style.display='none'">` : `<i class="fas fa-tshirt"></i>`}</div></td>
+      <td style="font-weight:400;max-width:180px">${p.name}</td>
+      <td><span style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#888">${p.category}</span></td>
+      <td>Rs. ${p.price.toLocaleString()}</td>
+      <td>${p.stock}</td>
+      <td>${p.discount ? p.discount + '%' : '—'}</td>
+      <td>
+        <div style="display:flex;gap:.4rem">
+          <button class="btn btn-outline" onclick="editProduct('${p._id}')"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-danger" onclick="deleteProduct('${p._id}','${p.name}')"><i class="fas fa-trash"></i></button>
         </div>
-      </div>
+      </td>
+    </tr>`).join('');
+}
 
-<!-- Coupon Modal -->
-<div class="modal-overlay" id="coupon-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeCouponModal()"><i class="fas fa-times"></i></button>
-    <h3 id="coupon-modal-title">Add Coupon</h3>
-    <input type="hidden" id="coupon-modal-orig"/>
-    <div class="form-grid">
-      <div class="form-group form-full">
-        <label>Coupon Code *</label>
-        <input type="text" id="coupon-modal-code" placeholder="e.g. SAVE20" style="text-transform:uppercase"/>
-      </div>
-      <div class="form-group">
-        <label>Discount Type *</label>
-        <select id="coupon-modal-type">
-          <option value="percent">Percentage (% OFF)</option>
-          <option value="flat">Flat Amount (Rs. OFF)</option>
+function filterProdCat(cat) { loadProducts(cat); }
+
+function openProductModal(id) {
+  document.getElementById('prod-id').value = '';
+  document.getElementById('prod-name').value = '';
+  document.getElementById('prod-cat').value = '';
+  document.getElementById('prod-price').value = '';
+  document.getElementById('prod-oldprice').value = '';
+  document.getElementById('prod-stock').value = '';
+  document.getElementById('prod-discount').value = '';
+  document.getElementById('prod-sizes').value = '';
+  document.getElementById('prod-desc').value = '';
+  document.getElementById('img-preview').innerHTML = '';
+  document.getElementById('prod-modal-title').textContent = 'Add Product';
+  document.getElementById('product-modal').classList.add('open');
+}
+
+function closeProductModal() { document.getElementById('product-modal').classList.remove('open'); }
+
+function editProduct(id) {
+  const p = allProducts.find(x => x._id === id);
+  if (!p) return;
+  document.getElementById('prod-id').value       = p._id;
+  document.getElementById('prod-name').value     = p.name;
+  document.getElementById('prod-cat').value      = p.category;
+  document.getElementById('prod-price').value    = p.price;
+  document.getElementById('prod-oldprice').value = p.oldPrice || '';
+  document.getElementById('prod-stock').value    = p.stock;
+  document.getElementById('prod-discount').value = p.discount || '';
+  document.getElementById('prod-sizes').value    = (p.sizes || []).join(', ');
+  document.getElementById('prod-desc').value     = p.description;
+  document.getElementById('img-preview').innerHTML = (p.images || []).map(img =>
+    `<div class="img-thumb"><img src="http://localhost:5000${img}"></div>`).join('');
+  document.getElementById('prod-modal-title').textContent = 'Edit Product';
+  document.getElementById('product-modal').classList.add('open');
+}
+
+function previewImages(input) {
+  const preview = document.getElementById('img-preview');
+  preview.innerHTML = '';
+  Array.from(input.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      preview.innerHTML += `<div class="img-thumb"><img src="${e.target.result}"></div>`;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function saveProduct() {
+  const id       = document.getElementById('prod-id').value;
+  const name     = document.getElementById('prod-name').value.trim();
+  const category = document.getElementById('prod-cat').value;
+  const price    = document.getElementById('prod-price').value;
+  const stock    = document.getElementById('prod-stock').value;
+  const desc     = document.getElementById('prod-desc').value.trim();
+
+  if (!name || !category || !price || !stock || !desc) { alert('Please fill all required fields.'); return; }
+
+  const btn = document.getElementById('save-prod-btn');
+  btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...';
+  btn.disabled = true;
+
+  const fd = new FormData();
+  fd.append('name',        name);
+  fd.append('category',    category);
+  fd.append('price',       price);
+  fd.append('oldPrice',    document.getElementById('prod-oldprice').value || price);
+  fd.append('stock',       stock);
+  fd.append('discount',    document.getElementById('prod-discount').value || 0);
+  fd.append('description', desc);
+  fd.append('sizes',       JSON.stringify(document.getElementById('prod-sizes').value.split(',').map(s => s.trim()).filter(Boolean)));
+
+  const files = document.getElementById('prod-images').files;
+  Array.from(files).forEach(f => fd.append('images', f));
+
+  try {
+    const url    = id ? `${API}/products/${id}` : `${API}/products`;
+    const method = id ? 'PUT' : 'POST';
+    const res    = await fetch(url, { method, headers: { Authorization: `Bearer ${token}` }, body: fd });
+    const data   = await res.json();
+    if (!res.ok) throw new Error(data.message);
+    showAlert('prod-alert', id ? 'Product updated successfully.' : 'Product added successfully.', 'success');
+    closeProductModal();
+    loadProducts();
+  } catch(err) {
+    showAlert('prod-alert', 'Error: ' + err.message, 'error');
+  } finally {
+    btn.innerHTML = '<i class="fas fa-save"></i> Save Product';
+    btn.disabled = false;
+  }
+}
+
+async function deleteProduct(id, name) {
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  try {
+    const res = await fetch(`${API}/products/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) throw new Error();
+    showAlert('prod-alert', 'Product deleted.', 'success');
+    loadProducts();
+  } catch(_) { showAlert('prod-alert', 'Could not delete product.', 'error'); }
+}
+
+// ── ORDERS ───────────────────────────────────────────────────────────────────
+async function loadOrders(statusFilter = '') {
+  const tbody = document.getElementById('orders-tbody');
+  tbody.innerHTML = `<tr class="loading-row"><td colspan="9"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td></tr>`;
+  try {
+    const res = await fetch(`${API}/orders`, { headers: { Authorization: `Bearer ${token}` } });
+    allOrders = res.ok ? await res.json() : [];
+    const filtered = statusFilter ? allOrders.filter(o => o.status === statusFilter) : allOrders;
+    renderOrdersTable(filtered);
+  } catch(_) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="9">Backend offline</td></tr>`;
+  }
+}
+
+function renderOrdersTable(orders) {
+  const tbody = document.getElementById('orders-tbody');
+  if (!orders.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="9">No orders found</td></tr>`; return; }
+  tbody.innerHTML = orders.map(o => `
+    <tr>
+      <td style="font-family:'Playfair Display',serif;font-size:.85rem;cursor:pointer;color:#C6A969" onclick="viewOrder('${o._id}')">${o.orderId}</td>
+      <td>${o.address?.name || '—'}</td>
+      <td>${o.address?.phone || '—'}</td>
+      <td>${o.address?.city || '—'}</td>
+      <td>Rs. ${(o.total||0).toLocaleString()}</td>
+      <td style="text-transform:uppercase;font-size:.65rem">${o.payment?.method || '—'}</td>
+      <td>
+        <select onchange="updateStatus('${o._id}',this.value)" style="padding:.3rem .5rem;border:1px solid #e0e0e0;font-size:.65rem;cursor:pointer;outline:none">
+          ${['placed','confirmed','processing','shipped','delivered','cancelled'].map(s =>
+            `<option value="${s}" ${o.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
+          ).join('')}
         </select>
-      </div>
-      <div class="form-group">
-        <label>Discount Value *</label>
-        <input type="number" id="coupon-modal-value" placeholder="e.g. 20" min="1"/>
-      </div>
-      <div class="form-group form-full">
-        <label>Status</label>
-        <select id="coupon-modal-active">
-          <option value="true">Active</option>
-          <option value="false">Inactive</option>
-        </select>
-      </div>
-    </div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem;margin-top:0.5rem" onclick="saveCoupon()">
-      <i class="fas fa-save"></i> Save Coupon
-    </button>
-  </div>
-</div>
+      </td>
+      <td style="font-size:.65rem;color:#aaa">${new Date(o.createdAt).toLocaleDateString('en-PK',{day:'numeric',month:'short',year:'numeric'})}</td>
+      <td>
+        <div style="display:flex;gap:.4rem">
+          <button class="btn btn-outline" onclick="viewOrder('${o._id}')"><i class="fas fa-eye"></i></button>
+          <button class="btn btn-gold" onclick="assignCourier('${o._id}')"><i class="fas fa-truck"></i></button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
 
-<!-- Sellers Panel -->
-<div class="panel" id="panel-sellers">
-  <div class="table-box">
-    <div class="table-header">
-      <h3><i class="fas fa-store" style="color:#f85606"></i> Sellers</h3>
-      <button class="btn btn-primary" onclick="openSellerModal()"><i class="fas fa-plus"></i> Add Seller</button>
-    </div>
-    <table>
-      <thead><tr><th>Name</th><th>Phone</th><th>Easypaisa</th><th>JazzCash</th><th>Commission %</th><th>Status</th><th>Actions</th></tr></thead>
-      <tbody id="sellers-table"></tbody>
-    </table>
-  </div>
-</div>
+function filterOrderStatus(status) { loadOrders(status); }
 
-<!-- Seller Modal -->
-<div class="modal-overlay" id="seller-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeSellerModal()"><i class="fas fa-times"></i></button>
-    <h3 id="seller-modal-title">Add Seller</h3>
-    <input type="hidden" id="seller-modal-id"/>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Seller Name *</label>
-        <input type="text" id="s-name" placeholder="e.g. Ali Traders" required/>
-      </div>
-      <div class="form-group">
-        <label>Phone *</label>
-        <input type="tel" id="s-phone" placeholder="03XXXXXXXXX" required/>
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="s-email" placeholder="seller@email.com"/>
-      </div>
-      <div class="form-group">
-        <label>Commission Rate (%)</label>
-        <input type="number" id="s-commission" min="0" max="100" placeholder="10" value="10"/>
-      </div>
-      <div class="form-group">
-        <label>Easypaisa Number</label>
-        <input type="tel" id="s-easypaisa" placeholder="03XXXXXXXXX"/>
-      </div>
-      <div class="form-group">
-        <label>JazzCash Number</label>
-        <input type="tel" id="s-jazzcash" placeholder="03XXXXXXXXX"/>
-      </div>
-      <div class="form-group form-full">
-        <label>Status</label>
-        <select id="s-active">
-          <option value="true">Active</option>
-          <option value="false">Inactive</option>
-        </select>
-      </div>
-    </div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem;margin-top:0.5rem" onclick="saveSeller()">
-      <i class="fas fa-save"></i> Save Seller
-    </button>
-  </div>
-</div>
+async function updateStatus(id, status) {
+  try {
+    const res = await fetch(`${API}/orders/${id}/status`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ status })
+    });
+    if (!res.ok) throw new Error();
+    showAlert('order-alert', `Status updated to "${status}".`, 'success');
+  } catch(_) { showAlert('order-alert', 'Could not update status.', 'error'); }
+}
 
-<!-- Courier Modal -->
-<div class="modal-overlay" id="courier-modal">
-  <div class="modal" style="max-width:420px">
-    <button class="modal-close" onclick="closeCourierModal()"><i class="fas fa-times"></i></button>
-    <h3><i class="fas fa-truck" style="color:#f85606"></i> Assign Courier</h3>
-    <input type="hidden" id="courier-order-id"/>
-    <div class="form-group" style="margin-top:1rem">
-      <label>Courier Company *</label>
-      <select id="courier-name" style="width:100%;border:1px solid #ddd;border-radius:8px;padding:0.7rem 1rem;font-family:'Poppins',sans-serif;font-size:16px;outline:none;-webkit-appearance:none">
-        <option value="">Select Courier</option>
-        <option value="Leopards Courier">Leopards Courier</option>
-        <option value="TCS Courier">TCS Courier</option>
-        <option value="Trax">Trax</option>
-        <option value="BlueEx">BlueEx</option>
-        <option value="M&P Courier">M&amp;P Courier</option>
-        <option value="Pakistan Post">Pakistan Post</option>
-        <option value="Swyft Logistics">Swyft Logistics</option>
-      </select>
+function viewOrder(id) {
+  const o = allOrders.find(x => x._id === id);
+  if (!o) return;
+  document.getElementById('ord-modal-title').textContent = `Order — ${o.orderId}`;
+  document.getElementById('ord-modal-body').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+      <div style="background:#fafafa;border:1px solid #f0f0f0;padding:1rem">
+        <p style="font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:#aaa;margin-bottom:.5rem">Customer</p>
+        <p style="font-size:.8rem;font-weight:400;color:#111;margin-bottom:.2rem">${o.address?.name}</p>
+        <p style="font-size:.72rem;font-weight:300;color:#555">${o.address?.phone}</p>
+        <p style="font-size:.72rem;font-weight:300;color:#555">${o.address?.email || ''}</p>
+        <p style="font-size:.72rem;font-weight:300;color:#555;margin-top:.3rem">${o.address?.street}, ${o.address?.city}</p>
+      </div>
+      <div style="background:#fafafa;border:1px solid #f0f0f0;padding:1rem">
+        <p style="font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:#aaa;margin-bottom:.5rem">Order Info</p>
+        <p style="font-size:.72rem;font-weight:300;color:#555">Payment: <strong>${o.payment?.method?.toUpperCase()}</strong></p>
+        <p style="font-size:.72rem;font-weight:300;color:#555">Status: <strong>${o.status}</strong></p>
+        <p style="font-size:.72rem;font-weight:300;color:#555">Courier: <strong>${o.courier?.name || 'Not assigned'}</strong></p>
+        ${o.courier?.trackingId ? `<p style="font-size:.72rem;font-weight:300;color:#555">Tracking: <strong>${o.courier.trackingId}</strong></p>` : ''}
+        <p style="font-size:.72rem;font-weight:300;color:#555">Total: <strong>Rs. ${(o.total||0).toLocaleString()}</strong></p>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Courier Tracking ID *</label>
-      <input type="text" id="courier-tracking" placeholder="e.g. LP123456789PK" style="width:100%;border:1px solid #ddd;border-radius:8px;padding:0.7rem 1rem;font-family:'Poppins',sans-serif;font-size:16px;outline:none"/>
-    </div>
-    <p style="font-size:0.8rem;color:#888;margin-bottom:1rem"><i class="fas fa-info-circle" style="color:#f85606"></i> Order status will auto-change to "Shipped" when courier is assigned.</p>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem" onclick="saveCourier()">
-      <i class="fas fa-truck"></i> Assign &amp; Mark Shipped
-    </button>
-  </div>
-</div>
+    <p style="font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:#aaa;margin-bottom:.8rem">Items</p>
+    ${(o.items||[]).map(item => `
+      <div style="display:flex;align-items:center;gap:1rem;padding:.7rem 0;border-bottom:1px solid #f8f8f8">
+        <div class="td-img">${item.image ? `<img src="${item.image}" onerror="this.style.display='none'">` : `<i class="fas fa-tshirt"></i>`}</div>
+        <div style="flex:1">
+          <p style="font-size:.72rem;font-weight:400;color:#333">${item.name}</p>
+          <p style="font-size:.65rem;font-weight:300;color:#aaa">${item.size ? 'Size: '+item.size+' · ' : ''}Qty: ${item.qty}</p>
+        </div>
+        <span style="font-size:.75rem;font-weight:400;color:#111">Rs. ${((item.price||0)*(item.qty||1)).toLocaleString()}</span>
+      </div>`).join('')}`;
+  document.getElementById('order-modal').classList.add('open');
+}
 
-<script src="admin.js"></script></body>
+function closeOrderModal() { document.getElementById('order-modal').classList.remove('open'); }
+
+async function assignCourier(id) {
+  const courier = prompt('Select courier:\n1. TCS\n2. Leopards\n\nType: TCS or Leopards');
+  if (!courier) return;
+  const name = courier.trim();
+  if (!['TCS','Leopards'].includes(name)) { alert('Only TCS or Leopards allowed.'); return; }
+  const trackingId = prompt(`Enter ${name} tracking number:`);
+  if (!trackingId) return;
+  try {
+    const res = await fetch(`${API}/orders/${id}/courier`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ courierName: name, courierTrackingId: trackingId })
+    });
+    if (!res.ok) throw new Error();
+    showAlert('order-alert', `Courier assigned: ${name} — ${trackingId}`, 'success');
+    loadOrders();
+  } catch(_) { showAlert('order-alert', 'Could not assign courier.', 'error'); }
+}
+
+// ── DISCOUNT ─────────────────────────────────────────────────────────────────
+function loadDiscount() {
+  const d = JSON.parse(localStorage.getItem('zenyar_discount') || 'null');
+  document.getElementById('disc-current').textContent = d ? `${d.label} — ${d.percent}% off` : 'No active discount';
+  loadPromos();
+}
+
+function applyDiscount() {
+  const percent = parseInt(document.getElementById('disc-percent').value);
+  const label   = document.getElementById('disc-label').value.trim() || `${percent}% OFF`;
+  if (!percent || percent < 1 || percent > 90) { alert('Enter a valid discount (1-90%).'); return; }
+  const d = { percent, label };
+  localStorage.setItem('zenyar_discount', JSON.stringify(d));
+  document.getElementById('disc-current').textContent = `${label} — ${percent}% off`;
+  alert(`Discount applied: ${label} — ${percent}% off`);
+}
+
+function removeDiscount() {
+  localStorage.removeItem('zenyar_discount');
+  document.getElementById('disc-current').textContent = 'No active discount';
+  document.getElementById('disc-percent').value = '';
+  document.getElementById('disc-label').value = '';
+}
+
+function loadPromos() {
+  const promos = JSON.parse(localStorage.getItem('tv_coupons') || '[]');
+  const tbody = document.getElementById('promos-tbody');
+  if (!promos.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="5">No promo codes</td></tr>`; return; }
+  tbody.innerHTML = promos.map((p, i) => `
+    <tr>
+      <td style="font-weight:500;letter-spacing:.1em">${p.code}</td>
+      <td style="text-transform:capitalize">${p.type}</td>
+      <td>${p.type === 'percent' ? p.value + '%' : 'Rs. ' + p.value}</td>
+      <td><span style="font-size:.6rem;padding:.2rem .6rem;border:1px solid;${p.active ? 'color:#2e7d32;border-color:#2e7d32;background:#f0faf0' : 'color:#aaa;border-color:#ddd'}">${p.active ? 'Active' : 'Inactive'}</span></td>
+      <td>
+        <div style="display:flex;gap:.4rem">
+          <button class="btn btn-outline" onclick="togglePromo(${i})">${p.active ? 'Disable' : 'Enable'}</button>
+          <button class="btn btn-danger" onclick="deletePromo(${i})"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function openPromoModal() { document.getElementById('promo-modal').classList.add('open'); }
+
+function savePromo() {
+  const code = document.getElementById('promo-code').value.trim().toUpperCase();
+  const type = document.getElementById('promo-type').value;
+  const val  = parseInt(document.getElementById('promo-val').value);
+  if (!code || !val) { alert('Fill all fields.'); return; }
+  const promos = JSON.parse(localStorage.getItem('tv_coupons') || '[]');
+  promos.push({ code, type, value: val, active: true });
+  localStorage.setItem('tv_coupons', JSON.stringify(promos));
+  document.getElementById('promo-modal').classList.remove('open');
+  loadPromos();
+}
+
+function togglePromo(i) {
+  const promos = JSON.parse(localStorage.getItem('tv_coupons') || '[]');
+  promos[i].active = !promos[i].active;
+  localStorage.setItem('tv_coupons', JSON.stringify(promos));
+  loadPromos();
+}
+
+function deletePromo(i) {
+  if (!confirm('Delete this promo code?')) return;
+  const promos = JSON.parse(localStorage.getItem('tv_coupons') || '[]');
+  promos.splice(i, 1);
+  localStorage.setItem('tv_coupons', JSON.stringify(promos));
+  loadPromos();
+}
+
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+function showAlert(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = `alert alert-${type} show`;
+  setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+loadDashboard();
+</script>
+</body>
 </html>

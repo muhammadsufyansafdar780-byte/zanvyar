@@ -4,7 +4,7 @@ const API = 'http://localhost:5000/api';
 // ===== PRODUCTS DATA (fallback if backend offline) =====
 const products = [
   { id:1,  name:'Classic White Tee',      category:'men',   price:2499, oldPrice:3499, discount:29, icon:'fas fa-tshirt',  image:'images/white-tee.jpg',     description:'Premium cotton, relaxed fit. Crafted for everyday luxury.' },
-  { id:2,  name:'Oversize Black Tee',      category:'men',   price:2799, oldPrice:3999, discount:30, icon:'fas fa-tshirt',  image:'images/black-tee.jpg',     description:'Signature oversized silhouette. The ZENVYAR essential.' },
+  { id:2,  name:'Oversize Black Tee',      category:'men',   price:2799, oldPrice:3999, discount:30, icon:'fas fa-tshirt',  image:'images/black-tee.jpg',     description:'Signature oversized silhouette. The ZENYAR essential.' },
   { id:3,  name:'Slim Fit Trousers',       category:'men',   price:3499, oldPrice:4999, discount:30, icon:'fas fa-male',   image:'images/slim-trousers.jpg', description:'Tailored for the modern man. Clean lines, premium fabric.' },
   { id:4,  name:'Linen Shirt',             category:'men',   price:2999, oldPrice:3999, discount:25, icon:'fas fa-tshirt',  image:'images/linen-shirt.jpg',   description:'Breathable luxury linen. Minimal design, maximum comfort.' },
   { id:5,  name:'Premium Suit',            category:'men',   price:8999, oldPrice:12999,discount:31, icon:'fas fa-tshirt',  image:'images/suit-men.jpg',      description:'Tailored premium suit. Crafted for the distinguished man.' },
@@ -40,7 +40,10 @@ function renderProducts(filter, tabEl) {
   }
 
   const search = (document.getElementById('search-input')?.value || '').toLowerCase();
-  let filtered = currentFilter === 'all' ? [...products] : products.filter(p => p.category === currentFilter);
+  // Kids/Junior hidden from frontend — only show men & women
+  let filtered = currentFilter === 'all'
+    ? products.filter(p => p.category !== 'kids')
+    : products.filter(p => p.category === currentFilter && p.category !== 'kids');
   if (search) filtered = filtered.filter(p => p.name.toLowerCase().includes(search));
 
   const grid = document.getElementById('products-grid');
