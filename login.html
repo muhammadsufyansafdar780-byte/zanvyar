@@ -48,7 +48,7 @@
 
 <div class="login-card">
   <div class="login-logo">
-    <img src="ZENYAR-logo.jpg" alt="ZENYAR" style="height:80px;border-radius:10px;margin-bottom:0.8rem;display:block;margin-left:auto;margin-right:auto;object-fit:contain"/>
+    <img src="ZENYAR-logo.jpg" alt="ZENYAR" style="height:90px;width:90px;border-radius:12px;margin-bottom:0.8rem;display:block;margin-left:auto;margin-right:auto;object-fit:contain"/>
     <h1>ZENYAR</h1>
     <p style="color:#FF4500;font-size:0.8rem;font-weight:600">Admin Panel — Authorized Access Only</p>
   </div>
@@ -63,7 +63,7 @@
       <label>Email Address</label>
       <div class="input-wrap">
         <i class="fas fa-envelope"></i>
-        <input type="email" id="login-email" placeholder="admin@trendvault.pk" required autocomplete="email"/>
+        <input type="email" id="login-email" placeholder="admin@zenyar.com" required autocomplete="email"/>
       </div>
     </div>
     <div class="form-group">
@@ -134,7 +134,15 @@
 
       localStorage.setItem('zv_token', data.token);
       localStorage.setItem('zv_user',  JSON.stringify(data.user));
-      window.location.href = 'admin.html';
+      // If came from checkout, go back there
+      const prevCart = localStorage.getItem('tv_cart');
+      if (prevCart && JSON.parse(prevCart).length > 0) {
+        window.location.href = 'checkout.html';
+      } else if (data.user?.role === 'admin') {
+        window.location.href = 'admin.html';
+      } else {
+        window.location.href = 'index.html';
+      }
     } catch(err) {
       showError('Cannot connect to server. Make sure backend is running.');
     } finally {

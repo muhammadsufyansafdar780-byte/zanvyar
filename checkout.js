@@ -94,6 +94,18 @@ function goStep(n) {
   if (n === 2 && !validateStep1()) return;
   if (n === 3 && !validateStep2()) return;
 
+  // Require login before payment step
+  if (n === 2) {
+    const token = localStorage.getItem('zv_token');
+    if (!token) {
+      if (confirm('Login ya account banao checkout ke liye.\n\nOK dabao login page pe jaane ke liye.')) {
+        localStorage.setItem('tv_cart', JSON.stringify(cart));
+        window.location.href = 'login.html';
+      }
+      return;
+    }
+  }
+
   [1, 2, 3].forEach(i => {
     document.getElementById(`step-${i}`).style.display = i === n ? '' : 'none';
     const s = document.getElementById(`s${i}`);

@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
+<meta name="theme-color" content="#ffffff"/>
+<title>Checkout | ZENYAR</title>
+<link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:#fff;color:#111;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font-family:'Montserrat',sans-serif;font-size:16px!important;-webkit-appearance:none;appearance:none}
+a{text-decoration:none}
+.co-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;border-bottom:1px solid #ebebeb;position:sticky;top:0;background:#fff;z-index:100}
+.co-logo{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:400;letter-spacing:.4em;color:#111}
+.co-back{font-size:.62rem;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:#aaa;display:flex;align-items:center;gap:.5rem;transition:color .2s}
+.co-back:hover{color:#111}
+.co-secure{font-size:.6rem;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:#C6A969;display:flex;align-items:center;gap:.4rem}
+.co-steps{display:flex;align-items:center;justify-content:center;padding:2rem 2rem 0;max-width:700px;margin:0 auto}
+.co-step{display:flex;align-items:center;gap:.6rem}
+.co-step-num{width:28px;height:28px;border-radius:50%;border:1px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:400;color:#bbb;transition:all .3s}
+.co-step-label{font-size:.6rem;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:#bbb;transition:color .3s}
+.co-step.active .co-step-num{border-color:#111;background:#111;color:#fff}
+.co-step.active .co-step-label{color:#111}
+.co-step.done .co-step-num{border-color:#C6A969;background:#C6A969;color:#fff}
+.co-step.done .co-step-label{color:#C6A969}
+.co-step-line{flex:1;height:1px;background:#ebebeb;min-width:40px;margin:0 .8rem}
+.co-body{display:grid;grid-template-columns:1fr 360px;gap:0;max-width:1100px;margin:0 auto;padding:3rem 2rem 5rem;align-items:start}
+.co-form{padding-right:4rem}
+.co-sidebar{border-left:1px solid #ebebeb;padding-left:3rem;position:sticky;top:80px}
+.co-section-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:400;color:#111;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid #f0f0f0}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fg{margin-bottom:1.2rem}
+.fg label{display:block;font-size:.6rem;font-weight:400;letter-spacing:.25em;text-transform:uppercase;color:#aaa;margin-bottom:.5rem}
+.fg input,.fg select,.fg textarea{width:100%;padding:.85rem 1rem;border:1px solid #e0e0e0;border-radius:0;font-size:.85rem!important;font-weight:300;color:#111;outline:none;transition:border .2s;background:#fff}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:#111}
+.fg textarea{resize:none}
+.fg select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23aaa' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem}
+.pay-options{display:flex;flex-direction:column;gap:0;margin-bottom:1.5rem;border:1px solid #e0e0e0}
+.pay-option{display:flex;align-items:center;gap:1.2rem;padding:1.2rem 1.4rem;cursor:pointer;border-bottom:1px solid #e0e0e0;transition:background .2s}
+.pay-option:last-child{border-bottom:none}
+.pay-option:hover,.pay-option.selected{background:#fafafa}
+.pay-option input[type=radio]{display:none}
+.pay-radio{width:18px;height:18px;border-radius:50%;border:1px solid #ddd;flex-shrink:0;position:relative;transition:all .2s}
+.pay-option.selected .pay-radio{border-color:#111}
+.pay-option.selected .pay-radio::after{content:'';width:8px;height:8px;border-radius:50%;background:#111;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.pay-icon-wrap{width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pay-icon-wrap i{font-size:1.2rem}
+.pay-text h4{font-size:.78rem;font-weight:400;letter-spacing:.05em;color:#111;margin-bottom:.2rem}
+.pay-text p{font-size:.65rem;font-weight:300;color:#aaa;letter-spacing:.05em}
+.pay-badge{margin-left:auto;font-size:.55rem;font-weight:400;letter-spacing:.15em;text-transform:uppercase;background:#f5f5f5;color:#888;padding:.2rem .6rem;white-space:nowrap}
+.pay-detail{background:#fafafa;border:1px solid #e0e0e0;padding:1.5rem;margin-bottom:1.5rem}
+.pay-detail h5{font-size:.62rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:#aaa;margin-bottom:1rem}
+.pay-number{font-family:'Playfair Display',serif;font-size:1.5rem;color:#111;margin-bottom:.3rem}
+.pay-acname{font-size:.7rem;font-weight:300;color:#888;letter-spacing:.1em;margin-bottom:1.2rem}
+.pay-steps-list{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.2rem}
+.pay-steps-list li{font-size:.7rem;font-weight:300;color:#888;display:flex;align-items:flex-start;gap:.6rem;line-height:1.5}
+.pay-steps-list li span{background:#111;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.55rem;flex-shrink:0;margin-top:1px}
+.open-app-btn{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;padding:.9rem;border:none;cursor:pointer;font-size:.62rem;font-weight:400;letter-spacing:.25em;text-transform:uppercase;color:#fff;margin-bottom:1rem;transition:opacity .2s}
+.open-app-btn:hover{opacity:.85}
+.btn-continue{width:100%;padding:1.1rem;background:#111;color:#fff;border:none;font-size:.65rem;font-weight:400;letter-spacing:.35em;text-transform:uppercase;cursor:pointer;transition:background .3s;margin-top:1rem}
+.btn-continue:hover{background:#C6A969}
+.btn-back-link{display:inline-flex;align-items:center;gap:.5rem;font-size:.6rem;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:#aaa;cursor:pointer;background:none;border:none;margin-bottom:2rem;transition:color .2s}
+.btn-back-link:hover{color:#111}
+.review-block{background:#fafafa;border:1px solid #e0e0e0;padding:1.5rem;margin-bottom:1rem}
+.review-block h5{font-size:.6rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:#aaa;margin-bottom:.8rem}
+.review-block p{font-size:.78rem;font-weight:300;color:#555;line-height:1.8}
+.review-block strong{font-weight:400;color:#111}
+.sidebar-title{font-size:.62rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:#aaa;margin-bottom:1.5rem}
+.sidebar-items{margin-bottom:1.5rem}
+.sidebar-item{display:flex;gap:1rem;align-items:flex-start;padding:.8rem 0;border-bottom:1px solid #f5f5f5}
+.sidebar-item-img{width:56px;height:68px;background:#ddeaf7;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.sidebar-item-img img{width:100%;height:100%;object-fit:cover}
+.sidebar-item-img i{color:#aac4e0;font-size:1.2rem}
+.sidebar-item-info{flex:1}
+.sidebar-item-info h4{font-size:.65rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:#333;margin-bottom:.25rem}
+.sidebar-item-info p{font-size:.6rem;font-weight:300;color:#aaa}
+.sidebar-item-price{font-size:.72rem;font-weight:400;color:#111;white-space:nowrap}
+.sidebar-totals{border-top:1px solid #ebebeb;padding-top:1rem}
+.sidebar-row{display:flex;justify-content:space-between;font-size:.68rem;font-weight:300;color:#888;margin-bottom:.6rem}
+.sidebar-row.total{font-size:.82rem;font-weight:400;color:#111;margin-top:.8rem;padding-top:.8rem;border-top:1px solid #ebebeb}
+.gold{color:#C6A969}
+.promo-wrap{display:flex;gap:0;margin-top:1.5rem}
+.promo-wrap input{flex:1;padding:.75rem 1rem;border:1px solid #e0e0e0;border-right:none;font-size:.75rem!important;font-weight:300;outline:none;border-radius:0}
+.promo-wrap button{padding:.75rem 1.2rem;background:#111;color:#fff;border:none;font-size:.6rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.promo-wrap button:hover{background:#C6A969}
+.promo-msg{font-size:.62rem;font-weight:300;margin-top:.4rem}
+.success-overlay{position:fixed;inset:0;background:#fff;z-index:9999;display:none;align-items:center;justify-content:center;padding:2rem}
+.success-overlay.open{display:flex}
+.success-box{max-width:480px;width:100%;text-align:center}
+.success-check{font-size:3rem;color:#C6A969;margin-bottom:1.5rem}
+.success-box h2{font-family:'Playfair Display',serif;font-size:2rem;font-weight:400;color:#111;margin-bottom:.8rem}
+.success-box>p{font-size:.75rem;font-weight:300;color:#aaa;line-height:1.8;margin-bottom:2rem}
+.order-id-box{border:1px solid #e0e0e0;padding:1.5rem;margin-bottom:2rem}
+.order-id-label{font-size:.58rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:#aaa;margin-bottom:.5rem}
+.order-id-val{font-family:'Playfair Display',serif;font-size:1.8rem;color:#111;letter-spacing:.1em}
+.success-actions{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}
+.success-btn{padding:.9rem 2rem;font-size:.62rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;cursor:pointer;transition:all .3s;border:none}
+.success-btn.primary{background:#111;color:#fff}
+.success-btn.primary:hover{background:#C6A969}
+.success-btn.secondary{background:#fff;color:#111;border:1px solid #e0e0e0}
+.success-btn.secondary:hover{border-color:#111}
+@media(max-width:900px){.co-body{grid-template-columns:1fr;padding:2rem 1.5rem 4rem}.co-form{padding-right:0}.co-sidebar{border-left:none;border-top:1px solid #ebebeb;padding-left:0;padding-top:2rem;margin-top:2rem;position:static}.co-header{padding:1rem 1.5rem}.co-secure{display:none}}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}.co-steps{padding:1.5rem 1rem 0}.co-step-label{display:none}}
+</style>
+</head>
+<body>
+<header class="co-header">
+  <a href="index.html" class="co-back"><i class="fas fa-arrow-left"></i> Back</a>
+  <span class="co-logo" style="display:flex;align-items:center;gap:.4rem">
+    <img src="ZENYAR-logo.jpg" alt="ZENYAR" style="height:32px;width:32px;object-fit:contain;border-radius:4px"/>
+    ZENYAR
+  </span>
+  <span class="co-secure"><i class="fas fa-lock"></i> Secure Checkout</span>
+</header>
+<div class="co-steps">
+  <div class="co-step active" id="s1"><div class="co-step-num">1</div><span class="co-step-label">Delivery</span></div>
+  <div class="co-step-line"></div>
+  <div class="co-step" id="s2"><div class="co-step-num">2</div><span class="co-step-label">Payment</span></div>
+  <div class="co-step-line"></div>
+  <div class="co-step" id="s3"><div class="co-step-num">3</div><span class="co-step-label">Confirm</span></div>
+</div>
+<div class="co-body">
+  <div class="co-form">
+    <div id="step-1">
+      <h2 class="co-section-title">Delivery Information</h2>
+      <div class="form-row">
+        <div class="fg"><label>Full Name *</label><input type="text" id="c-name" placeholder="Your full name"/></div>
+        <div class="fg"><label>Phone *</label><input type="tel" id="c-phone" placeholder="03XX-XXXXXXX"/></div>
+      </div>
+      <div class="fg"><label>Email</label><input type="email" id="c-email" placeholder="your@email.com"/></div>
+      <div class="fg"><label>Street Address *</label><input type="text" id="c-street" placeholder="House #, Street, Area"/></div>
+      <div class="form-row">
+        <div class="fg">
+          <label>City *</label>
+          <select id="c-city">
+            <option value="">Select City</option>
+            <optgroup label="Punjab"><option>Lahore</option><option>Faisalabad</option><option>Rawalpindi</option><option>Islamabad</option><option>Gujranwala</option><option>Multan</option><option>Sialkot</option><option>Bahawalpur</option><option>Sargodha</option><option>Sheikhupura</option><option>Jhang</option><option>Rahim Yar Khan</option><option>Gujrat</option><option>Sahiwal</option><option>Okara</option><option>Wah Cantt</option><option>Dera Ghazi Khan</option><option>Jhelum</option><option>Hafizabad</option><option>Mandi Bahauddin</option><option>Narowal</option><option>Kasur</option><option>Pakpattan</option><option>Khanewal</option><option>Vehari</option><option>Muzaffargarh</option><option>Lodhran</option><option>Bahawalnagar</option><option>Burewala</option><option>Wazirabad</option><option>Daska</option><option>Chiniot</option><option>Attock</option><option>Chakwal</option><option>Mianwali</option><option>Toba Tek Singh</option></optgroup>
+            <optgroup label="Sindh"><option>Karachi</option><option>Hyderabad</option><option>Sukkur</option><option>Larkana</option><option>Nawabshah</option><option>Mirpur Khas</option><option>Jacobabad</option><option>Khairpur</option><option>Dadu</option><option>Thatta</option><option>Badin</option><option>Sanghar</option><option>Ghotki</option></optgroup>
+            <optgroup label="KPK"><option>Peshawar</option><option>Mardan</option><option>Mingora</option><option>Kohat</option><option>Abbottabad</option><option>Mansehra</option><option>Dera Ismail Khan</option><option>Nowshera</option><option>Charsadda</option><option>Swabi</option><option>Haripur</option><option>Bannu</option></optgroup>
+            <optgroup label="Balochistan"><option>Quetta</option><option>Turbat</option><option>Khuzdar</option><option>Hub</option><option>Chaman</option><option>Gwadar</option><option>Zhob</option><option>Loralai</option></optgroup>
+            <optgroup label="AJK / GB"><option>Muzaffarabad</option><option>Mirpur AJK</option><option>Rawalakot</option><option>Gilgit</option><option>Skardu</option><option>Hunza</option></optgroup>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Province</label>
+          <select id="c-province">
+            <option value="">Select Province</option>
+            <option>Punjab</option><option>Sindh</option><option>KPK</option><option>Balochistan</option><option>Islamabad (ICT)</option><option>AJK</option><option>Gilgit-Baltistan</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label>Order Notes (Optional)</label><textarea id="c-notes" rows="2" placeholder="Any special instructions..."></textarea></div>
+      <button class="btn-continue" onclick="goStep(2)">Continue to Payment</button>
+    </div>
+    <div id="step-2" style="display:none">
+      <button class="btn-back-link" onclick="goStep(1)"><i class="fas fa-arrow-left"></i> Back to Delivery</button>
+      <h2 class="co-section-title">Payment Method</h2>
+      <div class="pay-options">
+        <div class="pay-option selected" onclick="selectPay('cod')" id="opt-cod">
+          <input type="radio" name="pay" checked/><div class="pay-radio"></div>
+          <div class="pay-icon-wrap"><i class="fas fa-money-bill-wave" style="color:#27ae60"></i></div>
+          <div class="pay-text"><h4>Cash on Delivery</h4><p>Pay when your order arrives at your door</p></div>
+          <span class="pay-badge">Most Popular</span>
+        </div>
+        <div class="pay-option" onclick="selectPay('easypaisa')" id="opt-easypaisa">
+          <input type="radio" name="pay"/><div class="pay-radio"></div>
+          <div class="pay-icon-wrap"><i class="fas fa-mobile-alt" style="color:#1565c0"></i></div>
+          <div class="pay-text"><h4>Easypaisa</h4><p>Mobile wallet — instant payment</p></div>
+        </div>
+        <div class="pay-option" onclick="selectPay('jazzcash')" id="opt-jazzcash">
+          <input type="radio" name="pay"/><div class="pay-radio"></div>
+          <div class="pay-icon-wrap"><i class="fas fa-wallet" style="color:#e65100"></i></div>
+          <div class="pay-text"><h4>JazzCash</h4><p>Mobile wallet — instant payment</p></div>
+        </div>
+        <div class="pay-option" onclick="selectPay('bank')" id="opt-bank">
+          <input type="radio" name="pay"/><div class="pay-radio"></div>
+          <div class="pay-icon-wrap"><i class="fas fa-university" style="color:#555"></i></div>
+          <div class="pay-text"><h4>Bank Transfer</h4><p>HBL / Meezan — direct transfer</p></div>
+        </div>
+      </div>
+      <div id="pay-detail-box"></div>
+      <button class="btn-continue" onclick="goStep(3)">Review Order</button>
+    </div>
+    <div id="step-3" style="display:none">
+      <button class="btn-back-link" onclick="goStep(2)"><i class="fas fa-arrow-left"></i> Back to Payment</button>
+      <h2 class="co-section-title">Order Confirmation</h2>
+      <div id="review-box"></div>
+      <button class="btn-continue" onclick="placeOrder()" id="place-btn">Place Order</button>
+    </div>
+  </div>
+  <div class="co-sidebar">
+    <p class="sidebar-title">Your Order</p>
+    <div class="sidebar-items" id="sidebar-items"></div>
+    <div class="sidebar-totals">
+      <div class="sidebar-row"><span>Subtotal</span><span id="s-sub">Rs. 0</span></div>
+      <div class="sidebar-row"><span>Delivery</span><span id="s-del" class="gold">Free</span></div>
+      <div class="sidebar-row" id="s-disc-row" style="display:none"><span>Discount</span><span id="s-disc" class="gold"></span></div>
+      <div class="sidebar-row total"><span>Total</span><span id="s-total">Rs. 0</span></div>
+    </div>
+    <div class="promo-wrap">
+      <input type="text" id="promo-input" placeholder="Promo code"/>
+      <button onclick="applyPromo()">Apply</button>
+    </div>
+    <p class="promo-msg" id="promo-msg"></p>
+  </div>
+</div>
+<div class="success-overlay" id="success-overlay">
+  <div class="success-box">
+    <div class="success-check"><i class="fas fa-check-circle"></i></div>
+    <h2>Order Placed</h2>
+    <p>Thank you for choosing ZENYAR.<br>Your order has been received and will be processed shortly.</p>
+    <div class="order-id-box">
+      <p class="order-id-label">Tracking ID</p>
+      <p class="order-id-val" id="order-id-val">—</p>
+    </div>
+    <div class="success-actions">
+      <a id="track-link" href="track.html" class="success-btn primary">Track Order</a>
+      <a href="index.html" class="success-btn secondary">Continue Shopping</a>
+    </div>
+  </div>
+</div>
+<script src="checkout.js"></script>
+</body>
+</html>

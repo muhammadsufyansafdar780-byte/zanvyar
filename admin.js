@@ -257,7 +257,7 @@ function openProductModal(product = null) {
 
   // Populate seller dropdown
   const sellerSelect = document.getElementById('p-seller');
-  sellerSelect.innerHTML = '<option value="">No Seller / TrendVault Direct</option>' +
+  sellerSelect.innerHTML = '<option value="">No Seller / ZENYAR Direct</option>' +
     allSellers.filter(s => s.isActive).map(s =>
       `<option value="${s._id}">${s.name} (${s.commissionRate}%)</option>`
     ).join('');
