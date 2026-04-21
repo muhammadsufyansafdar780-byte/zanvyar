@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Admin | ZENYAR</title>
-<link rel="icon" type="image/jpeg" href="zenvyar-logo.jpg"/>
+<link rel="icon" type="image/jpeg" href="ZENYAR-logo.jpg"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 <style>
@@ -153,9 +153,9 @@ tr:hover td{background:#fafafa}
           <span class="section-title">All Products</span>
           <select onchange="filterProdCat(this.value)" style="padding:.5rem .8rem;border:1px solid #e0e0e0;font-size:.7rem;outline:none;cursor:pointer">
             <option value="">All Categories</option>
-            <option value="men">Men</option>
-            <option value="women">Women</option>
-            <option value="kids">Junior</option>
+            <option value="outfits">Outfits</option>
+            <option value="tees">Casual Tees</option>
+            <option value="polo">Polo Shirts</option>
           </select>
         </div>
         <div class="table-wrap">
@@ -198,6 +198,7 @@ tr:hover td{background:#fafafa}
     <!-- DISCOUNT -->
     <div class="page" id="page-discount">
       <div class="admin-header"><div><h1>Discount</h1><p>Set sitewide discount or promo codes</p></div></div>
+      <div id="disc-alert" class="alert"></div>
       <div class="section">
         <div class="section-header"><span class="section-title">Sitewide Discount</span></div>
         <div class="discount-bar">
@@ -233,9 +234,9 @@ tr:hover td{background:#fafafa}
         <div class="fg"><label>Category *</label>
           <select id="prod-cat">
             <option value="">Select</option>
-            <option value="men">Men</option>
-            <option value="women">Women</option>
-            <option value="kids">Junior</option>
+            <option value="outfits">Outfits</option>
+            <option value="tees">Casual Tees</option>
+            <option value="polo">Polo Shirts</option>
           </select>
         </div>
       </div>
@@ -448,7 +449,9 @@ async function saveProduct() {
   const stock    = document.getElementById('prod-stock').value;
   const desc     = document.getElementById('prod-desc').value.trim();
 
-  if (!name || !category || !price || !stock || !desc) { alert('Please fill all required fields.'); return; }
+  if (!name || !category || !price || !stock || !desc) {
+    showAlert('prod-alert', 'Please fill all required fields.', 'error'); return;
+  }
 
   const btn = document.getElementById('save-prod-btn');
   btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...';
@@ -485,13 +488,14 @@ async function saveProduct() {
 }
 
 async function deleteProduct(id, name) {
-  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
-  try {
-    const res = await fetch(`${API}/products/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
-    if (!res.ok) throw new Error();
-    showAlert('prod-alert', 'Product deleted.', 'success');
-    loadProducts();
-  } catch(_) { showAlert('prod-alert', 'Could not delete product.', 'error'); }
+  showAdminConfirm(`Delete "${name}"? This cannot be undone.`, async () => {
+    try {
+      const res = await fetch(`${API}/products/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) throw new Error();
+      showAlert('prod-alert', 'Product deleted.', 'success');
+      loadProducts();
+    } catch(_) { showAlert('prod-alert', 'Could not delete product.', 'error'); }
+  });
 }
 
 // ── ORDERS ───────────────────────────────────────────────────────────────────
@@ -588,22 +592,7 @@ function viewOrder(id) {
 function closeOrderModal() { document.getElementById('order-modal').classList.remove('open'); }
 
 async function assignCourier(id) {
-  const courier = prompt('Select courier:\n1. TCS\n2. Leopards\n\nType: TCS or Leopards');
-  if (!courier) return;
-  const name = courier.trim();
-  if (!['TCS','Leopards'].includes(name)) { alert('Only TCS or Leopards allowed.'); return; }
-  const trackingId = prompt(`Enter ${name} tracking number:`);
-  if (!trackingId) return;
-  try {
-    const res = await fetch(`${API}/orders/${id}/courier`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ courierName: name, courierTrackingId: trackingId })
-    });
-    if (!res.ok) throw new Error();
-    showAlert('order-alert', `Courier assigned: ${name} — ${trackingId}`, 'success');
-    loadOrders();
-  } catch(_) { showAlert('order-alert', 'Could not assign courier.', 'error'); }
+  showCourierModal(id);
 }
 
 // ── DISCOUNT ─────────────────────────────────────────────────────────────────
@@ -616,11 +605,13 @@ function loadDiscount() {
 function applyDiscount() {
   const percent = parseInt(document.getElementById('disc-percent').value);
   const label   = document.getElementById('disc-label').value.trim() || `${percent}% OFF`;
-  if (!percent || percent < 1 || percent > 90) { alert('Enter a valid discount (1-90%).'); return; }
+  if (!percent || percent < 1 || percent > 90) {
+    showAlert('disc-alert', 'Enter a valid discount (1-90%).', 'error'); return;
+  }
   const d = { percent, label };
   localStorage.setItem('zenyar_discount', JSON.stringify(d));
   document.getElementById('disc-current').textContent = `${label} — ${percent}% off`;
-  alert(`Discount applied: ${label} — ${percent}% off`);
+  showAlert('disc-alert', `Discount applied: ${label} — ${percent}% off`, 'success');
 }
 
 function removeDiscount() {
@@ -655,7 +646,7 @@ function savePromo() {
   const code = document.getElementById('promo-code').value.trim().toUpperCase();
   const type = document.getElementById('promo-type').value;
   const val  = parseInt(document.getElementById('promo-val').value);
-  if (!code || !val) { alert('Fill all fields.'); return; }
+  if (!code || !val) { showAlert('disc-alert', 'Fill all promo fields.', 'error'); return; }
   const promos = JSON.parse(localStorage.getItem('tv_coupons') || '[]');
   promos.push({ code, type, value: val, active: true });
   localStorage.setItem('tv_coupons', JSON.stringify(promos));
@@ -671,19 +662,97 @@ function togglePromo(i) {
 }
 
 function deletePromo(i) {
-  if (!confirm('Delete this promo code?')) return;
-  const promos = JSON.parse(localStorage.getItem('tv_coupons') || '[]');
-  promos.splice(i, 1);
-  localStorage.setItem('tv_coupons', JSON.stringify(promos));
-  loadPromos();
+  showAdminConfirm('Delete this promo code?', () => {
+    const promos = JSON.parse(localStorage.getItem('tv_coupons') || '[]');
+    promos.splice(i, 1);
+    localStorage.setItem('tv_coupons', JSON.stringify(promos));
+    loadPromos();
+  });
 }
 
 // ── HELPERS ──────────────────────────────────────────────────────────────────
 function showAlert(id, msg, type) {
   const el = document.getElementById(id);
+  if (!el) return;
   el.textContent = msg;
   el.className = `alert alert-${type} show`;
   setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+// Confirm dialog (no browser confirm())
+function showAdminConfirm(msg, onYes, onNo) {
+  let overlay = document.getElementById('confirm-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'confirm-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1rem';
+    overlay.innerHTML = `
+      <div style="background:#fff;max-width:380px;width:100%;padding:2rem;text-align:center">
+        <p id="confirm-msg" style="font-family:Montserrat,sans-serif;font-size:.82rem;font-weight:300;color:#333;margin-bottom:1.5rem;line-height:1.7"></p>
+        <div style="display:flex;gap:.8rem;justify-content:center">
+          <button id="confirm-no"  class="btn btn-outline" style="min-width:90px">Cancel</button>
+          <button id="confirm-yes" class="btn btn-danger"  style="min-width:90px">Delete</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+  }
+  document.getElementById('confirm-msg').textContent = msg;
+  overlay.style.display = 'flex';
+  document.getElementById('confirm-yes').onclick = () => { overlay.style.display = 'none'; onYes && onYes(); };
+  document.getElementById('confirm-no').onclick  = () => { overlay.style.display = 'none'; onNo  && onNo();  };
+}
+
+// Courier modal (no prompt())
+function showCourierModal(orderId) {
+  let overlay = document.getElementById('courier-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'courier-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1rem';
+    overlay.innerHTML = `
+      <div style="background:#fff;max-width:400px;width:100%;padding:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid #f0f0f0">
+          <span style="font-family:'Playfair Display',serif;font-size:1.1rem">Assign Courier</span>
+          <button onclick="document.getElementById('courier-overlay').style.display='none'" style="background:none;border:none;color:#aaa;font-size:1rem;cursor:pointer"><i class="fas fa-times"></i></button>
+        </div>
+        <div style="padding:1.5rem">
+          <div class="fg"><label>Courier *</label>
+            <select id="courier-name" style="width:100%;padding:.75rem 1rem;border:1px solid #e0e0e0;font-size:.82rem;outline:none;cursor:pointer">
+              <option value="">Select courier</option>
+              <option value="TCS">TCS</option>
+              <option value="Leopards">Leopards</option>
+            </select>
+          </div>
+          <div class="fg"><label>Tracking Number *</label>
+            <input type="text" id="courier-tracking" placeholder="e.g. TCS123456789" style="width:100%;padding:.75rem 1rem;border:1px solid #e0e0e0;font-size:.82rem;outline:none"/>
+          </div>
+        </div>
+        <div style="padding:1rem 1.5rem;border-top:1px solid #f0f0f0;display:flex;gap:.8rem;justify-content:flex-end">
+          <button class="btn btn-outline" onclick="document.getElementById('courier-overlay').style.display='none'">Cancel</button>
+          <button class="btn btn-gold" id="courier-save-btn"><i class="fas fa-truck"></i> Assign</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+  }
+  document.getElementById('courier-name').value = '';
+  document.getElementById('courier-tracking').value = '';
+  overlay.style.display = 'flex';
+  document.getElementById('courier-save-btn').onclick = async () => {
+    const name       = document.getElementById('courier-name').value;
+    const trackingId = document.getElementById('courier-tracking').value.trim();
+    if (!name || !trackingId) { showAlert('order-alert', 'Select courier and enter tracking number.', 'error'); return; }
+    try {
+      const res = await fetch(`${API}/orders/${orderId}/courier`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ courierName: name, courierTrackingId: trackingId })
+      });
+      if (!res.ok) throw new Error();
+      overlay.style.display = 'none';
+      showAlert('order-alert', `Courier assigned: ${name} — ${trackingId}`, 'success');
+      loadOrders();
+    } catch(_) { showAlert('order-alert', 'Could not assign courier.', 'error'); }
+  };
 }
 
 // ── INIT ─────────────────────────────────────────────────────────────────────

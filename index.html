@@ -67,8 +67,9 @@
     <div class="panel-body">
       <div class="menu-section-label">Collections</div>
       <div class="fp-menu-item" onclick="filterProducts('all',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">All Products</div>
-      <div class="fp-menu-item" onclick="filterProducts('men',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Men</div>
-      <div class="fp-menu-item" onclick="filterProducts('women',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Women</div>
+      <div class="fp-menu-item" onclick="filterProducts('outfits',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Outfits</div>
+      <div class="fp-menu-item" onclick="filterProducts('tees',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Casual Tees</div>
+      <div class="fp-menu-item" onclick="filterProducts('polo',null);closeMenu();document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Polo Shirts</div>
       <div class="menu-section-label" style="margin-top:1.5rem">Help</div>
       <div class="fp-menu-item" onclick="window.location.href='orders.html'">My Orders</div>
       <div class="fp-menu-item" onclick="window.location.href='track.html'">Track Order</div>
@@ -141,25 +142,45 @@
     </div>
   </section>
 
-  <!-- ===== COLLECTIONS — 3 items ===== -->
+  <!-- ===== COLLECTIONS — 3 categories ===== -->
   <section class="collections-section" id="collections">
+    <div class="collections-heading">
+      <p class="collections-eyebrow">Shop by Category</p>
+      <h2 class="collections-title">Our Collections</h2>
+    </div>
     <div class="collections-grid">
 
-      <div class="collection-item" onclick="filterProducts('men',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">
-        <div class="collection-img collection-men">
+      <div class="collection-item" onclick="filterProducts('outfits',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">
+        <div class="collection-img collection-outfits">
           <div class="collection-overlay"></div>
+          <div class="collection-center-icon"><i class="fas fa-tshirt"></i></div>
           <div class="collection-label">
-            <span class="collection-name">MEN</span>
+            <span class="collection-sub">Tailored Essentials</span>
+            <span class="collection-name">OUTFITS</span>
             <span class="collection-link">Explore →</span>
           </div>
         </div>
       </div>
 
-      <div class="collection-item" onclick="filterProducts('women',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">
-        <div class="collection-img collection-women">
-          <div class="collection-overlay"></div>
+      <div class="collection-item" onclick="filterProducts('tees',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">
+        <div class="collection-img collection-tees">
+          <div class="collection-overlay" style="background:linear-gradient(to top,rgba(61,43,26,0.65) 0%,rgba(61,43,26,0.05) 55%)"></div>
+          <div class="collection-center-icon" style="color:rgba(101,67,33,0.12)"><i class="fas fa-tshirt"></i></div>
           <div class="collection-label">
-            <span class="collection-name">WOMEN</span>
+            <span class="collection-sub" style="color:rgba(61,43,26,0.5)">Everyday Comfort</span>
+            <span class="collection-name" style="color:#3d2b1a">CASUAL TEES</span>
+            <span class="collection-link" style="color:rgba(61,43,26,0.5)">Explore →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="collection-item" onclick="filterProducts('polo',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">
+        <div class="collection-img collection-polo">
+          <div class="collection-overlay"></div>
+          <div class="collection-center-icon"><i class="fas fa-tshirt"></i></div>
+          <div class="collection-label">
+            <span class="collection-sub">Classic Style</span>
+            <span class="collection-name">POLO SHIRTS</span>
             <span class="collection-link">Explore →</span>
           </div>
         </div>
@@ -181,8 +202,9 @@
     <div class="products-header">
       <div class="products-filter-tabs">
         <button class="filter-tab active" onclick="filterProducts('all', this)">All</button>
-        <button class="filter-tab" onclick="filterProducts('men', this)">Men</button>
-        <button class="filter-tab" onclick="filterProducts('women', this)">Women</button>
+        <button class="filter-tab" onclick="filterProducts('outfits', this)">Outfits</button>
+        <button class="filter-tab" onclick="filterProducts('tees', this)">Casual Tees</button>
+        <button class="filter-tab" onclick="filterProducts('polo', this)">Polo Shirts</button>
       </div>
     </div>
     <div class="products-grid" id="products-grid"></div>
@@ -206,8 +228,9 @@
         </div>
         <div class="footer-col">
           <h4 class="footer-col-title">Explore</h4>
-          <a href="#" class="footer-col-link" onclick="filterProducts('men',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Men's Collection</a>
-          <a href="#" class="footer-col-link" onclick="filterProducts('women',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Women's Collection</a>
+          <a href="#" class="footer-col-link" onclick="filterProducts('outfits',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Outfits</a>
+          <a href="#" class="footer-col-link" onclick="filterProducts('tees',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Casual Tees</a>
+          <a href="#" class="footer-col-link" onclick="filterProducts('polo',null);document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">Polo Shirts</a>
           <a href="#" class="footer-col-link" onclick="document.getElementById('collections').scrollIntoView({behavior:'smooth'});return false">New Arrivals</a>
           <a href="#" class="footer-col-link" onclick="document.getElementById('products-section').scrollIntoView({behavior:'smooth'});return false">All Products</a>
         </div>

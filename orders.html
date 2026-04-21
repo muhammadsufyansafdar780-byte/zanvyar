@@ -152,16 +152,17 @@
     const ids = JSON.parse(localStorage.getItem('tv_order_ids') || '[]');
     if (!ids.length) { renderEmpty(); return; }
 
-    // Fetch each order by ID
+    // Try to fetch each, else show from local storage
     const orders = [];
     for (const id of ids.slice(0, 10)) {
       try {
         const res = await fetch(`${API}/orders/track/${id}`, { signal: AbortSignal.timeout(3000) });
-        if (res.ok) orders.push(await res.json());
-      } catch(_) {
-        // Backend offline — show basic info from localStorage
-        orders.push({ orderId: id, status: 'placed', items: [], total: 0, createdAt: new Date() });
-      }
+        if (res.ok) { orders.push(await res.json()); continue; }
+      } catch(_) {}
+      // Use locally saved order if available
+      const local = localStorage.getItem('zy_order_' + id);
+      if (local) orders.push(JSON.parse(local));
+      else orders.push({ orderId: id, status: 'placed', items: [], total: 0, createdAt: new Date() });
     }
 
     if (orders.length) renderOrders(orders);

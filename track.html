@@ -195,12 +195,16 @@
       const res = await fetch(`${API}/orders/track/${id}`, { signal: AbortSignal.timeout(5000) });
       document.getElementById('track-loading').style.display = 'none';
 
-      if (!res.ok) { showError('Order not found. Please check your Order ID.'); return; }
-      const order = await res.json();
-      renderOrder(order);
+      if (res.ok) { renderOrder(await res.json()); return; }
+      // Check local storage
+      const local = localStorage.getItem('zy_order_' + id);
+      if (local) { renderOrder(JSON.parse(local)); return; }
+      showError('Order not found. Please check your Order ID.');
     } catch(e) {
       document.getElementById('track-loading').style.display = 'none';
-      // Backend offline — show basic status
+      // Check local storage when backend offline
+      const local = localStorage.getItem('zy_order_' + id);
+      if (local) { renderOrder(JSON.parse(local)); return; }
       renderOffline(id);
     }
   }

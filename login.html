@@ -2,154 +2,375 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
-  <meta name="theme-color" content="#1a1a2e"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
-  <meta name="mobile-web-app-capable" content="yes"/>
-  <title>Admin Login | ZENYAR</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  <meta name="theme-color" content="#0a0a0a"/>
+  <title>Login | ZENYAR</title>
   <link rel="icon" type="image/jpeg" href="ZENYAR-logo.jpg"/>
-  <link rel="apple-touch-icon" href="ZENYAR-logo.jpg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'Montserrat',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;-webkit-tap-highlight-color:transparent;overflow-y:auto;overflow-x:hidden;padding:2rem 0}
+    button,input{font-family:'Montserrat',sans-serif;font-size:16px!important;-webkit-appearance:none;appearance:none}
 
-    .login-card{background:#fff;border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:400px;box-shadow:0 25px 60px rgba(0,0,0,0.4)}
+    /* Animated background */
+    .bg-anim{position:fixed;inset:0;z-index:0;overflow:hidden}
+    .bg-anim::before{content:'';position:absolute;inset:-50%;background:radial-gradient(ellipse at 30% 40%,rgba(198,169,105,.12) 0%,transparent 60%);animation:bgDrift1 18s ease-in-out infinite}
+    .bg-anim::after{content:'';position:absolute;inset:-50%;background:radial-gradient(ellipse at 70% 60%,rgba(198,169,105,.08) 0%,transparent 55%);animation:bgDrift2 22s ease-in-out infinite}
+    @keyframes bgDrift1{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.1) rotate(5deg)}}
+    @keyframes bgDrift2{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.08) rotate(-4deg)}}
 
-    .login-logo{text-align:center;margin-bottom:2rem}
-    .login-logo h1{font-size:1.8rem;font-weight:900;color:#1a1a2e}
-    .login-logo h1 span{color:#FF4500}
-    .login-logo p{color:#888;font-size:0.85rem;margin-top:0.3rem}
+    /* Floating particles */
+    .particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+    .particle{position:absolute;width:1px;background:linear-gradient(to bottom,transparent,rgba(198,169,105,.4),transparent);animation:particleFloat linear infinite;opacity:0}
+    .p1{left:10%;height:100px;animation-duration:12s;animation-delay:0s}
+    .p2{left:25%;height:70px;animation-duration:16s;animation-delay:-4s}
+    .p3{left:45%;height:130px;animation-duration:14s;animation-delay:-8s}
+    .p4{left:65%;height:80px;animation-duration:18s;animation-delay:-2s}
+    .p5{left:80%;height:110px;animation-duration:13s;animation-delay:-6s}
+    .p6{left:92%;height:60px;animation-duration:20s;animation-delay:-10s}
+    @keyframes particleFloat{0%{top:110%;opacity:0}10%{opacity:.6}90%{opacity:.3}100%{top:-20%;opacity:0}}
 
-    .form-group{margin-bottom:1.2rem}
-    .form-group label{display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:0.5rem}
+    /* Main container */
+    .container{position:relative;z-index:1;width:100%;max-width:440px;padding:1.5rem;animation:fadeUp .8s ease both;margin:auto}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Logo */
+    .logo-wrap{text-align:center;margin-bottom:2.5rem}
+    .logo-img{width:70px;height:70px;object-fit:contain;border-radius:12px;margin:0 auto 1rem;display:block;filter:drop-shadow(0 4px 20px rgba(198,169,105,.3))}
+    .logo-text{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:400;letter-spacing:.4em;color:#fff;display:block;margin-bottom:.3rem}
+    .logo-sub{font-size:.58rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;color:rgba(198,169,105,.7)}
+
+    /* Card */
+    .card{background:rgba(255,255,255,.04);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);padding:2.5rem 2rem;border-radius:2px}
+
+    /* Tabs */
+    .tabs{display:flex;margin-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.08)}
+    .tab{flex:1;padding:.8rem;background:none;border:none;color:rgba(255,255,255,.35);font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:300;letter-spacing:.3em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-bottom:2px solid transparent;margin-bottom:-1px}
+    .tab:hover{color:rgba(255,255,255,.7)}
+    .tab.active{color:#C6A969;border-bottom-color:#C6A969}
+
+    /* Form */
+    .fg{margin-bottom:1.2rem}
+    .fg label{display:block;font-size:.58rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.6rem}
     .input-wrap{position:relative}
-    .input-wrap i{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:#bbb;font-size:0.9rem}
-    .input-wrap input{width:100%;padding:0.85rem 1rem 0.85rem 2.8rem;border:2px solid #eee;border-radius:10px;font-family:'Poppins',sans-serif;font-size:16px;outline:none;transition:border 0.2s;color:#333;-webkit-appearance:none;appearance:none}
-    .input-wrap input:focus{border-color:#FF4500}
-    .toggle-pass{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#bbb;font-size:0.9rem}
+    .input-wrap i{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.25);font-size:.85rem;pointer-events:none}
+    .input-wrap input{width:100%;padding:.9rem 1rem .9rem 2.8rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:.85rem!important;font-weight:300;outline:none;transition:all .3s;border-radius:0}
+    .input-wrap input::placeholder{color:rgba(255,255,255,.2)}
+    .input-wrap input:focus{border-color:rgba(198,169,105,.5);background:rgba(255,255,255,.07)}
+    .eye-btn{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.25);cursor:pointer;font-size:.85rem;transition:color .2s}
+    .eye-btn:hover{color:rgba(255,255,255,.6)}
 
-    .btn-login{width:100%;padding:1rem;background:linear-gradient(135deg,#FF4500,#ff6a00);color:#fff;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.3s;margin-top:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;min-height:52px;touch-action:manipulation;-webkit-appearance:none}
-    .btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(255,69,0,0.4)}
-    .btn-login:disabled{opacity:0.7;transform:none;cursor:not-allowed}
+    /* Error / Success */
+    .msg{padding:.7rem 1rem;font-size:.68rem;font-weight:300;letter-spacing:.05em;margin-bottom:1.2rem;display:none;align-items:center;gap:.5rem;border-radius:0}
+    .msg.show{display:flex}
+    .msg-error{background:rgba(198,50,50,.15);border:1px solid rgba(198,50,50,.3);color:#ff8a80}
+    .msg-success{background:rgba(46,125,50,.15);border:1px solid rgba(46,125,50,.3);color:#a5d6a7}
 
-    .error-msg{background:#ffebee;color:#c62828;border-radius:8px;padding:0.7rem 1rem;font-size:0.83rem;margin-bottom:1rem;display:none;align-items:center;gap:0.5rem}
-    .error-msg.show{display:flex}
+    /* Button */
+    .btn-submit{width:100%;padding:1rem;background:#C6A969;color:#111;border:none;font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:500;letter-spacing:.35em;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:.5rem;display:flex;align-items:center;justify-content:center;gap:.5rem}
+    .btn-submit:hover{background:#b8955a;transform:translateY(-1px)}
+    .btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
 
-    .back-link{text-align:center;margin-top:1.5rem;font-size:0.83rem;color:#aaa}
-    .back-link a{color:#FF4500;text-decoration:none;font-weight:600}
+    /* Switch text */
+    .switch-text{text-align:center;margin-top:1.2rem;font-size:.65rem;font-weight:300;color:rgba(255,255,255,.3)}
+    .switch-text span{color:#C6A969;cursor:pointer;transition:opacity .2s}
+    .switch-text span:hover{opacity:.7}
+
+    /* Back link */
+    .back-link{text-align:center;margin-top:1.5rem}
+    .back-link a{font-size:.6rem;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.25);text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;transition:color .2s}
+    .back-link a:hover{color:rgba(255,255,255,.5)}
+
+    /* Divider */
+    .divider{display:flex;align-items:center;gap:1rem;margin:1.2rem 0}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
+    .divider span{font-size:.55rem;font-weight:300;letter-spacing:.2em;color:rgba(255,255,255,.2);text-transform:uppercase}
+
+    @media(max-width:480px){.container{padding:1rem}.card{padding:2rem 1.5rem}}
   </style>
 </head>
 <body>
 
-<div class="login-card">
-  <div class="login-logo">
-    <img src="ZENYAR-logo.jpg" alt="ZENYAR" style="height:90px;width:90px;border-radius:12px;margin-bottom:0.8rem;display:block;margin-left:auto;margin-right:auto;object-fit:contain"/>
-    <h1>ZENYAR</h1>
-    <p style="color:#FF4500;font-size:0.8rem;font-weight:600">Admin Panel — Authorized Access Only</p>
+<div class="bg-anim"></div>
+<div class="particles">
+  <span class="particle p1"></span>
+  <span class="particle p2"></span>
+  <span class="particle p3"></span>
+  <span class="particle p4"></span>
+  <span class="particle p5"></span>
+  <span class="particle p6"></span>
+</div>
+
+<div class="container">
+  <!-- Logo -->
+  <div class="logo-wrap">
+    <img src="ZENYAR-logo.jpg" alt="ZENYAR" class="logo-img"/>
+    <span class="logo-text">ZENYAR</span>
+    <span class="logo-sub">Premium Clothing</span>
   </div>
 
-  <div class="error-msg" id="error-msg">
-    <i class="fas fa-exclamation-circle"></i>
-    <span id="error-text">Invalid credentials</span>
+  <!-- Card -->
+  <div class="card">
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="tab" id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- Messages -->
+    <div class="msg msg-error" id="msg-error"><i class="fas fa-exclamation-circle"></i><span id="msg-error-text"></span></div>
+    <div class="msg msg-success" id="msg-success"><i class="fas fa-check-circle"></i><span id="msg-success-text"></span></div>
+
+    <!-- LOGIN FORM -->
+    <div id="form-login">
+      <div class="fg">
+        <label>Email Address</label>
+        <div class="input-wrap">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="login-email" placeholder="your@email.com" autocomplete="email"/>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="login-pass" placeholder="Enter your password" autocomplete="current-password"/>
+          <button type="button" class="eye-btn" onclick="togglePass('login-pass','eye1')"><i class="fas fa-eye" id="eye1"></i></button>
+        </div>
+      </div>
+      <button class="btn-submit" id="login-btn" onclick="doLogin()">
+        <i class="fas fa-sign-in-alt"></i> Login
+      </button>
+      <p class="switch-text">Don't have an account? <span onclick="switchTab('signup')">Sign Up</span></p>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div id="form-signup" style="display:none">
+      <div class="fg">
+        <label>Full Name</label>
+        <div class="input-wrap">
+          <i class="fas fa-user"></i>
+          <input type="text" id="signup-name" placeholder="Your full name"/>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Email Address</label>
+        <div class="input-wrap">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="signup-email" placeholder="your@email.com" autocomplete="email"/>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Phone Number</label>
+        <div class="input-wrap">
+          <i class="fas fa-phone"></i>
+          <input type="tel" id="signup-phone" placeholder="03XX-XXXXXXX"/>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="signup-pass" placeholder="Min 8 characters" autocomplete="new-password"/>
+          <button type="button" class="eye-btn" onclick="togglePass('signup-pass','eye2')"><i class="fas fa-eye" id="eye2"></i></button>
+        </div>
+      </div>
+      <button class="btn-submit" id="signup-btn" onclick="doSignup()">
+        <i class="fas fa-user-plus"></i> Create Account
+      </button>
+      <p class="switch-text">Already have an account? <span onclick="switchTab('login')">Login</span></p>
+    </div>
   </div>
 
-  <form onsubmit="doLogin(event)">
-    <div class="form-group">
-      <label>Email Address</label>
-      <div class="input-wrap">
-        <i class="fas fa-envelope"></i>
-        <input type="email" id="login-email" placeholder="admin@zenyar.com" required autocomplete="email"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Password</label>
-      <div class="input-wrap">
-        <i class="fas fa-lock"></i>
-        <input type="password" id="login-pass" placeholder="Enter password" required autocomplete="current-password"/>
-        <button type="button" class="toggle-pass" onclick="togglePass()"><i class="fas fa-eye" id="eye-icon"></i></button>
-      </div>
-    </div>
-    <button type="submit" class="btn-login" id="login-btn">
-      <i class="fas fa-sign-in-alt"></i> Login to Admin Panel
-    </button>
-  </form>
-
-  <div class="back-link"><a href="index.html"><i class="fas fa-store"></i> Back to Store</a></div>
+  <div class="back-link">
+    <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Store</a>
+  </div>
 </div>
 
 <script>
   const API = 'http://localhost:5000/api';
 
-  // Already logged in as admin? redirect
+  // ── Local user store (works without backend) ──────────────────────────────
+  function getLocalUsers() { return JSON.parse(localStorage.getItem('zy_users') || '[]'); }
+  function saveLocalUsers(u) { localStorage.setItem('zy_users', JSON.stringify(u)); }
+
+  function localLogin(email, pass) {
+    const users = getLocalUsers();
+    const user  = users.find(u => u.email === email && u.password === pass);
+    return user || null;
+  }
+
+  function localSignup(name, email, phone, pass) {
+    const users = getLocalUsers();
+    if (users.find(u => u.email === email)) return null; // already exists
+    const user = { id: Date.now(), name, email, phone, password: pass, role: 'user' };
+    users.push(user);
+    saveLocalUsers(users);
+    return user;
+  }
+
+  function setLoggedIn(user) {
+    const fakeToken = 'local_' + btoa(user.email);
+    localStorage.setItem('zv_token', fakeToken);
+    localStorage.setItem('zv_user', JSON.stringify({ id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role }));
+  }
+
+  function redirect(role) {
+    if (role === 'admin') { window.location.href = 'admin.html'; return; }
+    const cart = localStorage.getItem('tv_cart');
+    if (cart && JSON.parse(cart).length > 0) window.location.href = 'checkout.html';
+    else window.location.href = 'index.html';
+  }
+
+  // Auto-redirect if already logged in
   (async () => {
     const t = localStorage.getItem('zv_token');
     if (!t) return;
+    // Local token
+    if (t.startsWith('local_')) {
+      const u = JSON.parse(localStorage.getItem('zv_user') || 'null');
+      if (u) redirect(u.role);
+      return;
+    }
+    // Try backend token
     try {
-      const res = await fetch(`${API}/auth/me`, { headers: { Authorization: `Bearer ${t}` } });
+      const res = await fetch(`${API}/auth/me`, { headers: { Authorization: `Bearer ${t}` }, signal: AbortSignal.timeout(3000) });
       if (res.ok) {
         const data = await res.json();
-        const u = data.user || data;
-        if (u.role === 'admin') window.location.href = 'admin.html';
+        redirect((data.user || data).role);
       }
     } catch(_) {}
   })();
 
-  function togglePass() {
-    const inp = document.getElementById('login-pass');
-    const ico = document.getElementById('eye-icon');
+  function switchTab(tab) {
+    document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+    document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+    document.getElementById('form-login').style.display = tab === 'login' ? '' : 'none';
+    document.getElementById('form-signup').style.display = tab === 'signup' ? '' : 'none';
+    hideMessages();
+  }
+
+  function togglePass(inputId, iconId) {
+    const inp = document.getElementById(inputId);
+    const ico = document.getElementById(iconId);
     if (inp.type === 'password') { inp.type = 'text'; ico.className = 'fas fa-eye-slash'; }
     else { inp.type = 'password'; ico.className = 'fas fa-eye'; }
   }
 
   function showError(msg) {
-    document.getElementById('error-text').textContent = msg;
-    document.getElementById('error-msg').classList.add('show');
+    document.getElementById('msg-error-text').textContent = msg;
+    document.getElementById('msg-error').classList.add('show');
+    document.getElementById('msg-success').classList.remove('show');
   }
 
-  async function doLogin(e) {
-    e.preventDefault();
-    document.getElementById('error-msg').classList.remove('show');
-    const btn = document.getElementById('login-btn');
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-    btn.disabled = true;
+  function showSuccess(msg) {
+    document.getElementById('msg-success-text').textContent = msg;
+    document.getElementById('msg-success').classList.add('show');
+    document.getElementById('msg-error').classList.remove('show');
+  }
 
-    const email    = document.getElementById('login-email').value.trim();
-    const password = document.getElementById('login-pass').value;
+  function hideMessages() {
+    document.getElementById('msg-error').classList.remove('show');
+    document.getElementById('msg-success').classList.remove('show');
+  }
+
+  function setLoading(btnId, loading, text) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = loading;
+    btn.innerHTML = loading ? '<i class="fas fa-circle-notch fa-spin"></i> Please wait...' : text;
+  }
+
+  async function doLogin() {
+    hideMessages();
+    const email = document.getElementById('login-email').value.trim();
+    const pass  = document.getElementById('login-pass').value;
+    if (!email || !pass) { showError('Please fill all fields.'); return; }
+    setLoading('login-btn', true, '');
 
     try {
-      const res  = await fetch(`${API}/auth/login`, {
+      // Try backend first (3 sec timeout)
+      const res = await fetch(`${API}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password: pass }),
+        signal: AbortSignal.timeout(3000)
       });
       const data = await res.json();
-
-      if (!res.ok) { showError(data.message || 'Login failed'); return; }
-      if (data.user?.role !== 'admin') { showError('Access denied. Admin accounts only.'); return; }
-
-      localStorage.setItem('zv_token', data.token);
-      localStorage.setItem('zv_user',  JSON.stringify(data.user));
-      // If came from checkout, go back there
-      const prevCart = localStorage.getItem('tv_cart');
-      if (prevCart && JSON.parse(prevCart).length > 0) {
-        window.location.href = 'checkout.html';
-      } else if (data.user?.role === 'admin') {
-        window.location.href = 'admin.html';
-      } else {
-        window.location.href = 'index.html';
+      if (res.ok) {
+        localStorage.setItem('zv_token', data.token);
+        localStorage.setItem('zv_user', JSON.stringify(data.user));
+        showSuccess('Login successful! Redirecting...');
+        setTimeout(() => redirect(data.user?.role), 800);
+        return;
       }
-    } catch(err) {
-      showError('Cannot connect to server. Make sure backend is running.');
+      showError(data.message || 'Invalid email or password.');
+    } catch(_) {
+      // Backend offline — use local
+      const user = localLogin(email, pass);
+      if (!user) {
+        showError('Invalid email or password.');
+      } else {
+        setLoggedIn(user);
+        showSuccess('Login successful! Redirecting...');
+        setTimeout(() => redirect(user.role), 800);
+      }
     } finally {
-      btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Admin Panel';
-      btn.disabled = false;
+      setLoading('login-btn', false, '<i class="fas fa-sign-in-alt"></i> Login');
     }
   }
+
+  async function doSignup() {
+    hideMessages();
+    const name  = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const phone = document.getElementById('signup-phone').value.trim();
+    const pass  = document.getElementById('signup-pass').value;
+    if (!name || !email || !phone || !pass) { showError('Please fill all fields.'); return; }
+    if (pass.length < 8) { showError('Password must be at least 8 characters.'); return; }
+    if (!/^03\d{9}$/.test(phone.replace(/-/g,''))) { showError('Enter a valid phone number (03XXXXXXXXX).'); return; }
+    setLoading('signup-btn', true, '');
+
+    try {
+      const res = await fetch(`${API}/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone, password: pass }),
+        signal: AbortSignal.timeout(3000)
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('zv_token', data.token);
+        localStorage.setItem('zv_user', JSON.stringify(data.user));
+        showSuccess('Account created! Redirecting...');
+        setTimeout(() => redirect(data.user?.role), 800);
+        return;
+      }
+      showError(data.message || 'Signup failed. Please try again.');
+    } catch(_) {
+      // Backend offline — use local
+      const user = localSignup(name, email, phone, pass);
+      if (!user) {
+        showError('Email already registered. Please login.');
+      } else {
+        setLoggedIn(user);
+        showSuccess('Account created! Redirecting...');
+        setTimeout(() => redirect(user.role), 800);
+      }
+    } finally {
+      setLoading('signup-btn', false, '<i class="fas fa-user-plus"></i> Create Account');
+    }
+  }
+
+  // Enter key support
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    if (document.getElementById('form-login').style.display !== 'none') doLogin();
+    else doSignup();
+  });
 </script>
 </body>
 </html>
